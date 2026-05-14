@@ -1,0 +1,1142 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THE BEST COLLECTOR</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --theme: #3b82f6;
+            --theme-glow: rgba(59,130,246,0.4);
+            --bg: #050810;
+            --surface: rgba(255,255,255,0.03);
+            --border: rgba(255,255,255,0.07);
+            --text: #e2e8f0;
+            --muted: #475569;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+            user-select: none;
+        }
+
+        /* Animated background grid */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(59,130,246,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(59,130,246,0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            animation: gridMove 20s linear infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(ellipse 80% 50% at 50% 0%, var(--theme-glow) 0%, transparent 60%);
+            pointer-events: none;
+            z-index: 0;
+            transition: background 0.6s;
+        }
+
+        @keyframes gridMove {
+            from { background-position: 0 0; }
+            to { background-position: 60px 60px; }
+        }
+
+        .wrapper {
+            position: relative;
+            z-index: 1;
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 24px 16px 60px;
+        }
+
+        /* HEADER */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 28px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            margin-bottom: 20px;
+            backdrop-filter: blur(20px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--theme), transparent);
+            transition: background 0.6s;
+        }
+
+        .header-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(28px, 5vw, 42px);
+            letter-spacing: 4px;
+            line-height: 1;
+        }
+
+        .header-title span {
+            color: var(--theme);
+            transition: color 0.5s;
+            text-shadow: 0 0 30px var(--theme);
+        }
+
+        .header-sub {
+            font-size: 11px;
+            color: var(--muted);
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-top: 4px;
+        }
+
+        .balance-box {
+            text-align: right;
+        }
+
+        .balance-label {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 2px;
+        }
+
+        .balance-amount {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: clamp(24px, 4vw, 36px);
+            font-weight: 700;
+            color: #fbbf24;
+            text-shadow: 0 0 20px rgba(251,191,36,0.5);
+            transition: all 0.3s;
+        }
+
+        .balance-amount.bump {
+            animation: bump 0.3s ease;
+        }
+
+        @keyframes bump {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+            100% { transform: scale(1); }
+        }
+
+        /* PROGRESS BAR */
+        .progress-wrap {
+            height: 4px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 4px;
+            margin-bottom: 20px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--theme), #a855f7);
+            border-radius: 4px;
+            transition: width 0.8s ease;
+            position: relative;
+        }
+
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            right: 0; top: 0; bottom: 0;
+            width: 40px;
+            background: rgba(255,255,255,0.4);
+            filter: blur(6px);
+        }
+
+        /* TABS */
+        .tabs-scroll {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding-bottom: 16px;
+            scrollbar-width: none;
+        }
+
+        .tabs-scroll::-webkit-scrollbar { display: none; }
+
+        .tab-btn {
+            flex-shrink: 0;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 10px 16px;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--muted);
+            cursor: pointer;
+            transition: all 0.25s;
+            white-space: nowrap;
+        }
+
+        .tab-btn:hover { color: white; border-color: rgba(255,255,255,0.15); }
+
+        .tab-btn.active {
+            background: var(--theme);
+            border-color: var(--theme);
+            color: white;
+            box-shadow: 0 0 20px var(--theme-glow), 0 4px 12px rgba(0,0,0,0.4);
+            transform: translateY(-2px);
+        }
+
+        .tab-emoji { display: block; font-size: 18px; margin-bottom: 4px; }
+
+        /* BOX TITLE AREA */
+        .box-info {
+            text-align: center;
+            margin-bottom: 16px;
+        }
+
+        .box-badge {
+            display: inline-block;
+            padding: 4px 14px;
+            border: 1px solid var(--theme);
+            border-radius: 999px;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--theme);
+            margin-bottom: 8px;
+            background: rgba(59,130,246,0.08);
+        }
+
+        .box-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(28px, 6vw, 48px);
+            letter-spacing: 6px;
+            text-shadow: 0 0 40px var(--theme-glow);
+        }
+
+        .box-cost {
+            font-size: 13px;
+            color: var(--muted);
+            font-weight: 700;
+            letter-spacing: 2px;
+            margin-top: 4px;
+        }
+
+        /* CASE / REEL */
+        .case-wrap {
+            position: relative;
+            width: 100%;
+            max-width: 820px;
+            height: 170px;
+            margin: 0 auto 24px;
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            background: rgba(0,0,0,0.5);
+            box-shadow: 0 0 60px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.05);
+        }
+
+        .case-wrap::before,
+        .case-wrap::after {
+            content: '';
+            position: absolute;
+            top: 0; bottom: 0;
+            width: 120px;
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        .case-wrap::before {
+            left: 0;
+            background: linear-gradient(90deg, rgba(5,8,16,0.95), transparent);
+        }
+
+        .case-wrap::after {
+            right: 0;
+            background: linear-gradient(-90deg, rgba(5,8,16,0.95), transparent);
+        }
+
+        .case-marker {
+            position: absolute;
+            left: 50%;
+            top: 0; bottom: 0;
+            width: 3px;
+            background: var(--theme);
+            z-index: 20;
+            transform: translateX(-50%);
+            box-shadow: 0 0 16px var(--theme), 0 0 40px var(--theme-glow);
+            pointer-events: none;
+        }
+
+        .case-marker::before,
+        .case-marker::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+        }
+
+        .case-marker::before {
+            top: 0;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-top: 10px solid var(--theme);
+        }
+
+        .case-marker::after {
+            bottom: 0;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-bottom: 10px solid var(--theme);
+        }
+
+        .case-reel {
+            display: flex;
+            position: absolute;
+            left: 0; top: 0; bottom: 0;
+            align-items: center;
+            transition: transform 5s cubic-bezier(0.12, 0, 0.04, 1);
+        }
+
+        .item-card {
+            min-width: 140px;
+            width: 140px;
+            height: 90%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 8px;
+            border-right: 1px solid rgba(255,255,255,0.04);
+            text-align: center;
+            border-radius: 4px;
+            position: relative;
+        }
+
+        .item-card .item-icon { font-size: 42px; line-height: 1; margin-bottom: 8px; }
+        .item-card .item-name { font-size: 9px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: rgba(255,255,255,0.7); line-height: 1.3; }
+
+        .rarity-comun { border-top: 3px solid #64748b; }
+        .rarity-especial { border-top: 3px solid #3b82f6; }
+        .rarity-epico { border-top: 3px solid #a855f7; background: radial-gradient(circle at 50% 0%, rgba(168,85,247,0.08), transparent 70%); }
+        .rarity-legendario { border-top: 3px solid #f43f5e; background: radial-gradient(circle at 50% 0%, rgba(244,63,94,0.1), transparent 70%); }
+        .rarity-mitico {
+            border-top: 3px solid #fbbf24;
+            background: radial-gradient(circle at 50% 0%, rgba(251,191,36,0.15), transparent 70%);
+            animation: mythicPulse 2s infinite;
+        }
+
+        @keyframes mythicPulse {
+            0%, 100% { box-shadow: inset 0 0 20px rgba(251,191,36,0.05); }
+            50% { box-shadow: inset 0 0 40px rgba(251,191,36,0.15); }
+        }
+
+        /* SPIN BUTTON */
+        .spin-wrap {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 32px;
+        }
+
+        .spin-btn {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 22px;
+            letter-spacing: 6px;
+            padding: 18px 64px;
+            background: var(--theme);
+            color: white;
+            border: none;
+            border-radius: 14px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s;
+            box-shadow: 0 0 30px var(--theme-glow), 0 8px 32px rgba(0,0,0,0.4);
+        }
+
+        .spin-btn::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .spin-btn::after {
+            content: '';
+            position: absolute;
+            top: -50%; left: -120%;
+            width: 60%;
+            height: 200%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transform: skewX(-20deg);
+            transition: left 0.6s;
+        }
+
+        .spin-btn:hover::after { left: 160%; }
+        .spin-btn:hover { transform: translateY(-3px); box-shadow: 0 0 50px var(--theme-glow), 0 16px 40px rgba(0,0,0,0.5); }
+        .spin-btn:active { transform: scale(0.97); }
+        .spin-btn:disabled { opacity: 0.4; pointer-events: none; filter: grayscale(0.5); }
+
+        /* STATS */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-bottom: 32px;
+        }
+
+        @media (max-width: 600px) {
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        .stat-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 16px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .stat-label {
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 6px;
+        }
+
+        .stat-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 22px;
+            font-weight: 700;
+        }
+
+        /* INVENTORY */
+        .inventory-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .inventory-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 28px;
+            letter-spacing: 4px;
+        }
+
+        .sell-all-btn {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            padding: 10px 20px;
+            background: rgba(74,222,128,0.1);
+            color: #4ade80;
+            border: 1px solid rgba(74,222,128,0.3);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.25s;
+        }
+
+        .sell-all-btn:hover {
+            background: #4ade80;
+            color: #052e16;
+            box-shadow: 0 0 20px rgba(74,222,128,0.3);
+        }
+
+        .inv-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 10px;
+        }
+
+        .inv-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 14px 10px;
+            text-align: center;
+            transition: all 0.2s;
+            position: relative;
+            overflow: hidden;
+            cursor: default;
+        }
+
+        .inv-card:hover { transform: translateY(-4px); border-color: rgba(255,255,255,0.15); }
+        .inv-card-bar { position: absolute; top: 0; left: 0; right: 0; height: 2px; }
+        .inv-card-icon { font-size: 32px; margin: 8px 0; }
+        .inv-card-name { font-size: 9px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+        .inv-card-price { font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 700; color: #4ade80; }
+
+        /* MODAL */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(5,8,16,0.92);
+            backdrop-filter: blur(20px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 50;
+            padding: 20px;
+        }
+
+        .modal-overlay.show { display: flex; }
+
+        .modal-box {
+            background: #0a0f1e;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 28px;
+            padding: 48px 40px;
+            max-width: 360px;
+            width: 100%;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            transform: scale(0.8) translateY(30px);
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .modal-box.open {
+            transform: scale(1) translateY(0);
+            opacity: 1;
+        }
+
+        .modal-glow {
+            position: absolute;
+            top: -60px; left: 50%;
+            transform: translateX(-50%);
+            width: 200px; height: 200px;
+            border-radius: 50%;
+            filter: blur(60px);
+            opacity: 0.3;
+            pointer-events: none;
+        }
+
+        .modal-rarity-bar {
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            border-radius: 28px 28px 0 0;
+        }
+
+        .modal-rarity-label {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+        }
+
+        .modal-icon {
+            font-size: 96px;
+            line-height: 1;
+            margin: 16px 0;
+            filter: drop-shadow(0 0 30px rgba(255,255,255,0.3));
+            animation: floatIcon 3s ease-in-out infinite;
+        }
+
+        @keyframes floatIcon {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        .modal-name {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 36px;
+            letter-spacing: 4px;
+            margin-bottom: 20px;
+        }
+
+        .modal-price-box {
+            background: rgba(0,0,0,0.4);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 16px;
+            margin-bottom: 24px;
+        }
+
+        .modal-price-label {
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 4px;
+        }
+
+        .modal-price {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 32px;
+            font-weight: 700;
+            color: #4ade80;
+        }
+
+        .modal-close-btn {
+            width: 100%;
+            padding: 16px;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 18px;
+            letter-spacing: 4px;
+            background: white;
+            color: #0a0f1e;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.25s;
+        }
+
+        .modal-close-btn:hover { background: var(--theme); color: white; }
+
+        /* WIN / LOSE SCREENS */
+        .fullscreen {
+            position: fixed;
+            inset: 0;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .fullscreen.show { display: flex; }
+
+        #winScreen { background: radial-gradient(ellipse at center, #1a0a2e 0%, #050810 70%); }
+        #loseScreen { background: radial-gradient(ellipse at center, #2e0a0a 0%, #050810 70%); }
+
+        .screen-emoji { font-size: 100px; animation: bounce 1s ease-in-out infinite alternate; }
+        @keyframes bounce { from { transform: translateY(0); } to { transform: translateY(-20px); } }
+
+        .screen-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(48px, 10vw, 88px);
+            letter-spacing: 8px;
+            margin: 16px 0 8px;
+        }
+
+        .screen-sub { color: var(--muted); font-size: 16px; font-weight: 600; margin-bottom: 40px; max-width: 400px; }
+
+        .screen-btn {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 20px;
+            letter-spacing: 4px;
+            padding: 20px 56px;
+            border: none;
+            border-radius: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        #winScreen .screen-btn { background: #fbbf24; color: #0a0f1e; box-shadow: 0 0 40px rgba(251,191,36,0.4); }
+        #loseScreen .screen-btn { background: white; color: #2e0a0a; }
+        .screen-btn:hover { transform: scale(1.06); }
+
+        /* Shake */
+        .shake { animation: shakeAnim 0.4s; }
+        @keyframes shakeAnim {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-6px); }
+            40%, 80% { transform: translateX(6px); }
+        }
+
+        /* Particle */
+        .particle {
+            position: fixed;
+            pointer-events: none;
+            z-index: 200;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+<body>
+<div class="wrapper">
+
+    <!-- HEADER -->
+    <header>
+        <div>
+            <div class="header-title">THE BEST <span id="titleTheme">COLLECTOR</span></div>
+            <div class="header-sub">Meta: 100.000 monedas · By Aritz</div>
+        </div>
+        <div class="balance-box">
+            <div class="balance-label">Tu Fortuna</div>
+            <div class="balance-amount" id="balance">650</div>
+        </div>
+    </header>
+
+    <!-- PROGRESS -->
+    <div class="progress-wrap">
+        <div class="progress-fill" id="progressFill" style="width:0%"></div>
+    </div>
+
+    <!-- TABS -->
+    <div class="tabs-scroll" id="tabsContainer"></div>
+
+    <!-- BOX INFO -->
+    <div class="box-info">
+        <div class="box-badge" id="boxBadge">Cargando...</div>
+        <div class="box-title" id="boxTitle">...</div>
+        <div class="box-cost" id="boxCost">Costo: --</div>
+    </div>
+
+    <!-- REEL -->
+    <div class="case-wrap" id="mainCase">
+        <div class="case-marker"></div>
+        <div class="case-reel" id="caseReel"></div>
+    </div>
+
+    <!-- SPIN BTN -->
+    <div class="spin-wrap">
+        <button class="spin-btn" id="spinBtn">ABRIR COFRE</button>
+    </div>
+
+    <!-- STATS -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-label">Cofres Abiertos</div>
+            <div class="stat-value" id="statOpened">0</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">Valor Colección</div>
+            <div class="stat-value" id="statValue" style="color:#4ade80">0</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">Objeto Más Caro</div>
+            <div class="stat-value" id="statBest" style="color:#fbbf24">-</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">Inversión Total</div>
+            <div class="stat-value" id="statSpent" style="color:#f43f5e">0</div>
+        </div>
+    </div>
+
+    <!-- INVENTORY -->
+    <div class="inventory-header">
+        <div class="inventory-title">Inventario</div>
+        <button class="sell-all-btn" onclick="sellAll()">Vender Todo 💰</button>
+    </div>
+    <div class="inv-grid" id="inventory"></div>
+
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal">
+    <div class="modal-box" id="modalBox">
+        <div class="modal-glow" id="modalGlow"></div>
+        <div class="modal-rarity-bar" id="modalBar"></div>
+        <div class="modal-rarity-label" id="modalRarity">RAREZA</div>
+        <div class="modal-icon" id="modalIcon">✨</div>
+        <div class="modal-name" id="modalName">Nombre</div>
+        <div class="modal-price-box">
+            <div class="modal-price-label">Valor de Reventa</div>
+            <div class="modal-price" id="modalPrice">0 $</div>
+        </div>
+        <button class="modal-close-btn" onclick="closeModal()">COLECCIONAR</button>
+    </div>
+</div>
+
+<!-- WIN -->
+<div class="fullscreen" id="winScreen">
+    <div>
+        <div class="screen-emoji">👑</div>
+        <div class="screen-title" style="color:#fbbf24">¡MÁXIMA GLORIA!</div>
+        <div class="screen-sub">Has conquistado el mercado y alcanzado los 100k. Eres una leyenda.</div>
+        <button class="screen-btn" onclick="location.reload()">VOLVER A EMPEZAR</button>
+    </div>
+</div>
+
+<!-- LOSE -->
+<div class="fullscreen" id="loseScreen">
+    <div>
+        <div class="screen-emoji">💸</div>
+        <div class="screen-title" style="color:#f43f5e">EN LA RUINA</div>
+        <div class="screen-sub">Te has quedado sin un céntimo. La banca siempre gana...</div>
+        <button class="screen-btn" onclick="location.reload()">VENDER MIS ZAPATOS</button>
+    </div>
+</div>
+
+<script>
+    // AUDIO
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+    function playSound(type) {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        const now = audioCtx.currentTime;
+        switch(type) {
+            case 'click':
+                osc.type = 'sine'; osc.frequency.setValueAtTime(400, now); osc.frequency.exponentialRampToValueAtTime(10, now + 0.1);
+                gain.gain.setValueAtTime(0.1, now); gain.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
+                osc.start(); osc.stop(now + 0.1); break;
+            case 'tick':
+                osc.type = 'square'; osc.frequency.setValueAtTime(160, now);
+                gain.gain.setValueAtTime(0.025, now); gain.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
+                osc.start(); osc.stop(now + 0.04); break;
+            case 'win':
+                [0, 0.1, 0.2, 0.3].forEach(d => {
+                    const o = audioCtx.createOscillator(), g = audioCtx.createGain();
+                    o.connect(g); g.connect(audioCtx.destination);
+                    o.type = 'triangle';
+                    o.frequency.setValueAtTime(440 + d * 220, now + d);
+                    o.frequency.exponentialRampToValueAtTime(880 + d * 220, now + d + 0.25);
+                    g.gain.setValueAtTime(0.12, now + d); g.gain.exponentialRampToValueAtTime(0.01, now + d + 0.35);
+                    o.start(now + d); o.stop(now + d + 0.35);
+                }); break;
+            case 'money':
+                osc.type = 'triangle'; osc.frequency.setValueAtTime(800, now); osc.frequency.exponentialRampToValueAtTime(1400, now + 0.15);
+                gain.gain.setValueAtTime(0.1, now); gain.gain.exponentialRampToValueAtTime(0.01, now + 0.2);
+                osc.start(); osc.stop(now + 0.2); break;
+        }
+    }
+
+    // PARTICLES
+    function createParticles(x, y, color, count = 15) {
+        for (let i = 0; i < count; i++) {
+            const p = document.createElement('div');
+            p.className = 'particle';
+            const size = Math.random() * 8 + 4;
+            p.style.cssText = `width:${size}px;height:${size}px;background:${color};left:${x}px;top:${y}px;`;
+            document.body.appendChild(p);
+            const angle = Math.random() * Math.PI * 2;
+            const vel = Math.random() * 12 + 4;
+            const vx = Math.cos(angle) * vel, vy = Math.sin(angle) * vel;
+            let opacity = 1;
+            const anim = () => {
+                p.style.left = parseFloat(p.style.left) + vx + 'px';
+                p.style.top = parseFloat(p.style.top) + vy + 'px';
+                opacity -= 0.025; p.style.opacity = opacity;
+                if (opacity > 0) requestAnimationFrame(anim); else p.remove();
+            };
+            requestAnimationFrame(anim);
+        }
+    }
+
+    // DATA
+    const boxes = {
+        sweet: { label:"Dulce", emoji:"🍦", cost:80, color:"#f472b6", title:"Cofre Dulce", items:[
+            {name:"Gominola",rarity:"comun",icon:"🍬",price:10},
+            {name:"Piruleta Galáctica",rarity:"especial",icon:"🍭",price:60},
+            {name:"Pastel Gourmet",rarity:"epico",icon:"🍰",price:150},
+            {name:"Cacao Mítico",rarity:"legendario",icon:"🍫",price:600},
+            {name:"Ambrosía",rarity:"mitico",icon:"🍯",price:3000}
+        ]},
+        nature: { label:"Natura", emoji:"🌿", cost:120, color:"#22c55e", title:"Cofre Natura", items:[
+            {name:"Piedra de Río",rarity:"comun",icon:"🪨",price:15},
+            {name:"Bonsai Milenario",rarity:"especial",icon:"🪴",price:85},
+            {name:"Orquídea de Cristal",rarity:"epico",icon:"🌸",price:220},
+            {name:"Lobo Plateado",rarity:"legendario",icon:"🐺",price:900},
+            {name:"Madre Tierra",rarity:"mitico",icon:"🌍",price:4500}
+        ]},
+        tech: { label:"Tech", emoji:"💻", cost:200, color:"#3b82f6", title:"Cofre Tech", items:[
+            {name:"USB 1TB",rarity:"comun",icon:"💾",price:25},
+            {name:"Smartphone Pro",rarity:"especial",icon:"📱",price:140},
+            {name:"Holograma",rarity:"epico",icon:"📡",price:400},
+            {name:"Supercomputador",rarity:"legendario",icon:"🖥️",price:1600},
+            {name:"Conciencia Digital",rarity:"mitico",icon:"🧠",price:8000}
+        ]},
+        gaming: { label:"Gaming", emoji:"🎮", cost:280, color:"#f43f5e", title:"Cofre Gaming", items:[
+            {name:"Alfombrilla",rarity:"comun",icon:"🖱️",price:40},
+            {name:"Silla Ergonómica",rarity:"especial",icon:"💺",price:190},
+            {name:"Consola Next-Gen",rarity:"epico",icon:"🎮",price:550},
+            {name:"Setup RGB Extremo",rarity:"legendario",icon:"💡",price:2200},
+            {name:"Server de Minecraft",rarity:"mitico",icon:"🧊",price:10000}
+        ]},
+        espacial: { label:"Espacial", emoji:"🚀", cost:400, color:"#a855f7", title:"Cofre Espacial", items:[
+            {name:"Polvo de Estrellas",rarity:"comun",icon:"✨",price:60},
+            {name:"Fragmento Voyager",rarity:"especial",icon:"🛰️",price:280},
+            {name:"Anillo Planetario",rarity:"epico",icon:"🪐",price:800},
+            {name:"Meteorito de Oro",rarity:"legendario",icon:"☄️",price:3500},
+            {name:"Agujero de Gusano",rarity:"mitico",icon:"🌀",price:15000}
+        ]},
+        joyeria: { label:"Joyería", emoji:"💎", cost:550, color:"#2dd4bf", title:"Bóveda Joyería", items:[
+            {name:"Anillo de Plata",rarity:"comun",icon:"💍",price:100},
+            {name:"Collar de Perlas",rarity:"especial",icon:"📿",price:450},
+            {name:"Reloj Suizo",rarity:"epico",icon:"⌚",price:1200},
+            {name:"Diamante Azul",rarity:"legendario",icon:"💎",price:4500},
+            {name:"El Arca de Oro",rarity:"mitico",icon:"📦",price:20000}
+        ]},
+        coches: { label:"Coches", emoji:"🏎️", cost:750, color:"#fbbf24", title:"Garaje Premium", items:[
+            {name:"Utilitario",rarity:"comun",icon:"🚗",price:150},
+            {name:"Todoterreno",rarity:"especial",icon:"🚙",price:600},
+            {name:"Deportivo de Lujo",rarity:"epico",icon:"🏎️",price:2000},
+            {name:"Hipercoche",rarity:"legendario",icon:"🏎️",price:7000},
+            {name:"Nave Terrestre",rarity:"mitico",icon:"🛸",price:25000}
+        ]},
+        casas: { label:"Casas", emoji:"🏠", cost:1000, color:"#4ade80", title:"Inmobiliaria", items:[
+            {name:"Estudio Urbano",rarity:"comun",icon:"🏢",price:250},
+            {name:"Chalet Adosado",rarity:"especial",icon:"🏡",price:850},
+            {name:"Villa con Piscina",rarity:"epico",icon:"🏰",price:3000},
+            {name:"Mansión en Hollywood",rarity:"legendario",icon:"🏛️",price:10000},
+            {name:"Castillo Medieval",rarity:"mitico",icon:"🏰",price:35000}
+        ]},
+        memes: { label:"Memes", emoji:"🤡", cost:1500, color:"#9333ea", title:"Cofre Memes", items:[
+            {name:"Pepe Frog",rarity:"comun",icon:"🐸",price:400},
+            {name:"Doge Coin",rarity:"especial",icon:"🐕",price:1400},
+            {name:"Video Viral",rarity:"epico",icon:"🎥",price:4500},
+            {name:"Meme Histórico",rarity:"legendario",icon:"📜",price:12000},
+            {name:"El Internet",rarity:"mitico",icon:"🌐",price:45000}
+        ]},
+        airfryer: { label:"Air-Fryer", emoji:"🍟", cost:2500, color:"#f97316", title:"Santuario Air-Fryer", items:[
+            {name:"Cesta de Recambio",rarity:"comun",icon:"🧺",price:600},
+            {name:"Modelo Básico",rarity:"especial",icon:"🍳",price:2200},
+            {name:"Air-Fryer Digital",rarity:"epico",icon:"🔥",price:7500},
+            {name:"Edición Oro Cocina",rarity:"legendario",icon:"🏆",price:22000},
+            {name:"La Freidora de Dios",rarity:"mitico",icon:"🍟",price:60000}
+        ]}
+    };
+
+    const rarities = {
+        comun: { chance:65, color:"#64748b", label:"COMÚN" },
+        especial: { chance:20, color:"#3b82f6", label:"ESPECIAL" },
+        epico: { chance:10, color:"#a855f7", label:"ÉPICO" },
+        legendario: { chance:4, color:"#f43f5e", label:"LEGENDARIO" },
+        mitico: { chance:1, color:"#fbbf24", label:"MÍTICO" }
+    };
+
+    let currentKey = 'tech';
+    let inventory = [];
+    let state = { balance:650, spent:0, invValue:0, opened:0, best:0, spinning:false, over:false, items:[] };
+    const WIN_GOAL = 100000;
+
+    const reel = document.getElementById('caseReel');
+    const spinBtn = document.getElementById('spinBtn');
+
+    function initTabs() {
+        const c = document.getElementById('tabsContainer');
+        Object.keys(boxes).forEach(k => {
+            const b = boxes[k];
+            const btn = document.createElement('button');
+            btn.id = `tab-${k}`;
+            btn.className = 'tab-btn';
+            btn.innerHTML = `<span class="tab-emoji">${b.emoji}</span>${b.label}`;
+            btn.onclick = () => { playSound('click'); switchBox(k); };
+            c.appendChild(btn);
+        });
+        switchBox('tech');
+    }
+
+    function switchBox(key) {
+        if (state.spinning || state.over) return;
+        currentKey = key;
+        const b = boxes[key];
+        document.documentElement.style.setProperty('--theme', b.color);
+        document.documentElement.style.setProperty('--theme-glow', hexToRgba(b.color, 0.35));
+        document.getElementById('titleTheme').style.color = b.color;
+        document.getElementById('titleTheme').style.textShadow = `0 0 30px ${b.color}`;
+        document.getElementById('boxBadge').textContent = b.label;
+        document.getElementById('boxBadge').style.borderColor = b.color;
+        document.getElementById('boxBadge').style.color = b.color;
+        document.getElementById('boxTitle').textContent = b.title;
+        document.getElementById('boxCost').textContent = `Costo: ${b.cost.toLocaleString()} $`;
+        Object.keys(boxes).forEach(k => {
+            const el = document.getElementById(`tab-${k}`);
+            el.classList.toggle('active', k === key);
+        });
+        setupReel();
+    }
+
+    function hexToRgba(hex, a) {
+        const r = parseInt(hex.slice(1,3),16), g = parseInt(hex.slice(3,5),16), b = parseInt(hex.slice(5,7),16);
+        return `rgba(${r},${g},${b},${a})`;
+    }
+
+    function setupReel() {
+        reel.innerHTML = '';
+        state.items = [];
+        for (let i = 0; i < 60; i++) {
+            const item = randomItem();
+            state.items.push(item);
+            const d = document.createElement('div');
+            d.className = `item-card rarity-${item.rarity}`;
+            d.innerHTML = `<div class="item-icon">${item.icon}</div><div class="item-name">${item.name}</div>`;
+            reel.appendChild(d);
+        }
+        reel.style.transition = 'none';
+        reel.style.transform = 'translateX(0px)';
+    }
+
+    function randomItem() {
+        const rand = Math.random() * 100;
+        let cum = 0;
+        const items = boxes[currentKey].items;
+        for (const [k, info] of Object.entries(rarities)) {
+            cum += info.chance;
+            if (rand <= cum) return items.find(i => i.rarity === k) || items[0];
+        }
+        return items[0];
+    }
+
+    let lastTick = -1;
+    function checkTick() {
+        if (!state.spinning) return;
+        const rect = reel.getBoundingClientRect();
+        const mid = window.innerWidth / 2;
+        const idx = Math.floor((mid - rect.left) / 140);
+        if (idx !== lastTick && idx >= 0) { playSound('tick'); lastTick = idx; }
+        requestAnimationFrame(checkTick);
+    }
+
+    function spin() {
+        if (state.over || state.spinning) return;
+        const cost = boxes[currentKey].cost;
+        if (state.balance < cost) {
+            playSound('click');
+            document.getElementById('balance').parentElement.classList.add('shake');
+            setTimeout(() => document.getElementById('balance').parentElement.classList.remove('shake'), 400);
+            return;
+        }
+        state.spinning = true;
+        spinBtn.disabled = true;
+        state.balance -= cost;
+        state.spent += cost;
+        updateStats();
+        setupReel();
+        void reel.offsetWidth;
+        reel.style.transition = 'transform 5s cubic-bezier(0.12, 0, 0.04, 1)';
+        const winIdx = 55;
+        const caseW = document.getElementById('mainCase').offsetWidth;
+        const tx = -((winIdx * 140) - (caseW / 2) + 70);
+        reel.style.transform = `translateX(${tx}px)`;
+        lastTick = -1;
+        checkTick();
+        setTimeout(() => finalize(state.items[winIdx]), 5100);
+    }
+
+    function finalize(winner) {
+        state.opened++;
+        state.invValue += winner.price;
+        if (winner.price > state.best) state.best = winner.price;
+        inventory.push(winner);
+        renderInventory();
+        updateStats();
+        showModal(winner);
+        state.spinning = false;
+        spinBtn.disabled = false;
+    }
+
+    function renderInventory() {
+        const c = document.getElementById('inventory');
+        c.innerHTML = '';
+        [...inventory].reverse().forEach(item => {
+            const d = document.createElement('div');
+            d.className = 'inv-card';
+            d.innerHTML = `
+                <div class="inv-card-bar" style="background:${rarities[item.rarity].color}"></div>
+                <div class="inv-card-icon">${item.icon}</div>
+                <div class="inv-card-name">${item.name}</div>
+                <div class="inv-card-price">${item.price.toLocaleString()} $</div>
+            `;
+            c.appendChild(d);
+        });
+    }
+
+    function sellAll() {
+        if (!inventory.length || state.over) return;
+        playSound('money');
+        createParticles(window.innerWidth/2, window.innerHeight/2, '#4ade80', 25);
+        state.balance += state.invValue;
+        state.invValue = 0;
+        inventory = [];
+        renderInventory();
+        updateStats();
+        checkEnd();
+    }
+
+    function updateStats() {
+        const bal = document.getElementById('balance');
+        bal.textContent = Math.floor(state.balance).toLocaleString();
+        bal.classList.remove('bump');
+        void bal.offsetWidth;
+        bal.classList.add('bump');
+        document.getElementById('statOpened').textContent = state.opened;
+        document.getElementById('statValue').textContent = Math.round(state.invValue).toLocaleString();
+        document.getElementById('statSpent').textContent = Math.round(state.spent).toLocaleString();
+        document.getElementById('statBest').textContent = state.best > 0 ? Math.round(state.best).toLocaleString() : '-';
+        document.getElementById('progressFill').style.width = `${Math.min((state.balance / WIN_GOAL) * 100, 100)}%`;
+    }
+
+    function checkEnd() {
+        if (state.balance >= WIN_GOAL) {
+            state.over = true;
+            document.getElementById('winScreen').classList.add('show');
+            confetti({ particleCount:300, spread:120, origin:{y:0.6} });
+            playSound('win');
+        } else if ((state.balance + state.invValue) < 80 && !state.spinning) {
+            state.over = true;
+            document.getElementById('loseScreen').classList.add('show');
+        }
+    }
+
+    function showModal(item) {
+        const rar = rarities[item.rarity];
+        document.getElementById('modalRarity').textContent = rar.label;
+        document.getElementById('modalRarity').style.color = rar.color;
+        document.getElementById('modalBar').style.background = rar.color;
+        document.getElementById('modalGlow').style.background = rar.color;
+        document.getElementById('modalIcon').textContent = item.icon;
+        document.getElementById('modalName').textContent = item.name;
+        document.getElementById('modalPrice').textContent = item.price.toLocaleString() + ' $';
+
+        const overlay = document.getElementById('modal');
+        const box = document.getElementById('modalBox');
+        overlay.classList.add('show');
+        setTimeout(() => box.classList.add('open'), 10);
+
+        if (item.rarity === 'legendario' || item.rarity === 'mitico') {
+            confetti({ particleCount:120, spread:80, colors:[rar.color, '#ffffff'] });
+            playSound('win');
+        } else {
+            playSound('click');
+        }
+    }
+
+    function closeModal() {
+        const box = document.getElementById('modalBox');
+        box.classList.remove('open');
+        setTimeout(() => {
+            document.getElementById('modal').classList.remove('show');
+            checkEnd();
+        }, 350);
+    }
+
+    spinBtn.addEventListener('click', () => { playSound('click'); spin(); });
+    initTabs();
+    updateStats();
+</script>
+</body>
+</html>
