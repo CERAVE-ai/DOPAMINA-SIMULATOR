@@ -673,6 +673,147 @@
             40%, 80% { transform: translateX(6px); }
         }
 
+        /* SPLASH SCREEN */
+        #splashScreen {
+            position: fixed;
+            inset: 0;
+            z-index: 999;
+            background: #050810;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 20px;
+            transition: opacity 0.7s ease, visibility 0.7s;
+        }
+
+        #splashScreen.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .splash-grid {
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(59,130,246,0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(59,130,246,0.05) 1px, transparent 1px);
+            background-size: 60px 60px;
+            animation: gridMove 20s linear infinite;
+        }
+
+        .splash-glow {
+            position: absolute;
+            top: 0; left: 50%;
+            transform: translateX(-50%);
+            width: 600px; height: 400px;
+            background: radial-gradient(ellipse, rgba(59,130,246,0.25) 0%, transparent 70%);
+            pointer-events: none;
+            animation: splashGlowPulse 3s ease-in-out infinite;
+        }
+
+        @keyframes splashGlowPulse {
+            0%, 100% { opacity: 0.6; transform: translateX(-50%) scale(1); }
+            50% { opacity: 1; transform: translateX(-50%) scale(1.1); }
+        }
+
+        .splash-content {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .splash-icon {
+            font-size: 90px;
+            line-height: 1;
+            margin-bottom: 24px;
+            animation: floatIcon 3s ease-in-out infinite;
+            filter: drop-shadow(0 0 40px rgba(251,191,36,0.5));
+        }
+
+        .splash-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(48px, 12vw, 96px);
+            letter-spacing: 8px;
+            line-height: 1;
+            color: white;
+            text-shadow: 0 0 60px rgba(59,130,246,0.6);
+            margin-bottom: 4px;
+        }
+
+        .splash-title span {
+            color: #3b82f6;
+            text-shadow: 0 0 40px #3b82f6;
+        }
+
+        .splash-subtitle {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            color: #475569;
+            margin-bottom: 56px;
+        }
+
+        .splash-play-btn {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 28px;
+            letter-spacing: 8px;
+            padding: 24px 80px;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 18px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 60px rgba(59,130,246,0.5), 0 12px 40px rgba(0,0,0,0.5);
+            transition: all 0.3s;
+            animation: btnPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes btnPulse {
+            0%, 100% { box-shadow: 0 0 40px rgba(59,130,246,0.4), 0 12px 40px rgba(0,0,0,0.5); }
+            50% { box-shadow: 0 0 80px rgba(59,130,246,0.7), 0 12px 40px rgba(0,0,0,0.5); }
+        }
+
+        .splash-play-btn::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 50%);
+        }
+
+        .splash-play-btn::after {
+            content: '';
+            position: absolute;
+            top: -50%; left: -120%;
+            width: 60%; height: 200%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
+            transform: skewX(-20deg);
+            transition: left 0.5s;
+        }
+
+        .splash-play-btn:hover::after { left: 160%; }
+        .splash-play-btn:hover { transform: translateY(-4px) scale(1.03); animation: none; box-shadow: 0 0 100px rgba(59,130,246,0.8), 0 20px 60px rgba(0,0,0,0.6); }
+        .splash-play-btn:active { transform: scale(0.97); }
+
+        .splash-by {
+            margin-top: 32px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: #1e293b;
+        }
+
+        .splash-by span { color: #334155; }
+
         /* Particle */
         .particle {
             position: fixed;
@@ -683,7 +824,20 @@
     </style>
 </head>
 <body>
-<div class="wrapper">
+<!-- SPLASH SCREEN -->
+<div id="splashScreen">
+    <div class="splash-grid"></div>
+    <div class="splash-glow"></div>
+    <div class="splash-content">
+        <div class="splash-icon">🏆</div>
+        <div class="splash-title">THE BEST<br><span>COLLECTOR</span></div>
+        <div class="splash-subtitle">By Aritz &nbsp;·&nbsp; Llega a 100.000 monedas</div>
+        <button class="splash-play-btn" onclick="startGame()">▶ &nbsp;JUGAR</button>
+        <div class="splash-by">Empieza con <span>650 monedas</span></div>
+    </div>
+</div>
+
+<div class="wrapper" id="gameWrapper" style="display:none">
 
     <!-- HEADER -->
     <header>
@@ -1135,8 +1289,15 @@
     }
 
     spinBtn.addEventListener('click', () => { playSound('click'); spin(); });
-    initTabs();
-    updateStats();
+
+    function startGame() {
+        const splash = document.getElementById('splashScreen');
+        const game = document.getElementById('gameWrapper');
+        splash.classList.add('hidden');
+        game.style.display = 'block';
+        initTabs();
+        updateStats();
+    }
 </script>
 </body>
 </html>
