@@ -831,7 +831,7 @@
     <div class="splash-content">
         <div class="splash-icon">🏆</div>
         <div class="splash-title">THE BEST<br><span>COLLECTOR</span></div>
-        <div class="splash-subtitle">By Aritz &nbsp;·&nbsp; Llega a 100.000 monedas</div>
+        <div class="splash-subtitle">By Aritz &nbsp;·&nbsp; Llega a 750.000 monedas</div>
         <button class="splash-play-btn" onclick="startGame()">▶ &nbsp;JUGAR</button>
         <div class="splash-by">Empieza con <span>650 monedas</span></div>
     </div>
@@ -843,7 +843,7 @@
     <header>
         <div>
             <div class="header-title">THE BEST <span id="titleTheme">COLLECTOR</span></div>
-            <div class="header-sub">Meta: 100.000 monedas · By Aritz</div>
+            <div class="header-sub">Meta: 750.000 monedas · By Aritz</div>
         </div>
         <div class="balance-box">
             <div class="balance-label">Tu Fortuna</div>
@@ -927,7 +927,7 @@
     <div>
         <div class="screen-emoji">👑</div>
         <div class="screen-title" style="color:#fbbf24">¡MÁXIMA GLORIA!</div>
-        <div class="screen-sub">Has conquistado el mercado y alcanzado los 100k. Eres una leyenda.</div>
+        <div class="screen-sub">Has conquistado el mercado y alcanzado los 750k. Eres una leyenda.</div>
         <button class="screen-btn" onclick="location.reload()">VOLVER A EMPEZAR</button>
     </div>
 </div>
@@ -1071,6 +1071,27 @@
             {name:"Air-Fryer Digital",rarity:"epico",icon:"🔥",price:7500},
             {name:"Edición Oro Cocina",rarity:"legendario",icon:"🏆",price:22000},
             {name:"La Freidora de Dios",rarity:"mitico",icon:"🍟",price:60000}
+        ]},
+        cosmico: { label:"Cósmico", emoji:"🌌", cost:4750, color:"#6366f1", title:"Cofre Cósmico", items:[
+            {name:"Marte",rarity:"comun",icon:"🔴",price:2900},
+            {name:"Tierra",rarity:"especial",icon:"🌍",price:4000},
+            {name:"Sol",rarity:"epico",icon:"☀️",price:8750},
+            {name:"UY Scuti",rarity:"legendario",icon:"⭐",price:50000},
+            {name:"TON 618",rarity:"mitico",icon:"🌑",price:100000}
+        ]},
+        paises: { label:"Países", emoji:"🗺️", cost:8000, color:"#10b981", title:"Cofre de Países", items:[
+            {name:"Japón",rarity:"comun",icon:"🇯🇵",price:4500},
+            {name:"Rusia",rarity:"especial",icon:"🇷🇺",price:6750},
+            {name:"China",rarity:"epico",icon:"🇨🇳",price:10000},
+            {name:"Estados Unidos",rarity:"legendario",icon:"🇺🇸",price:75000},
+            {name:"España",rarity:"mitico",icon:"🇪🇸",price:175000}
+        ]},
+        cerave: { label:"Cerave", emoji:"🧴", cost:15000, color:"#38bdf8", title:"Santuario Cerave", items:[
+            {name:"Copia Barata",rarity:"comun",icon:"🧴",price:10000},
+            {name:"Cerave Barato",rarity:"especial",icon:"💧",price:13500},
+            {name:"Cerave Original",rarity:"epico",icon:"✨",price:35000},
+            {name:"Cerave de Oro",rarity:"legendario",icon:"🥇",price:200000},
+            {name:"Cerave Cósmico",rarity:"mitico",icon:"🌌",price:1000000}
         ]}
     };
 
@@ -1085,7 +1106,7 @@
     let currentKey = 'tech';
     let inventory = [];
     let state = { balance:650, spent:0, invValue:0, opened:0, best:0, spinning:false, over:false, items:[] };
-    const WIN_GOAL = 100000;
+    const WIN_GOAL = 750000;
 
     const reel = document.getElementById('caseReel');
     const spinBtn = document.getElementById('spinBtn');
