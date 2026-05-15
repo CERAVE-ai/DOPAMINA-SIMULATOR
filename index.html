@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -1234,7 +1234,7 @@
                 <div class="inv-card-bar" style="background:${rarities[item.rarity].color}"></div>
                 <div class="inv-card-icon">${item.icon}</div>
                 <div class="inv-card-name">${item.name}</div>
-                <div class="inv-card-price">${item.price.toLocaleString()} $</div>
+                <div class="inv-card-price">${Math.round(item.price * 0.80).toLocaleString()} $</div>
             `;
             c.appendChild(d);
         });
@@ -1244,7 +1244,7 @@
         if (!inventory.length || state.over) return;
         playSound('money');
         createParticles(window.innerWidth/2, window.innerHeight/2, '#4ade80', 25);
-        state.balance += state.invValue;
+        state.balance += state.invValue * 0.80;
         state.invValue = 0;
         inventory = [];
         renderInventory();
@@ -1259,7 +1259,7 @@
         void bal.offsetWidth;
         bal.classList.add('bump');
         document.getElementById('statOpened').textContent = state.opened;
-        document.getElementById('statValue').textContent = Math.round(state.invValue).toLocaleString();
+        document.getElementById('statValue').textContent = Math.round(state.invValue * 0.80).toLocaleString();
         document.getElementById('statSpent').textContent = Math.round(state.spent).toLocaleString();
         document.getElementById('statBest').textContent = state.best > 0 ? Math.round(state.best).toLocaleString() : '-';
         document.getElementById('progressFill').style.width = `${Math.min((state.balance / WIN_GOAL) * 100, 100)}%`;
@@ -1273,8 +1273,138 @@
             playSound('win');
         } else if ((state.balance + state.invValue) < 80 && !state.spinning) {
             state.over = true;
-            document.getElementById('loseScreen').classList.add('show');
+            triggerLoseAnimation();
         }
+    }
+
+    function triggerLoseAnimation() {
+        // FASE 1: temblor suave creciente (0-2s)
+        let shakeIntensity = 2;
+        const shakeGrow = setInterval(() => {
+            shakeIntensity = Math.min(shakeIntensity + 1.5, 22);
+            const x = (Math.random() - 0.5) * shakeIntensity;
+            const y = (Math.random() - 0.5) * shakeIntensity;
+            document.body.style.transform = `translate(${x}px, ${y}px)`;
+        }, 40);
+
+        // FASE 2: monedas cayendo al revés (empieza en 0.3s)
+        setTimeout(() => {
+            for (let i = 0; i < 40; i++) {
+                setTimeout(() => {
+                    const coin = document.createElement('div');
+                    coin.textContent = '💸';
+                    coin.style.cssText = `
+                        position: fixed;
+                        font-size: ${Math.random() * 24 + 20}px;
+                        left: ${Math.random() * 100}vw;
+                        top: -60px;
+                        z-index: 300;
+                        pointer-events: none;
+                        transition: top 1.8s ease-in, opacity 1.8s ease-in;
+                        opacity: 1;
+                    `;
+                    document.body.appendChild(coin);
+                    requestAnimationFrame(() => {
+                        requestAnimationFrame(() => {
+                            coin.style.top = `110vh`;
+                            coin.style.opacity = '0';
+                        });
+                    });
+                    setTimeout(() => coin.remove(), 2000);
+                }, i * 60);
+            }
+        }, 300);
+
+        // FASE 3: contador del balance hacia 0 (empieza en 0.8s)
+        setTimeout(() => {
+            playLoseSound();
+            const balEl = document.getElementById('balance');
+            let current = state.balance;
+            const step = Math.max(1, Math.floor(current / 40));
+            const countDown = setInterval(() => {
+                current = Math.max(0, current - step);
+                balEl.textContent = Math.floor(current).toLocaleString();
+                balEl.style.color = '#f43f5e';
+                if (current <= 0) {
+                    clearInterval(countDown);
+                    balEl.textContent = '0';
+                }
+            }, 40);
+        }, 800);
+
+        // FASE 4: parar temblor y hacer flash rojo + mostrar pantalla (2.5s)
+        setTimeout(() => {
+            clearInterval(shakeGrow);
+            document.body.style.transform = '';
+
+            // Flash rojo
+            const flash = document.createElement('div');
+            flash.style.cssText = `
+                position: fixed; inset: 0; background: #f43f5e;
+                z-index: 400; pointer-events: none;
+                opacity: 0; transition: opacity 0.15s;
+            `;
+            document.body.appendChild(flash);
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => { flash.style.opacity = '0.85'; });
+            });
+
+            // Efecto de grietas (SVG)
+            const cracks = document.createElement('div');
+            cracks.innerHTML = `<svg style="position:fixed;inset:0;width:100%;height:100%;z-index:401;pointer-events:none;opacity:0;transition:opacity 0.2s" viewBox="0 0 100 100" preserveAspectRatio="none">
+                <line x1="50" y1="0" x2="30" y2="40" stroke="white" stroke-width="0.4" opacity="0.8"/>
+                <line x1="30" y1="40" x2="10" y2="70" stroke="white" stroke-width="0.3" opacity="0.6"/>
+                <line x1="30" y1="40" x2="50" y2="65" stroke="white" stroke-width="0.3" opacity="0.6"/>
+                <line x1="50" y1="0" x2="70" y2="35" stroke="white" stroke-width="0.4" opacity="0.8"/>
+                <line x1="70" y1="35" x2="90" y2="60" stroke="white" stroke-width="0.3" opacity="0.6"/>
+                <line x1="70" y1="35" x2="55" y2="60" stroke="white" stroke-width="0.3" opacity="0.5"/>
+                <line x1="50" y1="0" x2="45" y2="30" stroke="white" stroke-width="0.2" opacity="0.5"/>
+                <line x1="45" y1="30" x2="20" y2="50" stroke="white" stroke-width="0.2" opacity="0.4"/>
+                <line x1="45" y1="30" x2="60" y2="55" stroke="white" stroke-width="0.2" opacity="0.4"/>
+            </svg>`;
+            document.body.appendChild(cracks);
+            const svg = cracks.querySelector('svg');
+            setTimeout(() => { svg.style.opacity = '1'; }, 150);
+
+            // Mostrar pantalla de derrota y limpiar
+            setTimeout(() => {
+                flash.style.opacity = '0';
+                setTimeout(() => {
+                    flash.remove();
+                    cracks.remove();
+                    document.getElementById('loseScreen').classList.add('show');
+                }, 300);
+            }, 400);
+
+        }, 2500);
+    }
+
+    function playLoseSound() {
+        const ctx3 = new (window.AudioContext || window.webkitAudioContext)();
+        const now = ctx3.currentTime;
+        // Notas bajando dramáticamente
+        [523, 415, 330, 262, 196].forEach((freq, i) => {
+            const o = ctx3.createOscillator();
+            const g = ctx3.createGain();
+            o.connect(g); g.connect(ctx3.destination);
+            o.type = 'triangle';
+            o.frequency.setValueAtTime(freq, now + i * 0.18);
+            g.gain.setValueAtTime(0.18, now + i * 0.18);
+            g.gain.exponentialRampToValueAtTime(0.01, now + i * 0.18 + 0.3);
+            o.start(now + i * 0.18);
+            o.stop(now + i * 0.18 + 0.3);
+        });
+        // Golpe final grave
+        const o2 = ctx3.createOscillator();
+        const g2 = ctx3.createGain();
+        o2.connect(g2); g2.connect(ctx3.destination);
+        o2.type = 'sine';
+        o2.frequency.setValueAtTime(80, now + 1.0);
+        o2.frequency.exponentialRampToValueAtTime(30, now + 1.6);
+        g2.gain.setValueAtTime(0.4, now + 1.0);
+        g2.gain.exponentialRampToValueAtTime(0.01, now + 1.6);
+        o2.start(now + 1.0);
+        o2.stop(now + 1.6);
     }
 
     function showModal(item) {
@@ -1292,12 +1422,84 @@
         overlay.classList.add('show');
         setTimeout(() => box.classList.add('open'), 10);
 
-        if (item.rarity === 'legendario' || item.rarity === 'mitico') {
+        if (item.rarity === 'mitico') {
+            confetti({ particleCount:300, spread:160, colors:[rar.color, '#ffffff', '#fbbf24'] });
+            playSound('win');
+            playScream();
+        } else if (item.rarity === 'legendario') {
             confetti({ particleCount:120, spread:80, colors:[rar.color, '#ffffff'] });
             playSound('win');
+            shakeScreen();
         } else {
             playSound('click');
         }
+    }
+
+    function shakeScreen() {
+        const body = document.body;
+        let t = 0;
+        const duration = 80;
+        const interval = 30;
+        const shakeInterval = setInterval(() => {
+            const x = (Math.random() - 0.5) * 30;
+            const y = (Math.random() - 0.5) * 30;
+            body.style.transform = `translate(${x}px, ${y}px)`;
+            t += interval;
+            if (t >= duration * 8) {
+                clearInterval(shakeInterval);
+                body.style.transform = '';
+            }
+        }, interval);
+    }
+
+    function playScream() {
+        const ctx2 = new (window.AudioContext || window.webkitAudioContext)();
+        const duration = 1.8;
+        const now = ctx2.currentTime;
+
+        // Capa 1: grito base (ruido + filtro resonante)
+        const bufferSize = ctx2.sampleRate * duration;
+        const buffer = ctx2.createBuffer(1, bufferSize, ctx2.sampleRate);
+        const data = buffer.getChannelData(0);
+        for (let i = 0; i < bufferSize; i++) data[i] = (Math.random() * 2 - 1);
+        const noise = ctx2.createBufferSource();
+        noise.buffer = buffer;
+
+        const filter = ctx2.createBiquadFilter();
+        filter.type = 'bandpass';
+        filter.frequency.setValueAtTime(800, now);
+        filter.frequency.exponentialRampToValueAtTime(2400, now + 0.3);
+        filter.frequency.exponentialRampToValueAtTime(1200, now + duration);
+        filter.Q.value = 8;
+
+        const gainNode = ctx2.createGain();
+        gainNode.gain.setValueAtTime(0, now);
+        gainNode.gain.linearRampToValueAtTime(1.8, now + 0.05);
+        gainNode.gain.setValueAtTime(1.8, now + 0.5);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, now + duration);
+
+        noise.connect(filter); filter.connect(gainNode); gainNode.connect(ctx2.destination);
+        noise.start(now); noise.stop(now + duration);
+
+        // Capa 2: tono agudo de grito
+        const osc = ctx2.createOscillator();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(600, now);
+        osc.frequency.exponentialRampToValueAtTime(1100, now + 0.2);
+        osc.frequency.exponentialRampToValueAtTime(900, now + duration);
+
+        const distortion = ctx2.createWaveShaper();
+        const curve = new Float32Array(256);
+        for (let i = 0; i < 256; i++) { const x = (i * 2) / 256 - 1; curve[i] = (Math.PI + 300) * x / (Math.PI + 300 * Math.abs(x)); }
+        distortion.curve = curve;
+
+        const g2 = ctx2.createGain();
+        g2.gain.setValueAtTime(0, now);
+        g2.gain.linearRampToValueAtTime(0.6, now + 0.08);
+        g2.gain.exponentialRampToValueAtTime(0.01, now + duration);
+
+        osc.connect(distortion); distortion.connect(g2); g2.connect(ctx2.destination);
+        osc.start(now); osc.stop(now + duration);
     }
 
     function closeModal() {
