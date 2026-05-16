@@ -830,11 +830,14 @@
     <div class="splash-glow"></div>
     <div class="splash-content">
         <div class="splash-icon">🏆</div>
+        <div style="margin-bottom:20px;padding:12px 24px;border:1px solid rgba(244,63,94,0.4);border-radius:12px;background:rgba(244,63,94,0.08);max-width:480px;text-align:center;">
+            <div style="font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;color:#f43f5e;letter-spacing:1px;line-height:1.5;">☕ Si quieres seguir viendo este contenido, sería de mucha ayuda una donación de 2€ para el café</div>
+        </div>
         <div class="splash-title">THE BEST<br><span>COLLECTOR</span></div>
-        <div class="splash-subtitle">By Aritz &nbsp;·&nbsp; Llega a 750.000 monedas</div>
+        <div class="splash-subtitle">By Aritz &nbsp;·&nbsp; Llega a 2.000.000 monedas</div>
         <button class="splash-play-btn" onclick="startGame()">▶ &nbsp;JUGAR</button>
         <div class="splash-by">Empieza con <span>650 monedas</span></div>
-        <div class="splash-by" style="margin-top:12px;color:#1e3a5f;font-size:10px;letter-spacing:2px;">🔧 PRÓXIMA ACTUALIZACIÓN <span style="color:#3b82f6">20 / 05 / 2026</span></div>
+        <div style="margin-top:14px;font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;color:#f43f5e;letter-spacing:2px;">🔧 PRÓXIMA ACTUALIZACIÓN &nbsp; 20 / 05 / 2026</div>
     </div>
 </div>
 
@@ -844,7 +847,7 @@
     <header>
         <div>
             <div class="header-title">THE BEST <span id="titleTheme">COLLECTOR</span></div>
-            <div class="header-sub">Meta: 750.000 monedas · By Aritz</div>
+            <div class="header-sub">Meta: 2.000.000 monedas · By Aritz</div>
         </div>
         <div class="balance-box">
             <div class="balance-label">Tu Fortuna</div>
@@ -928,7 +931,7 @@
     <div>
         <div class="screen-emoji">👑</div>
         <div class="screen-title" style="color:#fbbf24">¡MÁXIMA GLORIA!</div>
-        <div class="screen-sub">Has conquistado el mercado y alcanzado los 750k. Eres una leyenda.</div>
+        <div class="screen-sub">Has conquistado el mercado y alcanzado los 2M. Eres una leyenda.</div>
         <button class="screen-btn" onclick="location.reload()">VOLVER A EMPEZAR</button>
     </div>
 </div>
@@ -1087,12 +1090,26 @@
             {name:"Estados Unidos",rarity:"legendario",icon:"🇺🇸",price:75000},
             {name:"España",rarity:"mitico",icon:"🇪🇸",price:175000}
         ]},
-        cerave: { label:"Cerave", emoji:"🧴", cost:15000, color:"#38bdf8", title:"Santuario Cerave", items:[
-            {name:"Copia Barata",rarity:"comun",icon:"🧴",price:10000},
-            {name:"Cerave Barato",rarity:"especial",icon:"💧",price:13500},
-            {name:"Cerave Original",rarity:"epico",icon:"✨",price:35000},
-            {name:"Cerave de Oro",rarity:"legendario",icon:"🥇",price:200000},
-            {name:"Cerave Cósmico",rarity:"mitico",icon:"🌌",price:1000000}
+        celebridades: { label:"Celebridades", emoji:"⭐", cost:15000, color:"#ec4899", title:"Cofre Celebridades", items:[
+            {name:"Ariana Grande",rarity:"comun",icon:"🎤",price:8000},
+            {name:"Anne Hathaway",rarity:"especial",icon:"🎬",price:12000},
+            {name:"Robert Downey Jr.",rarity:"epico",icon:"🦾",price:27000},
+            {name:"Joaquin Phoenix",rarity:"legendario",icon:"🃏",price:125000},
+            {name:"Hayden Christensen",rarity:"mitico",icon:"⚔️",price:275000}
+        ]},
+        villanos: { label:"Villanos", emoji:"💀", cost:27500, color:"#dc2626", title:"Reunión de Villanos", items:[
+            {name:"Thanos",rarity:"comun",icon:"💜",price:20000},
+            {name:"Joker",rarity:"especial",icon:"🃏",price:25000},
+            {name:"Sauron",rarity:"epico",icon:"👁️",price:35000},
+            {name:"Bowser",rarity:"legendario",icon:"🐢",price:200000},
+            {name:"Darth Vader",rarity:"mitico",icon:"🌑",price:450000}
+        ]},
+        cerave: { label:"Cerave", emoji:"🧴", cost:40000, color:"#38bdf8", title:"Santuario Cerave", items:[
+            {name:"Copia Barata",rarity:"comun",icon:"🧴",price:27500},
+            {name:"Cerave Barato",rarity:"especial",icon:"💧",price:35000},
+            {name:"Cerave Original",rarity:"epico",icon:"✨",price:75000},
+            {name:"Cerave de Oro",rarity:"legendario",icon:"🥇",price:400000},
+            {name:"Cerave Cósmico",rarity:"mitico",icon:"🌌",price:1250000}
         ]}
     };
 
@@ -1107,7 +1124,7 @@
     let currentKey = 'tech';
     let inventory = [];
     let state = { balance:650, spent:0, invValue:0, opened:0, best:0, spinning:false, over:false, items:[] };
-    const WIN_GOAL = 750000;
+    const WIN_GOAL = 2000000;
 
     const reel = document.getElementById('caseReel');
     const spinBtn = document.getElementById('spinBtn');
