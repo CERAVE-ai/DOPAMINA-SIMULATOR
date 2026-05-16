@@ -415,6 +415,15 @@
             .stats-grid { grid-template-columns: repeat(2, 1fr); }
         }
 
+        @keyframes musicBar1 {
+            0%, 100% { height: 4px; }
+            50% { height: 16px; }
+        }
+        @keyframes musicBar2 {
+            0%, 100% { height: 12px; }
+            50% { height: 4px; }
+        }
+
         /* MOBILE ADAPTATIONS */
         @media (max-width: 700px) {
             .wrapper { padding: 12px 10px 60px; }
@@ -984,6 +993,17 @@
     <div class="inventory-header">
         <div class="inventory-title">Inventario</div>
         <button class="sell-all-btn" onclick="sellAll()">Vender Todo 💰</button>
+    </div>
+    <!-- MUSIC INDICATOR -->
+    <div id="musicBar" style="display:none;align-items:center;gap:10px;margin-bottom:16px;padding:10px 16px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:12px;">
+        <div style="display:flex;gap:3px;align-items:flex-end;height:16px;">
+            <div class="music-bar-dot" style="width:3px;background:var(--theme);border-radius:2px;animation:musicBar1 0.8s ease-in-out infinite;"></div>
+            <div class="music-bar-dot" style="width:3px;background:var(--theme);border-radius:2px;animation:musicBar2 0.8s ease-in-out infinite 0.15s;"></div>
+            <div class="music-bar-dot" style="width:3px;background:var(--theme);border-radius:2px;animation:musicBar1 0.8s ease-in-out infinite 0.3s;"></div>
+            <div class="music-bar-dot" style="width:3px;background:var(--theme);border-radius:2px;animation:musicBar2 0.8s ease-in-out infinite 0.45s;"></div>
+        </div>
+        <div id="musicName" style="font-size:11px;font-weight:700;letter-spacing:1px;color:#475569;text-transform:uppercase;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">Cargando música...</div>
+        <button onclick="toggleMusic()" id="musicToggle" style="font-family:'Rajdhani',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:6px 12px;background:rgba(255,255,255,0.05);color:#475569;border:1px solid rgba(255,255,255,0.07);border-radius:8px;cursor:pointer;">⏸ PAUSA</button>
     </div>
     <div class="inv-grid" id="inventory"></div>
 
@@ -1639,7 +1659,66 @@
         initTabs();
         updateStats();
         startBonusTimer();
+        initMusic();
     }
+
+    // MUSIC PLAYER
+    const tracks = [
+        'https://api.soundcloud.com/tracks/soundcloud%3Atracks%3A2125617234',
+        'https://api.soundcloud.com/tracks/soundcloud%3Atracks%3A469902882',
+        'https://api.soundcloud.com/tracks/soundcloud%3Atracks%3A1620316506'
+    ];
+    const trackNames = [
+        'M4rkim - Trio Da Criação (Pokémon)',
+        'The Living Tombstone - My Ordinary Life',
+        'É Hora de Brincar | Poppy Playtime'
+    ];
+    let currentTrack = 0;
+    let scWidget = null;
+    let musicPaused = false;
+
+    function initMusic() {
+        const iframe = document.createElement('iframe');
+        iframe.id = 'sc-player';
+        iframe.width = '1';
+        iframe.height = '1';
+        iframe.style.cssText = 'position:fixed;bottom:0;left:0;opacity:0;pointer-events:none;z-index:-1;';
+        iframe.allow = 'autoplay; encrypted-media';
+        iframe.src = `https://w.soundcloud.com/player/?url=${encodeURIComponent(tracks[0])}&auto_play=true&hide_related=true&show_comments=false&show_user=false&show_reposts=false&show_teaser=false&visual=false`;
+        document.body.appendChild(iframe);
+
+        const scScript = document.createElement('script');
+        scScript.src = 'https://w.soundcloud.com/player/api.js';
+        scScript.onload = () => {
+            scWidget = SC.Widget(iframe);
+            scWidget.bind(SC.Widget.Events.READY, () => {
+                scWidget.play();
+                document.getElementById('musicBar').style.display = 'flex';
+                document.getElementById('musicName').textContent = trackNames[0];
+            });
+            scWidget.bind(SC.Widget.Events.FINISH, () => {
+                currentTrack = (currentTrack + 1) % tracks.length;
+                scWidget.load(tracks[currentTrack], { auto_play: true });
+                document.getElementById('musicName').textContent = trackNames[currentTrack];
+            });
+        };
+        document.head.appendChild(scScript);
+    }
+
+    window.toggleMusic = () => {
+        if (!scWidget) return;
+        if (musicPaused) {
+            scWidget.play();
+            musicPaused = false;
+            document.getElementById('musicToggle').textContent = '⏸ PAUSA';
+            document.querySelectorAll('.music-bar-dot').forEach(d => d.style.animationPlayState = 'running');
+        } else {
+            scWidget.pause();
+            musicPaused = true;
+            document.getElementById('musicToggle').textContent = '▶ PLAY';
+            document.querySelectorAll('.music-bar-dot').forEach(d => d.style.animationPlayState = 'paused');
+        }
+    };
 
     // BONUS x2 TIMER
     let bonusActive = false;
