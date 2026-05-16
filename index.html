@@ -1480,6 +1480,7 @@
         renderInventory();
         updateStats();
         checkAchievements();
+        saveGame();
         showModal(bonusWinner);
         state.spinning = false;
         spinBtn.disabled = false;
@@ -1511,6 +1512,7 @@
         renderInventory();
         updateStats();
         checkAchievements();
+        saveGame();
         checkEnd();
     }
 
@@ -1530,11 +1532,13 @@
     function checkEnd() {
         if (state.balance >= WIN_GOAL) {
             state.over = true;
+            clearSave();
             document.getElementById('winScreen').classList.add('show');
             confetti({ particleCount:300, spread:120, origin:{y:0.6} });
             playSound('win');
         } else if ((state.balance + state.invValue) < 80 && !state.spinning) {
             state.over = true;
+            clearSave();
             triggerLoseAnimation();
         }
     }
@@ -1853,16 +1857,91 @@
         toastTimeout = setTimeout(() => toast.classList.remove('show'), 4000);
     }
 
+    // AUTOGUARDADO
+    const SAVE_KEY = 'tbc_save';
+
+    function saveGame() {
+        const saveData = {
+            state: {
+                balance: state.balance,
+                spent: state.spent,
+                invValue: state.invValue,
+                opened: state.opened,
+                best: state.best,
+                commonCount: state.commonCount,
+                miticoCount: state.miticoCount,
+                consecutiveMiticos: state.consecutiveMiticos,
+                lastWasmitico: state.lastWasmitico
+            },
+            inventory: inventory,
+            achievements: achievements.map(a => ({ id: a.id, done: a.done })),
+            currentKey: currentKey,
+            savedAt: Date.now()
+        };
+        try {
+            localStorage.setItem(SAVE_KEY, JSON.stringify(saveData));
+        } catch(e) {}
+    }
+
+    function loadGame() {
+        try {
+            const raw = localStorage.getItem(SAVE_KEY);
+            if (!raw) return false;
+            const data = JSON.parse(raw);
+            // Restaurar state
+            Object.assign(state, data.state);
+            // Restaurar inventario
+            inventory = data.inventory || [];
+            // Restaurar logros
+            if (data.achievements) {
+                data.achievements.forEach(saved => {
+                    const a = achievements.find(x => x.id === saved.id);
+                    if (a) a.done = saved.done;
+                });
+            }
+            // Restaurar cofre activo
+            if (data.currentKey && boxes[data.currentKey]) currentKey = data.currentKey;
+            return true;
+        } catch(e) { return false; }
+    }
+
+    function clearSave() {
+        try { localStorage.removeItem(SAVE_KEY); } catch(e) {}
+    }
+
     function startGame() {
         const splash = document.getElementById('splashScreen');
         const game = document.getElementById('gameWrapper');
         splash.classList.add('hidden');
         game.style.display = 'block';
+
+        const hasSave = loadGame();
         initTabs();
+        if (hasSave) {
+            renderInventory();
+            showSaveNotice();
+        }
         updateStats();
         startBonusTimer();
         initMusic();
         initAchievements();
+        // Guardar cada 15 segundos automáticamente
+        setInterval(saveGame, 15000);
+    }
+
+    function showSaveNotice() {
+        const notice = document.createElement('div');
+        notice.style.cssText = `
+            position:fixed;top:20px;left:50%;transform:translateX(-50%);
+            background:#0a0f1e;border:1px solid #4ade80;border-radius:12px;
+            padding:10px 20px;font-family:'Rajdhani',sans-serif;font-size:13px;
+            font-weight:700;letter-spacing:2px;text-transform:uppercase;
+            color:#4ade80;z-index:600;box-shadow:0 0 20px rgba(74,222,128,0.3);
+            transition:opacity 0.5s;
+        `;
+        notice.textContent = '✅ Partida guardada cargada';
+        document.body.appendChild(notice);
+        setTimeout(() => { notice.style.opacity = '0'; setTimeout(() => notice.remove(), 500); }, 2500);
     }
 
     // MUSIC PLAYER
