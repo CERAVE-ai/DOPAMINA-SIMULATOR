@@ -849,9 +849,19 @@
             <div class="header-title">THE BEST <span id="titleTheme">COLLECTOR</span></div>
             <div class="header-sub">Meta: 2.000.000 monedas · By Aritz</div>
         </div>
-        <div class="balance-box">
-            <div class="balance-label">Tu Fortuna</div>
-            <div class="balance-amount" id="balance">650</div>
+        <div style="display:flex;align-items:center;gap:20px;">
+            <div id="bonusBox" style="text-align:center;">
+                <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#475569;margin-bottom:2px;" id="bonusLabel">💰 x2 Dinero en</div>
+                <div id="bonusTimer" style="font-family:'JetBrains Mono',monospace;font-size:28px;font-weight:700;color:#a855f7;text-shadow:0 0 20px rgba(168,85,247,0.5);">60:00</div>
+            </div>
+            <div id="luckyBox" style="text-align:center;">
+                <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#475569;margin-bottom:2px;" id="luckyLabel">🍀 x2 Suerte en</div>
+                <div id="luckyTimer" style="font-family:'JetBrains Mono',monospace;font-size:28px;font-weight:700;color:#22c55e;text-shadow:0 0 20px rgba(34,197,94,0.5);">30:00</div>
+            </div>
+            <div class="balance-box">
+                <div class="balance-label">Tu Fortuna</div>
+                <div class="balance-amount" id="balance">650</div>
+            </div>
         </div>
     </header>
 
@@ -1184,9 +1194,23 @@
     }
 
     function randomItem() {
+        const items = boxes[currentKey].items;
+
+        // Con suerte x2: se tiran dos veces y se queda el más raro
+        if (luckyActive) {
+            const roll1 = getItemByRoll(items);
+            const roll2 = getItemByRoll(items);
+            const rarityOrder = ['comun','especial','epico','legendario','mitico'];
+            const r1 = rarityOrder.indexOf(roll1.rarity);
+            const r2 = rarityOrder.indexOf(roll2.rarity);
+            return r1 >= r2 ? roll1 : roll2;
+        }
+        return getItemByRoll(items);
+    }
+
+    function getItemByRoll(items) {
         const rand = Math.random() * 100;
         let cum = 0;
-        const items = boxes[currentKey].items;
         for (const [k, info] of Object.entries(rarities)) {
             cum += info.chance;
             if (rand <= cum) return items.find(i => i.rarity === k) || items[0];
@@ -1232,12 +1256,14 @@
 
     function finalize(winner) {
         state.opened++;
-        state.invValue += winner.price;
-        if (winner.price > state.best) state.best = winner.price;
-        inventory.push(winner);
+        const finalPrice = bonusActive ? winner.price * 2 : winner.price;
+        const bonusWinner = { ...winner, price: finalPrice };
+        state.invValue += finalPrice;
+        if (finalPrice > state.best) state.best = finalPrice;
+        inventory.push(bonusWinner);
         renderInventory();
         updateStats();
-        showModal(winner);
+        showModal(bonusWinner);
         state.spinning = false;
         spinBtn.disabled = false;
     }
@@ -1538,6 +1564,84 @@
         game.style.display = 'block';
         initTabs();
         updateStats();
+        startBonusTimer();
+    }
+
+    // BONUS x2 TIMER
+    let bonusActive = false;
+    let bonusSecondsLeft = 60 * 60;
+    let bonusDurationLeft = 0;
+
+    let luckyActive = false;
+    let luckySecondsLeft = 30 * 60;
+    let luckyDurationLeft = 0;
+
+    function startBonusTimer() {
+        setInterval(() => {
+            if (state.over) return;
+
+            // --- DINERO x2 ---
+            if (bonusActive) {
+                bonusDurationLeft--;
+                const m = Math.floor(bonusDurationLeft / 60);
+                const s = bonusDurationLeft % 60;
+                document.getElementById('bonusTimer').textContent = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+                document.getElementById('bonusLabel').textContent = '🔥 x2 ACTIVO';
+                document.getElementById('bonusTimer').style.color = '#fbbf24';
+                document.getElementById('bonusTimer').style.textShadow = '0 0 20px rgba(251,191,36,0.7)';
+                document.getElementById('bonusBox').style.animation = 'mythicPulse 0.8s infinite';
+                if (bonusDurationLeft <= 0) {
+                    bonusActive = false;
+                    bonusSecondsLeft = 60 * 60;
+                    document.getElementById('bonusLabel').textContent = '💰 x2 Dinero en';
+                    document.getElementById('bonusTimer').style.color = '#a855f7';
+                    document.getElementById('bonusTimer').style.textShadow = '0 0 20px rgba(168,85,247,0.5)';
+                    document.getElementById('bonusBox').style.animation = '';
+                }
+            } else {
+                bonusSecondsLeft--;
+                const m = Math.floor(bonusSecondsLeft / 60);
+                const s = bonusSecondsLeft % 60;
+                document.getElementById('bonusTimer').textContent = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+                if (bonusSecondsLeft <= 0) {
+                    bonusActive = true;
+                    bonusDurationLeft = 2 * 60;
+                    playSound('win');
+                    confetti({ particleCount:150, spread:100, colors:['#fbbf24','#ffffff','#a855f7'] });
+                }
+            }
+
+            // --- SUERTE x2 ---
+            if (luckyActive) {
+                luckyDurationLeft--;
+                const m = Math.floor(luckyDurationLeft / 60);
+                const s = luckyDurationLeft % 60;
+                document.getElementById('luckyTimer').textContent = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+                document.getElementById('luckyLabel').textContent = '🍀 x2 ACTIVO';
+                document.getElementById('luckyTimer').style.color = '#fbbf24';
+                document.getElementById('luckyTimer').style.textShadow = '0 0 20px rgba(251,191,36,0.7)';
+                document.getElementById('luckyBox').style.animation = 'mythicPulse 0.8s infinite';
+                if (luckyDurationLeft <= 0) {
+                    luckyActive = false;
+                    luckySecondsLeft = 30 * 60;
+                    document.getElementById('luckyLabel').textContent = '🍀 x2 Suerte en';
+                    document.getElementById('luckyTimer').style.color = '#22c55e';
+                    document.getElementById('luckyTimer').style.textShadow = '0 0 20px rgba(34,197,94,0.5)';
+                    document.getElementById('luckyBox').style.animation = '';
+                }
+            } else {
+                luckySecondsLeft--;
+                const m = Math.floor(luckySecondsLeft / 60);
+                const s = luckySecondsLeft % 60;
+                document.getElementById('luckyTimer').textContent = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+                if (luckySecondsLeft <= 0) {
+                    luckyActive = true;
+                    luckyDurationLeft = 2 * 60;
+                    playSound('win');
+                    confetti({ particleCount:150, spread:100, colors:['#22c55e','#ffffff','#4ade80'] });
+                }
+            }
+        }, 1000);
     }
 </script>
 </body>
