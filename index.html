@@ -424,6 +424,99 @@
             50% { height: 4px; }
         }
 
+        /* LOGROS */
+        .achievement-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 18px 16px;
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        .achievement-card.done {
+            border-color: #fbbf24;
+            background: rgba(251,191,36,0.06);
+            box-shadow: 0 0 20px rgba(251,191,36,0.15);
+        }
+        .achievement-card.done::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #fbbf24, transparent);
+        }
+        .achievement-icon {
+            font-size: 36px;
+            line-height: 1;
+            flex-shrink: 0;
+            filter: grayscale(1) opacity(0.3);
+            transition: filter 0.3s;
+        }
+        .achievement-card.done .achievement-icon {
+            filter: none;
+        }
+        .achievement-name {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 18px;
+            letter-spacing: 2px;
+            color: var(--muted);
+            transition: color 0.3s;
+            line-height: 1.2;
+        }
+        .achievement-card.done .achievement-name { color: #fbbf24; }
+        .achievement-desc {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-top: 4px;
+            line-height: 1.4;
+        }
+        .achievement-badge {
+            position: absolute;
+            top: 10px; right: 10px;
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            padding: 3px 8px;
+            border-radius: 999px;
+            background: rgba(251,191,36,0.15);
+            color: #fbbf24;
+            border: 1px solid rgba(251,191,36,0.3);
+            display: none;
+        }
+        .achievement-card.done .achievement-badge { display: block; }
+
+        /* TOAST */
+        #achievement-toast {
+            position: fixed;
+            bottom: -120px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 500;
+            background: #0a0f1e;
+            border: 1px solid #fbbf24;
+            border-radius: 16px;
+            padding: 14px 20px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            box-shadow: 0 0 30px rgba(251,191,36,0.3), 0 8px 32px rgba(0,0,0,0.6);
+            transition: bottom 0.5s cubic-bezier(0.23,1,0.32,1);
+            min-width: 280px;
+            max-width: 90vw;
+        }
+        #achievement-toast.show { bottom: 24px; }
+        #achievement-toast-icon { font-size: 36px; }
+        #achievement-toast-title { font-family: 'Bebas Neue', sans-serif; font-size: 11px; letter-spacing: 3px; color: #fbbf24; }
+        #achievement-toast-name { font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 2px; color: white; line-height: 1.1; }
+
         /* MOBILE ADAPTATIONS */
         @media (max-width: 700px) {
             .wrapper { padding: 12px 10px 60px; }
@@ -1007,6 +1100,23 @@
     </div>
     <div class="inv-grid" id="inventory"></div>
 
+    <!-- LOGROS -->
+    <div style="margin-top:40px;">
+        <div class="inventory-header">
+            <div class="inventory-title">🏅 Logros</div>
+        </div>
+        <div id="achievements-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;"></div>
+    </div>
+
+</div>
+
+<!-- ACHIEVEMENT TOAST -->
+<div id="achievement-toast">
+    <div id="achievement-toast-icon">🏅</div>
+    <div>
+        <div id="achievement-toast-title">🏅 LOGRO DESBLOQUEADO</div>
+        <div id="achievement-toast-name">Nombre del logro</div>
+    </div>
 </div>
 
 <!-- MODAL -->
@@ -1222,7 +1332,7 @@
 
     let currentKey = 'tech';
     let inventory = [];
-    let state = { balance:650, spent:0, invValue:0, opened:0, best:0, spinning:false, over:false, items:[] };
+    let state = { balance:650, spent:0, invValue:0, opened:0, best:0, spinning:false, over:false, items:[], commonCount:0, miticoCount:0, consecutiveMiticos:0, lastWasmitico:false };
     const WIN_GOAL = 2000000;
 
     const reel = document.getElementById('caseReel');
@@ -1355,8 +1465,21 @@
         state.invValue += finalPrice;
         if (finalPrice > state.best) state.best = finalPrice;
         inventory.push(bonusWinner);
+
+        // Contadores de logros
+        if (winner.rarity === 'comun') state.commonCount++;
+        if (winner.rarity === 'mitico') {
+            state.miticoCount++;
+            state.consecutiveMiticos = state.lastWasmitico ? state.consecutiveMiticos + 1 : 1;
+            state.lastWasmitico = true;
+        } else {
+            state.consecutiveMiticos = 0;
+            state.lastWasmitico = false;
+        }
+
         renderInventory();
         updateStats();
+        checkAchievements();
         showModal(bonusWinner);
         state.spinning = false;
         spinBtn.disabled = false;
@@ -1387,6 +1510,7 @@
         inventory = [];
         renderInventory();
         updateStats();
+        checkAchievements();
         checkEnd();
     }
 
@@ -1651,6 +1775,84 @@
 
     spinBtn.addEventListener('click', () => { playSound('click'); spin(); });
 
+    // LOGROS
+    const achievements = [
+        {
+            id: 'mala_suerte',
+            name: '¡Que Mala Suerte Bro!',
+            desc: 'Abre cofres hasta conseguir 45 objetos comunes',
+            icon: '😭',
+            done: false,
+            check: () => state.commonCount >= 45
+        },
+        {
+            id: 'como_lo_has_hecho',
+            name: '¿Cómo Lo Has Hecho?',
+            desc: 'Consigue 5 objetos míticos (no tienen que ser seguidos)',
+            icon: '🤯',
+            done: false,
+            check: () => state.miticoCount >= 5
+        },
+        {
+            id: 'ya_casi',
+            name: 'Ya casi bro...',
+            desc: 'Llega a 1.000.000$ de fortuna',
+            icon: '💰',
+            done: false,
+            check: () => state.balance >= 1000000
+        },
+        {
+            id: 'suceso',
+            name: '¿Cómo es Posible Este Suceso?',
+            desc: 'Consigue dos míticos seguidos',
+            icon: '👁️',
+            done: false,
+            check: () => state.consecutiveMiticos >= 2
+        }
+    ];
+
+    function initAchievements() {
+        const grid = document.getElementById('achievements-grid');
+        grid.innerHTML = '';
+        achievements.forEach(a => {
+            const card = document.createElement('div');
+            card.className = `achievement-card${a.done ? ' done' : ''}`;
+            card.id = `ach-${a.id}`;
+            card.innerHTML = `
+                <div class="achievement-icon">${a.icon}</div>
+                <div style="flex:1">
+                    <div class="achievement-name">${a.name}</div>
+                    <div class="achievement-desc">${a.desc}</div>
+                </div>
+                <div class="achievement-badge">✓ HECHO</div>
+            `;
+            grid.appendChild(card);
+        });
+    }
+
+    function checkAchievements() {
+        achievements.forEach(a => {
+            if (!a.done && a.check()) {
+                a.done = true;
+                const card = document.getElementById(`ach-${a.id}`);
+                if (card) card.classList.add('done');
+                showAchievementToast(a);
+            }
+        });
+    }
+
+    let toastTimeout = null;
+    function showAchievementToast(a) {
+        const toast = document.getElementById('achievement-toast');
+        document.getElementById('achievement-toast-icon').textContent = a.icon;
+        document.getElementById('achievement-toast-name').textContent = a.name;
+        toast.classList.add('show');
+        confetti({ particleCount: 60, spread: 60, origin: { y: 0.9 }, colors: ['#fbbf24', '#ffffff'] });
+        playSound('win');
+        if (toastTimeout) clearTimeout(toastTimeout);
+        toastTimeout = setTimeout(() => toast.classList.remove('show'), 4000);
+    }
+
     function startGame() {
         const splash = document.getElementById('splashScreen');
         const game = document.getElementById('gameWrapper');
@@ -1660,6 +1862,7 @@
         updateStats();
         startBonusTimer();
         initMusic();
+        initAchievements();
     }
 
     // MUSIC PLAYER
