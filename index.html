@@ -415,6 +415,75 @@
             .stats-grid { grid-template-columns: repeat(2, 1fr); }
         }
 
+        /* MOBILE ADAPTATIONS */
+        @media (max-width: 700px) {
+            .wrapper { padding: 12px 10px 60px; }
+
+            header {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 12px;
+                padding: 14px 16px;
+            }
+
+            .header-title { font-size: 26px; }
+            .header-sub { font-size: 9px; }
+
+            /* Contadores + fortuna en fila compacta */
+            #header-right {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                gap: 8px;
+            }
+
+            #bonusBox, #luckyBox {
+                text-align: center;
+                flex: 1;
+            }
+
+            #bonusTimer, #luckyTimer {
+                font-size: 18px !important;
+            }
+
+            #bonusLabel, #luckyLabel {
+                font-size: 8px !important;
+                letter-spacing: 1px !important;
+            }
+
+            .balance-box { text-align: center; flex: 1; }
+            .balance-amount { font-size: 22px !important; }
+            .balance-label { font-size: 8px; }
+
+            /* Reel más pequeño */
+            .case-wrap { height: 130px; }
+            .item-card { min-width: 100px; width: 100px; }
+            .item-card .item-icon { font-size: 28px; }
+            .item-card .item-name { font-size: 7px; }
+
+            /* Botón spin */
+            .spin-btn { font-size: 18px; padding: 14px 40px; letter-spacing: 4px; }
+
+            /* Stats */
+            .stat-value { font-size: 16px; }
+            .stat-label { font-size: 8px; }
+            .stat-card { padding: 10px 8px; }
+
+            /* Inventario */
+            .inv-grid { grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); gap: 8px; }
+            .inv-card { padding: 10px 6px; }
+            .inv-card-icon { font-size: 24px; }
+            .inv-card-price { font-size: 11px; }
+
+            /* Tabs */
+            .tab-btn { padding: 8px 10px; font-size: 9px; }
+            .tab-emoji { font-size: 14px; }
+
+            /* Box info */
+            .box-title { font-size: 26px; letter-spacing: 3px; }
+            .box-cost { font-size: 11px; }
+        }
+
         .stat-card {
             background: var(--surface);
             border: 1px solid var(--border);
@@ -849,7 +918,7 @@
             <div class="header-title">THE BEST <span id="titleTheme">COLLECTOR</span></div>
             <div class="header-sub">Meta: 2.000.000 monedas · By Aritz</div>
         </div>
-        <div style="display:flex;align-items:center;gap:20px;">
+        <div style="display:flex;align-items:center;gap:20px;" id="header-right">
             <div id="bonusBox" style="text-align:center;">
                 <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#475569;margin-bottom:2px;" id="bonusLabel">💰 x2 Dinero en</div>
                 <div id="bonusTimer" style="font-family:'JetBrains Mono',monospace;font-size:28px;font-weight:700;color:#a855f7;text-shadow:0 0 20px rgba(168,85,247,0.5);">60:00</div>
@@ -1181,11 +1250,14 @@
     function setupReel() {
         reel.innerHTML = '';
         state.items = [];
+        const cardW = window.innerWidth <= 700 ? 100 : 140;
         for (let i = 0; i < 60; i++) {
             const item = randomItem();
             state.items.push(item);
             const d = document.createElement('div');
             d.className = `item-card rarity-${item.rarity}`;
+            d.style.minWidth = cardW + 'px';
+            d.style.width = cardW + 'px';
             d.innerHTML = `<div class="item-icon">${item.icon}</div><div class="item-name">${item.name}</div>`;
             reel.appendChild(d);
         }
@@ -1223,7 +1295,8 @@
         if (!state.spinning) return;
         const rect = reel.getBoundingClientRect();
         const mid = window.innerWidth / 2;
-        const idx = Math.floor((mid - rect.left) / 140);
+        const cardW = window.innerWidth <= 700 ? 100 : 140;
+        const idx = Math.floor((mid - rect.left) / cardW);
         if (idx !== lastTick && idx >= 0) { playSound('tick'); lastTick = idx; }
         requestAnimationFrame(checkTick);
     }
@@ -1247,7 +1320,8 @@
         reel.style.transition = 'transform 5s cubic-bezier(0.12, 0, 0.04, 1)';
         const winIdx = 55;
         const caseW = document.getElementById('mainCase').offsetWidth;
-        const tx = -((winIdx * 140) - (caseW / 2) + 70);
+        const cardW = window.innerWidth <= 700 ? 100 : 140;
+        const tx = -((winIdx * cardW) - (caseW / 2) + cardW / 2);
         reel.style.transform = `translateX(${tx}px)`;
         lastTick = -1;
         checkTick();
