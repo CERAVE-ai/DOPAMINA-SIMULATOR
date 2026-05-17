@@ -1340,7 +1340,7 @@
 
     let currentKey = 'tech';
     let inventory = [];
-    let state = { balance:650, spent:0, invValue:0, opened:0, best:0, spinning:false, over:false, items:[], commonCount:0, miticoCount:0, consecutiveMiticos:0, lastWasmitico:false };
+    let state = { balance:650, spent:0, invValue:0, opened:0, best:0, spinning:false, over:false, items:[], commonCount:0, miticoCount:0, consecutiveMiticos:0, lastWasmitico:false, timeInGame:0, gotSuerteMax:false };
     const WIN_GOAL = 2000000;
 
     const reel = document.getElementById('caseReel');
@@ -1831,6 +1831,38 @@
             icon: '👁️',
             done: false,
             check: () => state.consecutiveMiticos >= 2
+        },
+        {
+            id: 'eres_activo',
+            name: 'Eres Activo',
+            desc: 'Estate una hora en el juego',
+            icon: '⏰',
+            done: false,
+            check: () => state.timeInGame >= 3600
+        },
+        {
+            id: 'suertudo',
+            name: 'No Serás Tú Un Suertudo...',
+            desc: 'Que te toque Suerte Máxima en el evento aleatorio',
+            icon: '🍀',
+            done: false,
+            check: () => state.gotSuerteMax === true
+        },
+        {
+            id: 'te_queda_nada',
+            name: 'Te Queda Nada Bro...',
+            desc: 'Llega a 1.750.000$ de fortuna',
+            icon: '🤑',
+            done: false,
+            check: () => state.balance >= 1750000
+        },
+        {
+            id: 'esto_es_enserio',
+            name: '¿Esto Es En Serio?',
+            desc: 'Completa todos los demás logros',
+            icon: '👑',
+            done: false,
+            check: () => achievements.filter(a => a.id !== 'esto_es_enserio').every(a => a.done)
         }
     ];
 
@@ -1890,7 +1922,9 @@
                 commonCount: state.commonCount,
                 miticoCount: state.miticoCount,
                 consecutiveMiticos: state.consecutiveMiticos,
-                lastWasmitico: state.lastWasmitico
+                lastWasmitico: state.lastWasmitico,
+                timeInGame: state.timeInGame,
+                gotSuerteMax: state.gotSuerteMax
             },
             inventory: inventory,
             achievements: achievements.map(a => ({ id: a.id, done: a.done })),
@@ -1945,6 +1979,14 @@
         startEventTimer();
         initMusic();
         initAchievements();
+        // Contador de tiempo en juego
+        setInterval(() => {
+            if (!state.over) {
+                state.timeInGame++;
+                checkAchievements();
+            }
+        }, 1000);
+
         // Guardar cada 15 segundos automáticamente
         setInterval(saveGame, 15000);
     }
@@ -2102,6 +2144,10 @@
 
                     // Mostrar nombre del evento grande
                     showEventPopup(currentEvent);
+                    if (currentEvent.id === 'suerte_max') {
+                        state.gotSuerteMax = true;
+                        checkAchievements();
+                    }
                 }
             }
         }, 1000);
