@@ -1010,7 +1010,7 @@
         <input id="playerNameInput" type="text" maxlength="16" placeholder="Tu nombre para el leaderboard..."
             style="margin-top:20px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:10px 18px;font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;letter-spacing:2px;color:white;text-align:center;outline:none;width:280px;max-width:90vw;">
         <div id="nameError" style="display:none;margin-top:8px;font-size:12px;font-weight:700;letter-spacing:1px;color:#f43f5e;">❌ Ese nombre ya está en uso, elige otro</div>
-        <div class="splash-by">Empieza con <span>650 monedas</span></div>
+        <div class="splash-by">Empieza con <span>1.000 monedas</span></div>
         <div style="margin-top:14px;font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;color:#f43f5e;letter-spacing:2px;">🔧 PRÓXIMA ACTUALIZACIÓN &nbsp; 20 / 05 / 2026</div>
     </div>
 </div>
@@ -1272,8 +1272,14 @@
         const btn = document.getElementById('playBtn');
         const rawName = input.value.trim();
 
-        // Si no pone nombre, juega como Anónimo sin comprobar
-        if (!rawName) { startGame(); return; }
+        // Si no pone nombre, mostrar error
+        if (!rawName) {
+            nameError.textContent = '❌ Debes poner un nombre para jugar';
+            nameError.style.display = 'block';
+            btn.textContent = '▶ \u00a0JUGAR';
+            btn.disabled = false;
+            return;
+        }
 
         // Si ya tenía este nombre guardado (es su propio nombre), dejar pasar
         const savedName = localStorage.getItem(SAVED_NAME_KEY);
@@ -1494,7 +1500,7 @@
     let currentKey = 'tech';
     let inventory = [];
     let playerName = 'Anónimo';
-    let state = { balance:650, spent:0, invValue:0, opened:0, best:0, spinning:false, over:false, items:[], commonCount:0, miticoCount:0, consecutiveMiticos:0, lastWasmitico:false, timeInGame:0, gotSuerteMax:false };
+    let state = { balance:1000, spent:0, invValue:0, opened:0, best:0, spinning:false, over:false, items:[], commonCount:0, miticoCount:0, consecutiveMiticos:0, lastWasmitico:false, timeInGame:0, gotSuerteMax:false };
     const WIN_GOAL = 2000000;
 
     const reel = document.getElementById('caseReel');
