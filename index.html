@@ -1006,7 +1006,9 @@
         </div>
         <div class="splash-title">THE BEST<br><span>COLLECTOR</span></div>
         <div class="splash-subtitle">By Aritz &nbsp;·&nbsp; Llega a 2.000.000 monedas</div>
-        <button class="splash-play-btn" onclick="startGame()">▶ &nbsp;JUGAR</button>
+        <button class="splash-play-btn" id="playBtn">▶ &nbsp;JUGAR</button>
+        <input id="playerNameInput" type="text" maxlength="16" placeholder="Tu nombre para el leaderboard..."
+            style="margin-top:20px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:10px 18px;font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;letter-spacing:2px;color:white;text-align:center;outline:none;width:280px;max-width:90vw;">
         <div class="splash-by">Empieza con <span>650 monedas</span></div>
         <div style="margin-top:14px;font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;color:#f43f5e;letter-spacing:2px;">🔧 PRÓXIMA ACTUALIZACIÓN &nbsp; 20 / 05 / 2026</div>
     </div>
@@ -1090,10 +1092,26 @@
         </div>
     </div>
 
+    <!-- HISTORIAL DE PARTIDAS -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:32px;">
+        <div class="stat-card" style="border-color:rgba(244,63,94,0.3);background:rgba(244,63,94,0.05);">
+            <div style="font-size:32px;margin-bottom:6px;">👟</div>
+            <div class="stat-label" style="color:#f43f5e;">Zapatos Vendidos</div>
+            <div class="stat-value" id="statLosses" style="color:#f43f5e;">0</div>
+            <div style="font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#475569;margin-top:4px;">veces en la ruina</div>
+        </div>
+        <div class="stat-card" style="border-color:rgba(251,191,36,0.3);background:rgba(251,191,36,0.05);">
+            <div style="font-size:32px;margin-bottom:6px;">👑</div>
+            <div class="stat-label" style="color:#fbbf24;">Glorias Alcanzadas</div>
+            <div class="stat-value" id="statWins" style="color:#fbbf24;">0</div>
+            <div style="font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#475569;margin-top:4px;">veces en la gloria</div>
+        </div>
+    </div>
+
     <!-- INVENTORY -->
     <div class="inventory-header">
         <div class="inventory-title">Inventario</div>
-        <button class="sell-all-btn" onclick="sellAll()">Vender Todo 💰</button>
+        <button class="sell-all-btn" id="sellAllBtn">Vender Todo 💰</button>
     </div>
     <!-- MUSIC INDICATOR -->
     <div id="musicBar" style="display:none;align-items:center;gap:10px;margin-bottom:16px;padding:10px 16px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:12px;">
@@ -1104,7 +1122,7 @@
             <div class="music-bar-dot" style="width:3px;background:var(--theme);border-radius:2px;animation:musicBar2 0.8s ease-in-out infinite 0.45s;"></div>
         </div>
         <div id="musicName" style="font-size:11px;font-weight:700;letter-spacing:1px;color:#475569;text-transform:uppercase;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">Cargando música...</div>
-        <button onclick="toggleMusic()" id="musicToggle" style="font-family:'Rajdhani',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:6px 12px;background:rgba(255,255,255,0.05);color:#475569;border:1px solid rgba(255,255,255,0.07);border-radius:8px;cursor:pointer;">⏸ PAUSA</button>
+        <button id="musicToggle" style="font-family:'Rajdhani',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:6px 12px;background:rgba(255,255,255,0.05);color:#475569;border:1px solid rgba(255,255,255,0.07);border-radius:8px;cursor:pointer;">⏸ PAUSA</button>
     </div>
     <div class="inv-grid" id="inventory"></div>
 
@@ -1114,6 +1132,17 @@
             <div class="inventory-title">🏅 Logros</div>
         </div>
         <div id="achievements-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;"></div>
+    </div>
+
+    <!-- LEADERBOARD -->
+    <div style="margin-top:40px;">
+        <div class="inventory-header">
+            <div class="inventory-title">🏆 Leaderboard</div>
+            <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#475569;">Glorias Alcanzadas</div>
+        </div>
+        <div id="leaderboard-list" style="display:flex;flex-direction:column;gap:8px;">
+            <div style="text-align:center;color:#475569;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:20px;">Cargando...</div>
+        </div>
     </div>
 
 </div>
@@ -1139,7 +1168,7 @@
             <div class="modal-price-label">Valor de Reventa</div>
             <div class="modal-price" id="modalPrice">0 $</div>
         </div>
-        <button class="modal-close-btn" onclick="closeModal()">COLECCIONAR</button>
+        <button class="modal-close-btn" id="modalCloseBtn">COLECCIONAR</button>
     </div>
 </div>
 
@@ -1163,7 +1192,75 @@
     </div>
 </div>
 
-<script>
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import { getFirestore, doc, setDoc, collection, query, orderBy, limit, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+    import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyBDMb1r_EPNGdt7X1_ZrpUAAPBAfm7XZcg",
+        authDomain: "best-collector.firebaseapp.com",
+        projectId: "best-collector",
+        storageBucket: "best-collector.firebasestorage.app",
+        messagingSenderId: "460027338205",
+        appId: "1:460027338205:web:e40f66e4bd2cfb51b9aa34"
+    };
+
+    const fbApp = initializeApp(firebaseConfig);
+    const db = getFirestore(fbApp);
+    const auth = getAuth(fbApp);
+    let fbUser = null;
+
+    signInAnonymously(auth).catch(() => {});
+    onAuthStateChanged(auth, u => {
+        fbUser = u;
+        if (u) listenLeaderboard();
+    });
+
+    function listenLeaderboard() {
+        const q = query(collection(db, 'leaderboard'), orderBy('wins', 'desc'), limit(10));
+        onSnapshot(q, snap => {
+            const list = document.getElementById('leaderboard-list');
+            if (!list) return;
+            if (snap.empty) {
+                list.innerHTML = `<div style="text-align:center;color:#475569;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:20px;">Sé el primero en aparecer 👑</div>`;
+                return;
+            }
+            list.innerHTML = '';
+            snap.docs.forEach((d, i) => {
+                const data = d.data();
+                const isMe = fbUser && d.id === fbUser.uid;
+                const medals = ['🥇','🥈','🥉'];
+                const medal = medals[i] || `${i+1}.`;
+                const card = document.createElement('div');
+                card.style.cssText = `
+                    display:flex;align-items:center;gap:14px;
+                    padding:14px 18px;border-radius:14px;
+                    background:${isMe ? 'rgba(251,191,36,0.08)' : 'rgba(255,255,255,0.03)'};
+                    border:1px solid ${isMe ? 'rgba(251,191,36,0.3)' : 'rgba(255,255,255,0.07)'};
+                    transition:all 0.2s;
+                `;
+                card.innerHTML = `
+                    <div style="font-size:24px;width:32px;text-align:center;">${medal}</div>
+                    <div style="flex:1;">
+                        <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:2px;color:${isMe ? '#fbbf24' : 'white'};">${data.name || 'Anónimo'}${isMe ? ' (Tú)' : ''}</div>
+                    </div>
+                    <div style="text-align:right;">
+                        <div style="font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:700;color:#fbbf24;">${data.wins} 👑</div>
+                        <div style="font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#475569;">${data.losses || 0} derrotas</div>
+                    </div>
+                `;
+                list.appendChild(card);
+            });
+        });
+    }
+
+    window.syncLeaderboard = async (name, wins, losses) => {
+        if (!fbUser) return;
+        try {
+            await setDoc(doc(db, 'leaderboard', fbUser.uid), { name, wins, losses, updatedAt: Date.now() });
+        } catch(e) { console.warn('Leaderboard sync error', e); }
+    };
     // AUDIO
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
@@ -1340,6 +1437,7 @@
 
     let currentKey = 'tech';
     let inventory = [];
+    let playerName = 'Anónimo';
     let state = { balance:650, spent:0, invValue:0, opened:0, best:0, spinning:false, over:false, items:[], commonCount:0, miticoCount:0, consecutiveMiticos:0, lastWasmitico:false, timeInGame:0, gotSuerteMax:false };
     const WIN_GOAL = 2000000;
 
@@ -1552,12 +1650,24 @@
         if (state.balance >= WIN_GOAL) {
             state.over = true;
             clearSave();
+            const rec = getRecord();
+            const newWins = rec.wins + 1;
+            saveRecord(newWins, rec.losses);
+            updateRecordDisplay();
+            if (window.syncLeaderboard) window.syncLeaderboard(playerName, newWins, rec.losses);
+            checkAchievements();
             document.getElementById('winScreen').classList.add('show');
             confetti({ particleCount:300, spread:120, origin:{y:0.6} });
             playSound('win');
         } else if ((state.balance + state.invValue) < 80 && !state.spinning) {
             state.over = true;
             clearSave();
+            const rec = getRecord();
+            const newLosses = rec.losses + 1;
+            saveRecord(rec.wins, newLosses);
+            updateRecordDisplay();
+            if (window.syncLeaderboard) window.syncLeaderboard(playerName, rec.wins, newLosses);
+            checkAchievements();
             triggerLoseAnimation();
         }
     }
@@ -1885,6 +1995,22 @@
             icon: '👑',
             done: false,
             check: () => achievements.filter(a => a.id !== 'esto_es_enserio').every(a => a.done)
+        },
+        {
+            id: 'el_perdedor',
+            name: 'El Perdedor',
+            desc: 'Quédate en la ruina 15 veces',
+            icon: '👟',
+            done: false,
+            check: () => getRecord().losses >= 15
+        },
+        {
+            id: 'gloria_maxima',
+            name: 'Gloria Máxima',
+            desc: 'Alcanza la gloria 20 veces',
+            icon: '🏆',
+            done: false,
+            check: () => getRecord().wins >= 20
         }
     ];
 
@@ -1932,6 +2058,24 @@
 
     // AUTOGUARDADO
     const SAVE_KEY = 'tbc_save';
+    const RECORD_KEY = 'tbc_record';
+
+    function getRecord() {
+        try {
+            const raw = localStorage.getItem(RECORD_KEY);
+            return raw ? JSON.parse(raw) : { wins: 0, losses: 0 };
+        } catch(e) { return { wins: 0, losses: 0 }; }
+    }
+
+    function saveRecord(wins, losses) {
+        try { localStorage.setItem(RECORD_KEY, JSON.stringify({ wins, losses })); } catch(e) {}
+    }
+
+    function updateRecordDisplay() {
+        const rec = getRecord();
+        document.getElementById('statWins').textContent = rec.wins;
+        document.getElementById('statLosses').textContent = rec.losses;
+    }
 
     function saveGame() {
         const saveData = {
@@ -1990,6 +2134,9 @@
         splash.classList.add('hidden');
         game.style.display = 'block';
 
+        const nameInput = document.getElementById('playerNameInput');
+        if (nameInput && nameInput.value.trim()) playerName = nameInput.value.trim();
+
         const hasSave = loadGame();
         initTabs();
         if (hasSave) {
@@ -1997,6 +2144,11 @@
             showSaveNotice();
         }
         updateStats();
+        updateRecordDisplay();
+
+        // Sincronizar al leaderboard con datos actuales
+        const rec = getRecord();
+        if (window.syncLeaderboard) window.syncLeaderboard(playerName, rec.wins, rec.losses);
         startBonusTimer();
         startEventTimer();
         initMusic();
@@ -2276,6 +2428,14 @@
             }
         }, 1000);
     }
+
+    // EVENT LISTENERS (reemplaza todos los onclick del HTML)
+    document.getElementById('playBtn').addEventListener('click', startGame);
+    document.getElementById('sellAllBtn').addEventListener('click', sellAll);
+    document.getElementById('modalCloseBtn').addEventListener('click', closeModal);
+    document.getElementById('musicToggle').addEventListener('click', toggleMusic);
+    document.querySelectorAll('.screen-btn').forEach(btn => btn.addEventListener('click', () => location.reload()));
+
 </script>
 </body>
 </html>
