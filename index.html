@@ -1009,6 +1009,7 @@
         <button class="splash-play-btn" id="playBtn">▶ &nbsp;JUGAR</button>
         <input id="playerNameInput" type="text" maxlength="16" placeholder="Tu nombre para el leaderboard..."
             style="margin-top:20px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:10px 18px;font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;letter-spacing:2px;color:white;text-align:center;outline:none;width:280px;max-width:90vw;">
+        <div id="nameError" style="display:none;margin-top:8px;font-size:12px;font-weight:700;letter-spacing:1px;color:#f43f5e;">❌ Ese nombre ya está en uso, elige otro</div>
         <div class="splash-by">Empieza con <span>650 monedas</span></div>
         <div style="margin-top:14px;font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;color:#f43f5e;letter-spacing:2px;">🔧 PRÓXIMA ACTUALIZACIÓN &nbsp; 20 / 05 / 2026</div>
     </div>
@@ -1194,7 +1195,7 @@
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-    import { getFirestore, doc, setDoc, collection, query, orderBy, limit, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+    import { getFirestore, doc, setDoc, getDoc, collection, query, orderBy, limit, onSnapshot, where, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
     import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 
     const firebaseConfig = {
@@ -1259,6 +1260,61 @@
         if (!fbUser) return;
         try {
             await setDoc(doc(db, 'leaderboard', fbUser.uid), { name, wins, losses, updatedAt: Date.now() });
+        } catch(e) { console.warn('Leaderboard sync error', e); }
+    };
+
+    // Guardar nombre reservado para este usuario
+    const SAVED_NAME_KEY = 'tbc_playername_v2';
+
+    window.checkAndStartGame = async () => {
+        const input = document.getElementById('playerNameInput');
+        const nameError = document.getElementById('nameError');
+        const btn = document.getElementById('playBtn');
+        const rawName = input.value.trim();
+
+        // Si no pone nombre, juega como Anónimo sin comprobar
+        if (!rawName) { startGame(); return; }
+
+        // Si ya tenía este nombre guardado (es su propio nombre), dejar pasar
+        const savedName = localStorage.getItem(SAVED_NAME_KEY);
+        if (savedName && savedName.toLowerCase() === rawName.toLowerCase()) {
+            startGame(); return;
+        }
+
+        // Esperar a que Firebase esté listo
+        if (!fbUser) { startGame(); return; }
+
+        btn.textContent = '⏳ Comprobando...';
+        btn.disabled = true;
+        nameError.style.display = 'none';
+
+        try {
+            // Buscar si el nombre ya existe en otro documento
+            const q = query(collection(db, 'leaderboard'), where('nameLower', '==', rawName.toLowerCase()));
+            const snap = await getDocs(q);
+            const taken = snap.docs.some(d => d.id !== fbUser.uid);
+
+            if (taken) {
+                nameError.style.display = 'block';
+                btn.textContent = '▶ \u00a0JUGAR';
+                btn.disabled = false;
+            } else {
+                localStorage.setItem(SAVED_NAME_KEY, rawName);
+                startGame();
+            }
+        } catch(e) {
+            startGame(); // Si falla Firebase, dejar pasar
+        }
+    };
+
+    // Guardar nameLower junto con el doc
+    const _origSync = window.syncLeaderboard;
+    window.syncLeaderboard = async (name, wins, losses) => {
+        if (!fbUser) return;
+        try {
+            await setDoc(doc(db, 'leaderboard', fbUser.uid), {
+                name, nameLower: name.toLowerCase(), wins, losses, updatedAt: Date.now()
+            });
         } catch(e) { console.warn('Leaderboard sync error', e); }
     };
     // AUDIO
@@ -2430,7 +2486,15 @@
     }
 
     // EVENT LISTENERS (reemplaza todos los onclick del HTML)
-    document.getElementById('playBtn').addEventListener('click', startGame);
+    document.getElementById('playBtn').addEventListener('click', () => {
+        if (window.checkAndStartGame) window.checkAndStartGame();
+        else startGame();
+    });
+
+    // Precargar nombre guardado
+    const savedN = localStorage.getItem('tbc_playername_v2');
+    if (savedN) document.getElementById('playerNameInput').value = savedN;
+
     document.getElementById('sellAllBtn').addEventListener('click', sellAll);
     document.getElementById('modalCloseBtn').addEventListener('click', closeModal);
     document.getElementById('musicToggle').addEventListener('click', toggleMusic);
