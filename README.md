@@ -1,2 +1,2 @@
 # THE-BEST-COLLECTOR
-qwertyu
+Llega a la gloria o quedate en bancarrota tu decides
