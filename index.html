@@ -1861,8 +1861,9 @@
 
     function checkEnd() {
         if (state.balance >= WIN_GOAL) {
-            state.over = true;
+            // ✅ FIX: clearSave PRIMERO para que el autosave de 15s no pueda re-guardar el estado
             clearSave();
+            state.over = true;
             const rec = getRecord();
             const newWins = rec.wins + 1;
             saveRecord(newWins, rec.losses);
@@ -1873,8 +1874,9 @@
             confetti({ particleCount:300, spread:120, origin:{y:0.6} });
             playSound('win');
         } else if ((state.balance + state.invValue) < 80 && !state.spinning) {
-            state.over = true;
+            // ✅ FIX: clearSave PRIMERO para que el autosave de 15s no pueda re-guardar el estado
             clearSave();
+            state.over = true;
             const rec = getRecord();
             const newLosses = rec.losses + 1;
             saveRecord(rec.wins, newLosses);
@@ -2291,6 +2293,9 @@
     }
 
     function saveGame() {
+        // ✅ FIX: No guardar nunca si la partida ha terminado (evita re-guardar estado de derrota/victoria)
+        if (state.over) return;
+
         const saveData = {
             state: {
                 balance: state.balance,
@@ -2320,6 +2325,8 @@
             const raw = localStorage.getItem(SAVE_KEY);
             if (!raw) return false;
             const data = JSON.parse(raw);
+            // ✅ FIX: Si por alguna razón se guardó un estado de game over, ignorarlo y empezar de cero
+            if (data.state && (data.state.over === true)) { clearSave(); return false; }
             // Restaurar state
             Object.assign(state, data.state);
             // Restaurar inventario
