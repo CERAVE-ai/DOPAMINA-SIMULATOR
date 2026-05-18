@@ -1033,10 +1033,6 @@
         <div class="splash-title">THE BEST<br><span>COLLECTOR</span></div>
         <div class="splash-subtitle">By Aritz &nbsp;·&nbsp; Llega a 2.000.000 monedas</div>
         <button class="splash-play-btn" id="playBtn">▶ &nbsp;JUGAR</button>
-        <input id="playerNameInput" type="text" maxlength="16" placeholder="Tu nombre para el leaderboard..."
-            style="margin-top:20px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:10px 18px;font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;letter-spacing:2px;color:white;text-align:center;outline:none;width:280px;max-width:90vw;">
-        <div id="nameError" style="display:none;margin-top:8px;font-size:12px;font-weight:700;letter-spacing:1px;color:#f43f5e;">❌ Ese nombre ya está en uso, elige otro</div>
-        <div style="margin-top:10px;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#334155;max-width:280px;line-height:1.6;">Recuerda el nombre que pusiste al principio, ese es el nombre que tendrás que utilizar siempre</div>
         <div class="splash-by">Empieza con <span>1.000 monedas</span></div>
         <div style="margin-top:14px;font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;color:#f43f5e;letter-spacing:2px;">🔧 PRÓXIMA ACTUALIZACIÓN &nbsp; 20 / 05 / 2026</div>
         <div style="margin-top:8px;font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;color:#f43f5e;letter-spacing:2px;">Versión Del Juego Actual #24</div>
@@ -1049,7 +1045,7 @@
     <div id="eventBanner" style="text-align:center;margin-bottom:20px;padding:20px 24px;background:var(--surface);border:1px solid var(--border);border-radius:20px;backdrop-filter:blur(20px);position:relative;overflow:hidden;">
         <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--theme),transparent);"></div>
         <div id="eventLabel" style="font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#475569;margin-bottom:6px;">⚡ PRÓXIMO EVENTO EN</div>
-        <div id="eventCountdown" style="font-family:'Bebas Neue',sans-serif;font-size:clamp(48px,10vw,80px);letter-spacing:8px;line-height:1;color:white;text-shadow:0 0 40px rgba(255,255,255,0.2);">10:00</div>
+        <div id="eventCountdown" style="font-family:'Bebas Neue',sans-serif;font-size:clamp(48px,10vw,80px);letter-spacing:8px;line-height:1;color:white;text-shadow:0 0 40px rgba(255,255,255,0.2);">05:00</div>
         <div id="eventName" style="font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#475569;margin-top:4px;"></div>
     </div>
 
@@ -1163,16 +1159,6 @@
         <div id="achievements-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;"></div>
     </div>
 
-    <!-- LEADERBOARD -->
-    <div style="margin-top:40px;">
-        <div class="inventory-header">
-            <div class="inventory-title">🏆 Leaderboard</div>
-            <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#475569;">Glorias Alcanzadas</div>
-        </div>
-        <div id="leaderboard-list" style="display:flex;flex-direction:column;gap:8px;">
-            <div style="text-align:center;color:#475569;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:20px;">Cargando...</div>
-        </div>
-    </div>
 
 </div>
 
@@ -1222,135 +1208,8 @@
 </div>
 
 <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-    import { getFirestore, doc, setDoc, getDoc, collection, query, orderBy, limit, onSnapshot, where, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-    import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 
-    const firebaseConfig = {
-        apiKey: "AIzaSyBDMb1r_EPNGdt7X1_ZrpUAAPBAfm7XZcg",
-        authDomain: "best-collector.firebaseapp.com",
-        projectId: "best-collector",
-        storageBucket: "best-collector.firebasestorage.app",
-        messagingSenderId: "460027338205",
-        appId: "1:460027338205:web:e40f66e4bd2cfb51b9aa34"
-    };
 
-    const fbApp = initializeApp(firebaseConfig);
-    const db = getFirestore(fbApp);
-    const auth = getAuth(fbApp);
-    let fbUser = null;
-
-    signInAnonymously(auth).catch(() => {});
-    onAuthStateChanged(auth, u => {
-        fbUser = u;
-        if (u) listenLeaderboard();
-    });
-
-    function listenLeaderboard() {
-        const q = query(collection(db, 'leaderboard'), orderBy('wins', 'desc'), limit(10));
-        onSnapshot(q, snap => {
-            const list = document.getElementById('leaderboard-list');
-            if (!list) return;
-            if (snap.empty) {
-                list.innerHTML = `<div style="text-align:center;color:#475569;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:20px;">Sé el primero en aparecer 👑</div>`;
-                return;
-            }
-            list.innerHTML = '';
-            snap.docs.forEach((d, i) => {
-                const data = d.data();
-                const isMe = fbUser && d.id === fbUser.uid;
-                const medals = ['🥇','🥈','🥉'];
-                const medal = medals[i] || `${i+1}.`;
-                const card = document.createElement('div');
-                card.style.cssText = `
-                    display:flex;align-items:center;gap:14px;
-                    padding:14px 18px;border-radius:14px;
-                    background:${isMe ? 'rgba(251,191,36,0.08)' : 'rgba(255,255,255,0.03)'};
-                    border:1px solid ${isMe ? 'rgba(251,191,36,0.3)' : 'rgba(255,255,255,0.07)'};
-                    transition:all 0.2s;
-                `;
-                card.innerHTML = `
-                    <div style="font-size:24px;width:32px;text-align:center;">${medal}</div>
-                    <div style="flex:1;">
-                        <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:2px;color:${isMe ? '#fbbf24' : 'white'};">${data.name || 'Anónimo'}${isMe ? ' (Tú)' : ''}</div>
-                    </div>
-                    <div style="text-align:right;">
-                        <div style="font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:700;color:#fbbf24;">${data.wins} 👑</div>
-                        <div style="font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#475569;">${data.losses || 0} derrotas</div>
-                    </div>
-                `;
-                list.appendChild(card);
-            });
-        });
-    }
-
-    window.syncLeaderboard = async (name, wins, losses) => {
-        if (!fbUser) return;
-        try {
-            await setDoc(doc(db, 'leaderboard', fbUser.uid), { name, wins, losses, updatedAt: Date.now() });
-        } catch(e) { console.warn('Leaderboard sync error', e); }
-    };
-
-    // Guardar nombre reservado para este usuario
-    const SAVED_NAME_KEY = 'tbc_playername_v2';
-
-    window.checkAndStartGame = async () => {
-        const input = document.getElementById('playerNameInput');
-        const nameError = document.getElementById('nameError');
-        const btn = document.getElementById('playBtn');
-        const rawName = input.value.trim();
-
-        // Si no pone nombre, mostrar error
-        if (!rawName) {
-            nameError.textContent = '❌ Debes poner un nombre para jugar';
-            nameError.style.display = 'block';
-            btn.textContent = '▶ \u00a0JUGAR';
-            btn.disabled = false;
-            return;
-        }
-
-        // Si ya tenía este nombre guardado (es su propio nombre), dejar pasar
-        const savedName = localStorage.getItem(SAVED_NAME_KEY);
-        if (savedName && savedName.toLowerCase() === rawName.toLowerCase()) {
-            startGame(); return;
-        }
-
-        // Esperar a que Firebase esté listo
-        if (!fbUser) { startGame(); return; }
-
-        btn.textContent = '⏳ Comprobando...';
-        btn.disabled = true;
-        nameError.style.display = 'none';
-
-        try {
-            // Buscar si el nombre ya existe en otro documento
-            const q = query(collection(db, 'leaderboard'), where('nameLower', '==', rawName.toLowerCase()));
-            const snap = await getDocs(q);
-            const taken = snap.docs.some(d => d.id !== fbUser.uid);
-
-            if (taken) {
-                nameError.style.display = 'block';
-                btn.textContent = '▶ \u00a0JUGAR';
-                btn.disabled = false;
-            } else {
-                localStorage.setItem(SAVED_NAME_KEY, rawName);
-                startGame();
-            }
-        } catch(e) {
-            startGame(); // Si falla Firebase, dejar pasar
-        }
-    };
-
-    // Guardar nameLower junto con el doc
-    const _origSync = window.syncLeaderboard;
-    window.syncLeaderboard = async (name, wins, losses) => {
-        if (!fbUser) return;
-        try {
-            await setDoc(doc(db, 'leaderboard', fbUser.uid), {
-                name, nameLower: name.toLowerCase(), wins, losses, updatedAt: Date.now()
-            });
-        } catch(e) { console.warn('Leaderboard sync error', e); }
-    };
     // AUDIO
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
@@ -1501,14 +1360,14 @@
             {name:"Joaquin Phoenix",rarity:"legendario",icon:"🃏",price:125000},
             {name:"Hayden Christensen",rarity:"mitico",icon:"⚔️",price:275000}
         ]},
-        villanos: { label:"Villanos", emoji:"💀", cost:29000, color:"#dc2626", title:"Reunión de Villanos", items:[
+        villanos: { label:"Villanos", emoji:"💀", cost:27500, color:"#dc2626", title:"Reunión de Villanos", items:[
             {name:"Thanos",rarity:"comun",icon:"💜",price:20000},
             {name:"Joker",rarity:"especial",icon:"🃏",price:25000},
             {name:"Sauron",rarity:"epico",icon:"👁️",price:35000},
             {name:"Bowser",rarity:"legendario",icon:"🐢",price:200000},
             {name:"Darth Vader",rarity:"mitico",icon:"🌑",price:450000}
         ]},
-        cerave: { label:"Cerave", emoji:"🧴", cost:45000, color:"#38bdf8", title:"Santuario Cerave", items:[
+        cerave: { label:"Cerave", emoji:"🧴", cost:40000, color:"#38bdf8", title:"Santuario Cerave", items:[
             {name:"Copia Barata",rarity:"comun",icon:"🧴",price:27500},
             {name:"Cerave Barato",rarity:"especial",icon:"💧",price:35000},
             {name:"Cerave Original",rarity:"epico",icon:"✨",price:75000},
@@ -1527,7 +1386,6 @@
 
     let currentKey = 'tech';
     let inventory = [];
-    let playerName = 'Anónimo';
     let state = { balance:1000, spent:0, invValue:0, opened:0, best:0, spinning:false, over:false, items:[], commonCount:0, miticoCount:0, consecutiveMiticos:0, lastWasmitico:false, timeInGame:0, gotSuerteMax:false };
     const WIN_GOAL = 2000000;
 
@@ -1868,7 +1726,6 @@
             const newWins = rec.wins + 1;
             saveRecord(newWins, rec.losses);
             updateRecordDisplay();
-            if (window.syncLeaderboard) window.syncLeaderboard(playerName, newWins, rec.losses);
             checkAchievements();
             document.getElementById('winScreen').classList.add('show');
             confetti({ particleCount:300, spread:120, origin:{y:0.6} });
@@ -1881,7 +1738,6 @@
             const newLosses = rec.losses + 1;
             saveRecord(rec.wins, newLosses);
             updateRecordDisplay();
-            if (window.syncLeaderboard) window.syncLeaderboard(playerName, rec.wins, newLosses);
             checkAchievements();
             triggerLoseAnimation();
         }
@@ -2158,10 +2014,10 @@
         {
             id: 'como_lo_has_hecho',
             name: '¿Cómo Lo Has Hecho?',
-            desc: 'Consigue 7 objetos míticos (no tienen que ser seguidos)',
+            desc: 'Consigue 5 objetos míticos (no tienen que ser seguidos)',
             icon: '🤯',
             done: false,
-            check: () => state.miticoCount >= 7
+            check: () => state.miticoCount >= 5
         },
         {
             id: 'ya_casi',
@@ -2272,8 +2128,8 @@
     }
 
     // AUTOGUARDADO
-    const SAVE_KEY = 'tbc_save_v4';
-    const RECORD_KEY = 'tbc_record_v4';
+    const SAVE_KEY = 'tbc_save_v3';
+    const RECORD_KEY = 'tbc_record_v3';
 
     function getRecord() {
         try {
@@ -2354,9 +2210,7 @@
         splash.classList.add('hidden');
         game.style.display = 'block';
 
-        const nameInput = document.getElementById('playerNameInput');
-        if (nameInput && nameInput.value.trim()) playerName = nameInput.value.trim();
-
+        
         const hasSave = loadGame();
         initTabs();
         if (hasSave) {
@@ -2366,9 +2220,6 @@
         updateStats();
         updateRecordDisplay();
 
-        // Sincronizar al leaderboard con datos actuales
-        const rec = getRecord();
-        if (window.syncLeaderboard) window.syncLeaderboard(playerName, rec.wins, rec.losses);
         startBonusTimer();
         startEventTimer();
         initMusic();
@@ -2465,14 +2316,14 @@
 
     // SISTEMA DE EVENTOS
     const events = [
-        { id: 'dios_no', name: '😈 DIOS NO TE QUIERE', desc: 'Los objetos valen un 50% menos', color: '#f43f5e', chance: 45 },
-        { id: 'dios_inmo', name: '🏠 DIOS INMOBILIARIO', desc: 'Los objetos valen un 25% más', color: '#4ade80', chance: 30 },
+        { id: 'dios_no', name: '😈 DIOS NO TE QUIERE', desc: 'Los objetos valen un 50% menos', color: '#f43f5e', chance: 50 },
+        { id: 'dios_inmo', name: '🏠 DIOS INMOBILIARIO', desc: 'Los objetos valen un 25% más', color: '#4ade80', chance: 25 },
         { id: 'suerte_mitica', name: '🌟 SUERTE MÍTICA', desc: 'Los míticos tienen un 2% de probabilidad', color: '#fbbf24', chance: 24 },
         { id: 'suerte_max', name: '🔥 SUERTE MÁXIMA', desc: 'Los cofres cuestan un 50% menos', color: '#a855f7', chance: 1 }
     ];
 
     let currentEvent = null;
-    let eventSecondsLeft = 10 * 60;
+    let eventSecondsLeft = 5 * 60;
     let eventDurationLeft = 0;
     let eventActive = false;
 
@@ -2504,7 +2355,7 @@
                     // Termina el evento
                     eventActive = false;
                     currentEvent = null;
-                    eventSecondsLeft = 10 * 60;
+                    eventSecondsLeft = 5 * 60;
                     label.textContent = '⚡ PRÓXIMO EVENTO EN';
                     nameEl.textContent = '';
                     countdown.style.color = 'white';
@@ -2651,13 +2502,8 @@
 
     // EVENT LISTENERS (reemplaza todos los onclick del HTML)
     document.getElementById('playBtn').addEventListener('click', () => {
-        if (window.checkAndStartGame) window.checkAndStartGame();
-        else startGame();
+        startGame();
     });
-
-    // Precargar nombre guardado
-    const savedN = localStorage.getItem('tbc_playername_v2');
-    if (savedN) document.getElementById('playerNameInput').value = savedN;
 
     document.getElementById('sellAllBtn').addEventListener('click', sellAll);
     document.getElementById('modalCloseBtn').addEventListener('click', closeModal);
