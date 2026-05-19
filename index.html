@@ -1737,7 +1737,7 @@
         <button class="splash-play-btn" id="playBtn">▶ &nbsp;JUGAR</button>
         <div class="splash-by">Empieza con <span>2.000 monedas</span></div>
         <div style="margin-top:14px;font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;color:#f43f5e;letter-spacing:2px;">🔧 PRÓXIMA ACTUALIZACIÓN &nbsp; 23 / 05 / 2026</div>
-        <div style="margin-top:8px;font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;color:#f43f5e;letter-spacing:2px;">Versión Del Juego Actual #28</div>
+        <div style="margin-top:8px;font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;color:#f43f5e;letter-spacing:2px;">Versión Del Juego Actual #26</div>
     </div>
 </div>
 
@@ -2491,6 +2491,9 @@
             state.miticoCount++;
             state.consecutiveMiticos = state.lastWasmitico ? state.consecutiveMiticos + 1 : 1;
             state.lastWasmitico = true;
+            // Solo cuentan para las ruletas los míticos de Air-Fryer (2500$) en adelante
+            const boxCost = boxes[currentKey] ? boxes[currentKey].cost : 0;
+            if (boxCost >= 2500) {
             // Cuenta para RULETA MÍTICA (cada 5 míticos = 1 tirada)
             state.miticosForRuleta++;
             if (state.miticosForRuleta >= 5) {
@@ -2513,6 +2516,7 @@
             } else {
                 updateSuperRuletaProgress();
             }
+            } // fin if (boxCost >= 2500)
         } else {
             state.consecutiveMiticos = 0;
             state.lastWasmitico = false;
