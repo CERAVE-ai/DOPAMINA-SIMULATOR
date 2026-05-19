@@ -4219,16 +4219,10 @@
         const pool = getAuctionPool();
         const item = pool[Math.floor(Math.random() * pool.length)];
 
-        const priceRanges = [
-            [100,   1200],
-            [800,   5000],
-            [3000,  18000],
-            [12000, 60000],
-            [40000, 150000]
-        ];
-        const range = priceRanges[Math.floor(Math.random() * priceRanges.length)];
-        const rawPrice = Math.random() * (range[1] - range[0]) + range[0];
-        const price = Math.round(rawPrice / 50) * 50;
+        // Precio aleatorio: puede ser desde un 40% más barato hasta un 60% más caro
+        // (verdadera apuesta — a veces ganas, a veces pierdes)
+        const factor = 0.60 + Math.random() * 1.00; // entre 0.60 y 1.60 del valor real
+        const price = Math.max(50, Math.round(item.price * factor / 50) * 50);
 
         currentAuction = { item, price };
         auctionPurchased = false;
@@ -4246,7 +4240,7 @@
         const chest = document.getElementById('subastaChest');
 
         if (auctionPurchased) {
-            hint.textContent = 'YA PUJADA';
+            hint.textContent = '???';
             hint.className = 'subasta-rarity-hint';
             hint.style.color = '#475569';
             hint.style.background = 'rgba(71,85,105,0.15)';
@@ -4256,11 +4250,11 @@
             btn.disabled = true;
             btn.textContent = '⏳ Esperando nueva subasta…';
         } else {
-            hint.textContent = rarLabels[item.rarity] || '???';
-            hint.className = 'subasta-rarity-hint ' + (rarClass[item.rarity] || '');
-            hint.style.color = '';
-            hint.style.background = '';
-            hint.style.border = '';
+            hint.textContent = '???';
+            hint.className = 'subasta-rarity-hint';
+            hint.style.color = '#94a3b8';
+            hint.style.background = 'rgba(148,163,184,0.1)';
+            hint.style.border = '1px solid rgba(148,163,184,0.25)';
             chest.style.filter = '';
             document.getElementById('subastaPrice').textContent = price.toLocaleString() + ' $';
             const canAfford = state.balance >= price;
