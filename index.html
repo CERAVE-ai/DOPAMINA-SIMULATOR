@@ -1548,6 +1548,83 @@
         .shop-btn:hover { transform: translateY(-3px); box-shadow: 0 0 50px rgba(16,185,129,0.6), 0 16px 40px rgba(0,0,0,0.5); }
         .shop-btn:active { transform: scale(0.97); }
 
+        /* SUBASTAS */
+        .subasta-section {
+            margin: 20px 0;
+            padding: 20px 16px;
+            background: linear-gradient(135deg, rgba(251,191,36,0.05), rgba(244,63,94,0.04));
+            border: 1px solid rgba(251,191,36,0.22);
+            border-radius: 20px;
+        }
+        .subasta-header { text-align: center; margin-bottom: 16px; }
+        .subasta-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 26px;
+            letter-spacing: 5px;
+            background: linear-gradient(90deg, #fbbf24, #f43f5e);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .subasta-subtitle { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-top: 4px; }
+        .subasta-card {
+            background: rgba(0,0,0,0.3);
+            border: 1px solid rgba(251,191,36,0.14);
+            border-radius: 16px;
+            padding: 20px 16px;
+            text-align: center;
+        }
+        .subasta-chest {
+            font-size: 62px;
+            line-height: 1;
+            margin-bottom: 8px;
+            filter: drop-shadow(0 0 18px rgba(251,191,36,0.45));
+            animation: floatIcon 3s ease-in-out infinite;
+        }
+        .subasta-rarity-hint {
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 14px;
+            padding: 3px 12px;
+            border-radius: 20px;
+            display: inline-block;
+        }
+        .subasta-rarity-epico     { color:#a855f7; background:rgba(168,85,247,0.12); border:1px solid rgba(168,85,247,0.3); }
+        .subasta-rarity-legendario{ color:#f43f5e; background:rgba(244,63,94,0.12);  border:1px solid rgba(244,63,94,0.3); }
+        .subasta-rarity-mitico    { color:#fbbf24; background:rgba(251,191,36,0.12); border:1px solid rgba(251,191,36,0.35); }
+        .subasta-row { display: flex; gap: 10px; margin-bottom: 14px; }
+        .subasta-info-box {
+            flex: 1;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.07);
+            border-radius: 10px;
+            padding: 10px 8px;
+        }
+        .subasta-info-label { font-size: 8px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
+        .subasta-price { font-family: 'JetBrains Mono', monospace; font-size: 20px; font-weight: 700; color: #fbbf24; }
+        .subasta-timer { font-family: 'JetBrains Mono', monospace; font-size: 18px; font-weight: 700; color: #94a3b8; }
+        .subasta-timer.urgent { color: #f43f5e; animation: blink 0.8s step-end infinite; }
+        @keyframes blink { 50% { opacity: 0.3; } }
+        .subasta-buy-btn {
+            width: 100%;
+            padding: 13px;
+            border-radius: 12px;
+            border: none;
+            background: linear-gradient(135deg, #b45309, #fbbf24);
+            color: #0a0f1e;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 18px;
+            letter-spacing: 3px;
+            cursor: pointer;
+            font-weight: 700;
+            transition: all 0.2s;
+            box-shadow: 0 0 20px rgba(251,191,36,0.25), 0 6px 18px rgba(0,0,0,0.4);
+        }
+        .subasta-buy-btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 0 35px rgba(251,191,36,0.45), 0 10px 28px rgba(0,0,0,0.4); }
+        .subasta-buy-btn:active:not(:disabled) { transform: scale(0.97); }
+        .subasta-buy-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+
         /* MODAL TIENDA */
         #shopModal {
             position: fixed; inset: 0;
@@ -1824,6 +1901,29 @@
         </div>
         <div class="ruleta-cost-info">Cada <span style="color:#a855f7;">10 míticos</span> en cofres = 1 tirada · Progreso: <span id="superRuletaProgressDisplay" style="color:#a855f7;">0/10</span> · Tiradas: <span id="superRuletaChargesDisplay" style="color:#a855f7;">0</span></div>
         <button class="ruleta-spin-btn" id="superRuletaSpinBtn" style="background:linear-gradient(135deg,#7c3aed,#a855f7);box-shadow:0 0 30px rgba(168,85,247,0.4),0 8px 24px rgba(0,0,0,0.4);">⚡ GIRAR SÚPER RULETA</button>
+    </div>
+
+    <!-- SUBASTAS -->
+    <div class="subasta-section">
+        <div class="subasta-header">
+            <div class="subasta-title">🏷️ SUBASTAS</div>
+            <div class="subasta-subtitle">Objeto misterioso · Precio independiente</div>
+        </div>
+        <div class="subasta-card">
+            <div class="subasta-chest" id="subastaChest">📦</div>
+            <div class="subasta-rarity-hint" id="subastaRarityHint">???</div>
+            <div class="subasta-row">
+                <div class="subasta-info-box">
+                    <div class="subasta-info-label">Precio de Puja</div>
+                    <div class="subasta-price" id="subastaPrice">—</div>
+                </div>
+                <div class="subasta-info-box">
+                    <div class="subasta-info-label">Nueva subasta en</div>
+                    <div class="subasta-timer" id="subastaTimer">2:00</div>
+                </div>
+            </div>
+            <button class="subasta-buy-btn" id="subastaBuyBtn">🏷️ PUJAR Y ABRIR</button>
+        </div>
     </div>
 
     <!-- BOTÓN TIENDA -->
@@ -4097,6 +4197,135 @@
     document.getElementById('superRuletaSpinBtn').addEventListener('click', spinSuperRuleta);
     document.getElementById('superRuletaModalCloseBtn').addEventListener('click', closeSuperRuletaModal);
     setupSuperRuleta();
+
+    // ─── SUBASTAS ───────────────────────────────────────────────────────────────
+    let currentAuction = null;
+    let auctionSecondsLeft = 120;
+    let auctionInterval = null;
+    let auctionPurchased = false;
+
+    function getAuctionPool() {
+        const allowed = ['epico', 'legendario', 'mitico'];
+        const pool = [];
+        Object.values(boxes).forEach(box => {
+            box.items.forEach(item => {
+                if (allowed.includes(item.rarity)) pool.push(item);
+            });
+        });
+        return pool;
+    }
+
+    function generateAuction() {
+        const pool = getAuctionPool();
+        const item = pool[Math.floor(Math.random() * pool.length)];
+
+        const priceRanges = [
+            [100,   1200],
+            [800,   5000],
+            [3000,  18000],
+            [12000, 60000],
+            [40000, 150000]
+        ];
+        const range = priceRanges[Math.floor(Math.random() * priceRanges.length)];
+        const rawPrice = Math.random() * (range[1] - range[0]) + range[0];
+        const price = Math.round(rawPrice / 50) * 50;
+
+        currentAuction = { item, price };
+        auctionPurchased = false;
+        auctionSecondsLeft = 120;
+        renderAuction();
+    }
+
+    function renderAuction() {
+        if (!currentAuction) return;
+        const { item, price } = currentAuction;
+        const rarLabels = { epico: 'ÉPICO', legendario: 'LEGENDARIO', mitico: 'MÍTICO' };
+        const rarClass  = { epico: 'subasta-rarity-epico', legendario: 'subasta-rarity-legendario', mitico: 'subasta-rarity-mitico' };
+        const hint  = document.getElementById('subastaRarityHint');
+        const btn = document.getElementById('subastaBuyBtn');
+        const chest = document.getElementById('subastaChest');
+
+        if (auctionPurchased) {
+            hint.textContent = 'YA PUJADA';
+            hint.className = 'subasta-rarity-hint';
+            hint.style.color = '#475569';
+            hint.style.background = 'rgba(71,85,105,0.15)';
+            hint.style.border = '1px solid rgba(71,85,105,0.3)';
+            chest.style.filter = 'grayscale(1) opacity(0.5)';
+            document.getElementById('subastaPrice').textContent = '—';
+            btn.disabled = true;
+            btn.textContent = '⏳ Esperando nueva subasta…';
+        } else {
+            hint.textContent = rarLabels[item.rarity] || '???';
+            hint.className = 'subasta-rarity-hint ' + (rarClass[item.rarity] || '');
+            hint.style.color = '';
+            hint.style.background = '';
+            hint.style.border = '';
+            chest.style.filter = '';
+            document.getElementById('subastaPrice').textContent = price.toLocaleString() + ' $';
+            const canAfford = state.balance >= price;
+            btn.disabled = state.over || !canAfford;
+            btn.textContent = canAfford ? '🏷️ PUJAR Y ABRIR' : '💸 Saldo insuficiente';
+        }
+    }
+
+    function updateAuctionTimer() {
+        const timerEl = document.getElementById('subastaTimer');
+        if (!timerEl) return;
+        const m = Math.floor(auctionSecondsLeft / 60);
+        const s = auctionSecondsLeft % 60;
+        timerEl.textContent = `${m}:${String(s).padStart(2,'0')}`;
+        timerEl.className = 'subasta-timer' + (auctionSecondsLeft <= 20 ? ' urgent' : '');
+    }
+
+    function startAuctionLoop() {
+        if (auctionInterval) clearInterval(auctionInterval);
+        auctionInterval = setInterval(() => {
+            if (state.over) return;
+            auctionSecondsLeft--;
+            updateAuctionTimer();
+            if (auctionSecondsLeft <= 0) generateAuction();
+            // Actualizar botón en cada tick por si el balance cambió
+            renderAuction();
+        }, 1000);
+    }
+
+    function buyAuction() {
+        if (!currentAuction || state.over || state.spinning) return;
+        const { item, price } = currentAuction;
+        if (state.balance < price) return;
+
+        state.balance -= price;
+        state.spent += price;
+
+        // Aplicar mutación y poción de dinero
+        let finalPrice = item.price;
+        if (moneyPotionActive) finalPrice *= 1.3;
+        const mut = getMutation();
+        finalPrice = Math.round(finalPrice * mut.mult);
+
+        const wonItem = { ...item, price: finalPrice, favorite: false, mutation: mut.id };
+        inventory.push(wonItem);
+        state.invValue += finalPrice;
+        if (finalPrice > state.best) state.best = finalPrice;
+        state.opened++;
+
+        renderInventory();
+        updateStats();
+        checkAchievements();
+        saveGame();
+        showModal(wonItem);
+
+        // Marcar como comprada — nueva subasta solo cuando termine el contador
+        auctionPurchased = true;
+        renderAuction();
+    }
+
+    generateAuction();
+    startAuctionLoop();
+
+    document.getElementById('subastaBuyBtn').addEventListener('click', buyAuction);
+    // ────────────────────────────────────────────────────────────────────────────
 
     // TIENDA
     document.getElementById('shopBtn').addEventListener('click', openShop);
