@@ -693,6 +693,30 @@
 
         .inv-card:hover { transform: translateY(-4px); border-color: rgba(255,255,255,0.15); }
         .inv-card-bar { position: absolute; top: 0; left: 0; right: 0; height: 2px; }
+        .mutation-badge {
+            display: inline-block;
+            font-size: 8px;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            padding: 2px 6px;
+            border-radius: 20px;
+            margin-bottom: 4px;
+        }
+        .mutation-normal  { background: rgba(148,163,184,0.18); color: #94a3b8; border: 1px solid rgba(148,163,184,0.3); }
+        .mutation-roto    { background: rgba(239,68,68,0.18);   color: #f87171; border: 1px solid rgba(239,68,68,0.35); }
+        .mutation-radiactivo { background: rgba(74,222,128,0.18); color: #4ade80; border: 1px solid rgba(74,222,128,0.35); }
+        .mutation-universal { background: rgba(245,158,11,0.18); color: #fbbf24; border: 1px solid rgba(245,158,11,0.4); }
+        .modal-mutation-badge {
+            display: inline-block;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            padding: 4px 14px;
+            border-radius: 30px;
+            margin-bottom: 10px;
+        }
         .inv-card-icon { font-size: 32px; margin: 8px 0; }
         .inv-card-name { font-size: 9px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
         .inv-card-price { font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 700; color: #4ade80; }
@@ -1474,6 +1498,151 @@
         .super-ruleta-card .sr-icon  { font-size: 38px; line-height: 1; margin-bottom: 6px; }
         .super-ruleta-card .sr-name  { font-size: 8px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: rgba(255,255,255,0.8); line-height: 1.3; }
         .super-ruleta-card .sr-price { font-family: 'JetBrains Mono', monospace; font-size: 9px; font-weight: 700; color: #a855f7; margin-top: 4px; }
+
+        /* FAVORITOS */
+        .fav-btn {
+            position: absolute;
+            top: 6px; right: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            z-index: 5;
+            line-height: 1;
+            transition: transform 0.2s;
+            filter: drop-shadow(0 0 4px rgba(251,191,36,0.6));
+        }
+        .fav-btn:hover { transform: scale(1.3); }
+        .inv-card.favorited {
+            border-color: rgba(251,191,36,0.5);
+            box-shadow: 0 0 14px rgba(251,191,36,0.15);
+        }
+        .inv-card.favorited .sell-overlay { display: none; }
+
+        /* BOTÓN TIENDA */
+        .shop-btn-wrap {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0 40px;
+        }
+        .shop-btn {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 22px;
+            letter-spacing: 5px;
+            padding: 18px 60px;
+            background: linear-gradient(135deg, #059669, #10b981);
+            color: white;
+            border: none;
+            border-radius: 14px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s;
+            box-shadow: 0 0 30px rgba(16,185,129,0.4), 0 8px 32px rgba(0,0,0,0.4);
+        }
+        .shop-btn::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 50%);
+            pointer-events: none;
+        }
+        .shop-btn:hover { transform: translateY(-3px); box-shadow: 0 0 50px rgba(16,185,129,0.6), 0 16px 40px rgba(0,0,0,0.5); }
+        .shop-btn:active { transform: scale(0.97); }
+
+        /* MODAL TIENDA */
+        #shopModal {
+            position: fixed; inset: 0;
+            background: rgba(5,8,16,0.93); backdrop-filter: blur(24px);
+            display: none; align-items: center; justify-content: center; z-index: 60; padding: 20px;
+        }
+        #shopModal.show { display: flex; }
+        #shopBox {
+            background: #0a0f1e;
+            border: 1px solid rgba(16,185,129,0.3);
+            border-radius: 28px;
+            padding: 40px 36px;
+            max-width: 460px; width: 100%;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            transform: scale(0.85) translateY(20px);
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.23,1,0.32,1);
+        }
+        #shopBox.open { transform: scale(1) translateY(0); opacity: 1; }
+        #shopBox::before {
+            content: '';
+            position: absolute; top: 0; left: 0; right: 0; height: 3px;
+            background: linear-gradient(90deg, transparent, #10b981, transparent);
+            border-radius: 28px 28px 0 0;
+        }
+        .shop-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 32px; letter-spacing: 5px; margin-bottom: 4px;
+        }
+        .shop-subtitle {
+            font-size: 10px; font-weight: 700; letter-spacing: 3px;
+            text-transform: uppercase; color: #475569; margin-bottom: 28px;
+        }
+        .pocion-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 16px;
+            padding: 16px 18px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            text-align: left;
+            transition: all 0.25s;
+        }
+        .pocion-card:hover { border-color: rgba(255,255,255,0.18); background: rgba(255,255,255,0.05); }
+        .pocion-icon { font-size: 36px; flex-shrink: 0; }
+        .pocion-info { flex: 1; }
+        .pocion-name {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 18px; letter-spacing: 2px; color: white; line-height: 1.1;
+        }
+        .pocion-desc {
+            font-size: 10px; font-weight: 700; letter-spacing: 1px;
+            text-transform: uppercase; color: #475569; margin-top: 3px; line-height: 1.4;
+        }
+        .pocion-buy-btn {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 14px; letter-spacing: 2px;
+            padding: 10px 18px;
+            border: none; border-radius: 10px; cursor: pointer;
+            transition: all 0.25s; white-space: nowrap; flex-shrink: 0;
+        }
+        .pocion-buy-btn:hover { transform: translateY(-2px); }
+        .pocion-buy-btn:disabled { opacity: 0.4; pointer-events: none; }
+        #shopCloseBtn {
+            width: 100%; padding: 13px; margin-top: 8px;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 16px; letter-spacing: 3px;
+            background: rgba(255,255,255,0.06);
+            color: #475569; border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 12px; cursor: pointer; transition: all 0.25s;
+        }
+        #shopCloseBtn:hover { background: rgba(255,255,255,0.1); color: white; }
+
+        /* POTION ACTIVE INDICATORS */
+        #potionIndicators {
+            display: flex; gap: 8px; flex-wrap: wrap; justify-content: center;
+            margin-bottom: 12px;
+        }
+        .potion-indicator {
+            display: none;
+            align-items: center; gap: 6px;
+            padding: 5px 12px;
+            border-radius: 999px;
+            font-size: 11px; font-weight: 700; letter-spacing: 1px;
+            text-transform: uppercase;
+            animation: mythicPulse 1.5s infinite;
+        }
+        .potion-indicator.active { display: flex; }
+        #luckPotionInd { background: rgba(251,191,36,0.15); border: 1px solid rgba(251,191,36,0.4); color: #fbbf24; }
+        #speedPotionInd { background: rgba(59,130,246,0.15); border: 1px solid rgba(59,130,246,0.4); color: #3b82f6; }
+        #moneyPotionInd { background: rgba(74,222,128,0.15); border: 1px solid rgba(74,222,128,0.4); color: #4ade80; }
     </style>
 </head>
 <body>
@@ -1491,7 +1660,7 @@
         <button class="splash-play-btn" id="playBtn">▶ &nbsp;JUGAR</button>
         <div class="splash-by">Empieza con <span>2.000 monedas</span></div>
         <div style="margin-top:14px;font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;color:#f43f5e;letter-spacing:2px;">🔧 PRÓXIMA ACTUALIZACIÓN &nbsp; 23 / 05 / 2026</div>
-        <div style="margin-top:8px;font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;color:#f43f5e;letter-spacing:2px;">Versión Del Juego Actual #25</div>
+        <div style="margin-top:8px;font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;color:#f43f5e;letter-spacing:2px;">Versión Del Juego Actual #26</div>
     </div>
 </div>
 
@@ -1527,6 +1696,13 @@
             <div style="position:relative;flex-shrink:0;"><button id="coinBtn" title="Apostar monedas">🪙</button><div id="coinCooldownLabel"></div></div>
         </div>
     </header>
+
+    <!-- POTION INDICATORS -->
+    <div id="potionIndicators">
+        <div class="potion-indicator" id="luckPotionInd">🍀 SUERTE +40% · <span id="luckPotionTimer">5:00</span></div>
+        <div class="potion-indicator" id="speedPotionInd">⚡ VELOCIDAD +35% · <span id="speedPotionTimer">3:00</span></div>
+        <div class="potion-indicator" id="moneyPotionInd">💰 DINERO +30% · <span id="moneyPotionTimer">3:00</span></div>
+    </div>
 
     <!-- PROGRESS -->
     <div class="progress-wrap">
@@ -1634,7 +1810,7 @@
     </div>
 
     <!-- RULETA SÚPER MÍTICA -->
-    <div style="margin-top:40px;margin-bottom:40px;">
+    <div style="margin-top:40px;margin-bottom:20px;">
         <div class="inventory-header">
             <div class="inventory-title" style="background:linear-gradient(90deg,#a855f7,#f43f5e,#fbbf24);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">⚡ Ruleta Súper Mítica</div>
             <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#a855f7;">Objetos Legendarios Únicos</div>
@@ -1650,7 +1826,57 @@
         <button class="ruleta-spin-btn" id="superRuletaSpinBtn" style="background:linear-gradient(135deg,#7c3aed,#a855f7);box-shadow:0 0 30px rgba(168,85,247,0.4),0 8px 24px rgba(0,0,0,0.4);">⚡ GIRAR SÚPER RULETA</button>
     </div>
 
+    <!-- BOTÓN TIENDA -->
+    <div class="shop-btn-wrap">
+        <button class="shop-btn" id="shopBtn">🛒 &nbsp;TIENDA</button>
+    </div>
 
+</div>
+
+<!-- SHOP MODAL -->
+<div id="shopModal">
+    <div id="shopBox">
+        <div class="shop-title">🛒 TIENDA</div>
+        <div class="shop-subtitle">Pociones y mejoras para tu partida</div>
+
+        <!-- Poción de Suerte -->
+        <div class="pocion-card">
+            <div class="pocion-icon">🍀</div>
+            <div class="pocion-info">
+                <div class="pocion-name">Poción de Suerte</div>
+                <div class="pocion-desc">+40% de suerte durante 5 minutos</div>
+            </div>
+            <button class="pocion-buy-btn" id="buyLuckPotion" style="background:linear-gradient(135deg,#d97706,#fbbf24);color:#0a0f1e;">
+                50.000 $
+            </button>
+        </div>
+
+        <!-- Poción de Velocidad -->
+        <div class="pocion-card">
+            <div class="pocion-icon">⚡</div>
+            <div class="pocion-info">
+                <div class="pocion-name">Poción de Velocidad</div>
+                <div class="pocion-desc">Ruletas giran 35% más rápido durante 3 minutos</div>
+            </div>
+            <button class="pocion-buy-btn" id="buySpeedPotion" style="background:linear-gradient(135deg,#1d4ed8,#3b82f6);color:white;">
+                55.000 $
+            </button>
+        </div>
+
+        <!-- Poción de Dinero -->
+        <div class="pocion-card">
+            <div class="pocion-icon">💰</div>
+            <div class="pocion-info">
+                <div class="pocion-name">Poción de Dinero</div>
+                <div class="pocion-desc">Los objetos valen 30% más durante 3 minutos</div>
+            </div>
+            <button class="pocion-buy-btn" id="buyMoneyPotion" style="background:linear-gradient(135deg,#047857,#10b981);color:white;">
+                60.000 $
+            </button>
+        </div>
+
+        <button id="shopCloseBtn">CERRAR TIENDA</button>
+    </div>
 </div>
 
 <!-- RULETA MÍTICA MODAL -->
@@ -1659,7 +1885,8 @@
         <div style="position:absolute;top:-60px;left:50%;transform:translateX(-50%);width:200px;height:200px;border-radius:50%;background:#fbbf24;filter:blur(60px);opacity:0.2;pointer-events:none;"></div>
         <div style="font-size:10px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#fbbf24;margin-bottom:16px;">✨ OBJETO MÍTICO</div>
         <div id="ruletaModalIcon" style="font-size:96px;line-height:1;margin:16px 0;filter:drop-shadow(0 0 30px rgba(251,191,36,0.5));animation:floatIcon 3s ease-in-out infinite;">⭐</div>
-        <div id="ruletaModalName" style="font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:4px;margin-bottom:20px;color:white;"></div>
+        <div id="ruletaModalName" style="font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:4px;margin-bottom:12px;color:white;"></div>
+        <div id="ruletaModalMutation" class="modal-mutation-badge" style="display:none;margin-bottom:16px;"></div>
         <div style="background:rgba(0,0,0,0.4);border:1px solid rgba(255,255,255,0.07);border-radius:14px;padding:16px;margin-bottom:24px;">
             <div style="font-size:9px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#475569;margin-bottom:4px;">Valor de Reventa</div>
             <div id="ruletaModalPrice" style="font-family:'JetBrains Mono',monospace;font-size:32px;font-weight:700;color:#4ade80;"></div>
@@ -1683,7 +1910,8 @@
         <div style="position:absolute;top:-60px;left:50%;transform:translateX(-50%);width:220px;height:220px;border-radius:50%;background:linear-gradient(135deg,#a855f7,#f43f5e);filter:blur(70px);opacity:0.25;pointer-events:none;"></div>
         <div style="font-size:10px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#a855f7;margin-bottom:16px;">⚡ SÚPER MÍTICO</div>
         <div id="superRuletaModalIcon" style="font-size:96px;line-height:1;margin:16px 0;filter:drop-shadow(0 0 40px rgba(168,85,247,0.7));animation:floatIcon 3s ease-in-out infinite;">⚡</div>
-        <div id="superRuletaModalName" style="font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:3px;margin-bottom:20px;color:white;"></div>
+        <div id="superRuletaModalName" style="font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:3px;margin-bottom:12px;color:white;"></div>
+        <div id="superRuletaModalMutation" class="modal-mutation-badge" style="display:none;margin-bottom:16px;"></div>
         <div style="background:rgba(0,0,0,0.4);border:1px solid rgba(255,255,255,0.07);border-radius:14px;padding:16px;margin-bottom:24px;">
             <div style="font-size:9px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#475569;margin-bottom:4px;">Valor de Reventa</div>
             <div id="superRuletaModalPrice" style="font-family:'JetBrains Mono',monospace;font-size:28px;font-weight:700;color:#a855f7;"></div>
@@ -1718,6 +1946,7 @@
         <div class="modal-rarity-label" id="modalRarity">RAREZA</div>
         <div class="modal-icon" id="modalIcon">✨</div>
         <div class="modal-name" id="modalName">Nombre</div>
+        <div id="modalMutation" class="modal-mutation-badge" style="display:none;"></div>
         <div class="modal-price-box">
             <div class="modal-price-label">Valor de Reventa</div>
             <div class="modal-price" id="modalPrice">0 $</div>
@@ -2041,6 +2270,8 @@
             let chance = info.chance;
             // Suerte Mítica: mítico pasa de 1% a 2%
             if (currentEvent && currentEvent.id === 'suerte_mitica' && k === 'mitico') chance = 2;
+            // Poción de Suerte: +40% a todas las rarezas mejores que común
+            if (luckPotionActive && k !== 'comun') chance *= 1.4;
             cum += chance;
             if (rand <= cum) return items.find(i => i.rarity === k) || items[0];
         }
@@ -2089,7 +2320,8 @@
             colorIdx++;
         }, 300);
 
-        reel.style.transition = 'transform 5s cubic-bezier(0.12, 0, 0.04, 1)';
+        const spinDuration = speedPotionActive ? Math.round(5000 * 0.65) : 5000;
+        reel.style.transition = `transform ${spinDuration/1000}s cubic-bezier(0.12, 0, 0.04, 1)`;
         const winIdx = 55;
         const caseW = caseEl.offsetWidth;
         const cardW = window.innerWidth <= 700 ? 100 : 140;
@@ -2104,7 +2336,31 @@
             caseEl.classList.remove('spinning');
             reel.classList.remove('reel-spinning');
             finalize(state.items[winIdx]);
-        }, 5100);
+        }, spinDuration + 100);
+    }
+
+    const mutations = {
+        normal:     { id: 'normal',      label: 'Normal',      mult: 1.00, color: '#94a3b8', icon: '⬜' },
+        roto:       { id: 'roto',        label: 'Roto',        mult: 0.75, color: '#f87171', icon: '💔' },
+        radiactivo: { id: 'radiactivo',  label: 'Radiactivo',  mult: 1.20, color: '#4ade80', icon: '☢️' },
+        universal:  { id: 'universal',   label: 'Universal',   mult: 1.40, color: '#fbbf24', icon: '✨' }
+    };
+
+    function getMutation() {
+        const r = Math.random() * 100;
+        if (r < 40) return mutations.normal;
+        if (r < 70) return mutations.roto;
+        if (r < 90) return mutations.radiactivo;
+        return mutations.universal;
+    }
+
+    function applyMutationBadge(elId, mutId) {
+        const el = document.getElementById(elId);
+        if (!el) return;
+        const m = mutations[mutId] || mutations.normal;
+        el.textContent = m.icon + ' ' + m.label;
+        el.className = 'modal-mutation-badge mutation-' + m.id;
+        el.style.display = 'inline-block';
     }
 
     function finalize(winner) {
@@ -2116,8 +2372,12 @@
             if (currentEvent.id === 'dios_no') finalPrice *= 0.5;
             else if (currentEvent.id === 'dios_inmo') finalPrice *= 1.25;
         }
-        finalPrice = Math.round(finalPrice);
-        const bonusWinner = { ...winner, price: finalPrice };
+        // Aplicar poción de dinero (+30%)
+        if (moneyPotionActive) finalPrice *= 1.3;
+        // Aplicar mutación
+        const mutation = getMutation();
+        finalPrice = Math.round(finalPrice * mutation.mult);
+        const bonusWinner = { ...winner, price: finalPrice, favorite: false, mutation: mutation.id };
         state.invValue += finalPrice;
         if (finalPrice > state.best) state.best = finalPrice;
         inventory.push(bonusWinner);
@@ -2131,18 +2391,27 @@
             state.miticoCount++;
             state.consecutiveMiticos = state.lastWasmitico ? state.consecutiveMiticos + 1 : 1;
             state.lastWasmitico = true;
-            // Count towards ruleta charge (every 3 miticos = 1 charge)
+            // Cuenta para RULETA MÍTICA (cada 5 míticos = 1 tirada)
             state.miticosForRuleta++;
             if (state.miticosForRuleta >= 5) {
                 state.miticosForRuleta = 0;
                 state.ruletaCharges++;
                 updateRuletaBtn();
-        updateRuletaProgress();
-        updateSuperRuletaBtn();
-        updateSuperRuletaProgress();
+                updateRuletaProgress();
                 showRuletaChargeToast();
             } else {
                 updateRuletaProgress();
+            }
+            // Cuenta para SÚPER RULETA MÍTICA (cada 10 míticos = 1 tirada)
+            state.miticosForSuperRuleta++;
+            if (state.miticosForSuperRuleta >= 10) {
+                state.miticosForSuperRuleta = 0;
+                state.superRuletaCharges++;
+                updateSuperRuletaBtn();
+                updateSuperRuletaProgress();
+                showSuperRuletaChargeToast();
+            } else {
+                updateSuperRuletaProgress();
             }
         } else {
             state.consecutiveMiticos = 0;
@@ -2260,30 +2529,40 @@
     function renderInventory() {
         const c = document.getElementById('inventory');
         c.innerHTML = '';
-        // Store original indices for selling by reference
         const reversed = [...inventory].map((item, origIdx) => ({ item, origIdx })).reverse();
         reversed.forEach(({ item, origIdx }) => {
             const salePrice = item.price;
+            const isFav = !!item.favorite;
             const d = document.createElement('div');
-            d.className = 'inv-card';
+            d.className = 'inv-card' + (isFav ? ' favorited' : '');
             d.innerHTML = `
-                <div class="inv-card-bar" style="background:${rarities[item.rarity].color}"></div>
+                <div class="inv-card-bar" style="background:${rarities[item.rarity] ? rarities[item.rarity].color : '#fbbf24'}"></div>
+                <div class="fav-btn" title="${isFav ? 'Quitar favorito' : 'Marcar favorito'}">${isFav ? '⭐' : '☆'}</div>
                 <div class="inv-card-icon">${item.icon}</div>
                 <div class="inv-card-name">${item.name}</div>
+                ${(() => { const m = mutations[item.mutation] || mutations.normal; return `<div class="mutation-badge mutation-${m.id}">${m.icon} ${m.label}</div>`; })()}
                 <div class="inv-card-price">${salePrice.toLocaleString()} $</div>
                 <div class="sell-overlay">
                     <div class="sell-overlay-text">💰 VENDER</div>
                     <div class="sell-overlay-price">${salePrice.toLocaleString()} $</div>
                 </div>
             `;
-            d.addEventListener('click', () => sellOne(origIdx, d, salePrice));
+            d.querySelector('.fav-btn').addEventListener('click', (e) => {
+                e.stopPropagation();
+                inventory[origIdx].favorite = !inventory[origIdx].favorite;
+                renderInventory();
+                saveGame();
+            });
+            if (!isFav) {
+                d.addEventListener('click', () => sellOne(origIdx, d, salePrice));
+            }
             c.appendChild(d);
         });
     }
 
     function sellOne(origIdx, cardEl, salePrice) {
         if (state.over || state.spinning) return;
-        // Animate card out then remove
+        if (inventory[origIdx] && inventory[origIdx].favorite) return;
         cardEl.classList.add('selling');
         playSound('money');
         createParticles(
@@ -2306,11 +2585,15 @@
 
     function sellAll() {
         if (!inventory.length || state.over) return;
+        const nonFavItems = inventory.filter(item => !item.favorite);
+        if (!nonFavItems.length) return;
         playSound('money');
         createParticles(window.innerWidth/2, window.innerHeight/2, '#4ade80', 25);
-        state.balance += state.invValue;
-        state.invValue = 0;
-        inventory = [];
+        const sellValue = nonFavItems.reduce((sum, item) => sum + item.price, 0);
+        state.balance += sellValue;
+        state.invValue -= sellValue;
+        if (state.invValue < 0) state.invValue = 0;
+        inventory = inventory.filter(item => item.favorite);
         renderInventory();
         updateStats();
         checkAchievements();
@@ -2633,6 +2916,7 @@
         document.getElementById('modalIcon').textContent = item.icon;
         document.getElementById('modalName').textContent = item.name;
         document.getElementById('modalPrice').textContent = item.price.toLocaleString() + ' $';
+        applyMutationBadge('modalMutation', item.mutation);
 
         const overlay = document.getElementById('modal');
         const box = document.getElementById('modalBox');
@@ -3064,6 +3348,102 @@
         }
     };
 
+    // POCIONES
+    let luckPotionActive = false;
+    let luckPotionSecondsLeft = 0;
+    let speedPotionActive = false;
+    let speedPotionSecondsLeft = 0;
+    let moneyPotionActive = false;
+    let moneyPotionSecondsLeft = 0;
+
+    function startPotionTimers() {
+        setInterval(() => {
+            if (state.over) return;
+            // Poción de Suerte
+            if (luckPotionActive) {
+                luckPotionSecondsLeft--;
+                const m = Math.floor(luckPotionSecondsLeft / 60);
+                const s = luckPotionSecondsLeft % 60;
+                const timerEl = document.getElementById('luckPotionTimer');
+                if (timerEl) timerEl.textContent = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+                if (luckPotionSecondsLeft <= 0) {
+                    luckPotionActive = false;
+                    document.getElementById('luckPotionInd').classList.remove('active');
+                }
+            }
+            // Poción de Velocidad
+            if (speedPotionActive) {
+                speedPotionSecondsLeft--;
+                const m = Math.floor(speedPotionSecondsLeft / 60);
+                const s = speedPotionSecondsLeft % 60;
+                const timerEl = document.getElementById('speedPotionTimer');
+                if (timerEl) timerEl.textContent = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+                if (speedPotionSecondsLeft <= 0) {
+                    speedPotionActive = false;
+                    document.getElementById('speedPotionInd').classList.remove('active');
+                }
+            }
+            // Poción de Dinero
+            if (moneyPotionActive) {
+                moneyPotionSecondsLeft--;
+                const m = Math.floor(moneyPotionSecondsLeft / 60);
+                const s = moneyPotionSecondsLeft % 60;
+                const timerEl = document.getElementById('moneyPotionTimer');
+                if (timerEl) timerEl.textContent = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+                if (moneyPotionSecondsLeft <= 0) {
+                    moneyPotionActive = false;
+                    document.getElementById('moneyPotionInd').classList.remove('active');
+                }
+            }
+        }, 1000);
+    }
+
+    function openShop() {
+        if (state.over) return;
+        playSound('click');
+        const modal = document.getElementById('shopModal');
+        const box = document.getElementById('shopBox');
+        modal.classList.add('show');
+        setTimeout(() => box.classList.add('open'), 10);
+    }
+
+    function closeShop() {
+        const box = document.getElementById('shopBox');
+        box.classList.remove('open');
+        setTimeout(() => document.getElementById('shopModal').classList.remove('show'), 350);
+    }
+
+    function buyPotion(type) {
+        const prices = { luck: 50000, speed: 55000, money: 60000 };
+        const price = prices[type];
+        if (state.balance < price) {
+            playSound('click');
+            document.getElementById('balance').parentElement.classList.add('shake');
+            setTimeout(() => document.getElementById('balance').parentElement.classList.remove('shake'), 400);
+            return;
+        }
+        state.balance -= price;
+        updateStats();
+        saveGame();
+        playSound('win');
+        confetti({ particleCount: 80, spread: 70, colors: ['#10b981','#fbbf24','#ffffff'] });
+
+        if (type === 'luck') {
+            luckPotionActive = true;
+            luckPotionSecondsLeft = 5 * 60;
+            document.getElementById('luckPotionInd').classList.add('active');
+        } else if (type === 'speed') {
+            speedPotionActive = true;
+            speedPotionSecondsLeft = 180;
+            document.getElementById('speedPotionInd').classList.add('active');
+        } else if (type === 'money') {
+            moneyPotionActive = true;
+            moneyPotionSecondsLeft = 3 * 60;
+            document.getElementById('moneyPotionInd').classList.add('active');
+        }
+        closeShop();
+    }
+
     // BONUS x2 TIMER
     let bonusActive = false;
     let bonusSecondsLeft = 45 * 60;
@@ -3489,9 +3869,11 @@
         setTimeout(() => {
             caseEl.style.boxShadow = '';
             const winner = ruletaItems[winIdx];
-            // Add to inventory with bonus check
-            const finalPrice = bonusActive ? winner.price * 2 : winner.price;
-            const wonItem = { ...winner, price: Math.round(finalPrice) };
+            let finalPrice = bonusActive ? winner.price * 2 : winner.price;
+            if (moneyPotionActive) finalPrice *= 1.3;
+            const mutationR = getMutation();
+            finalPrice = Math.round(finalPrice * mutationR.mult);
+            const wonItem = { ...winner, price: finalPrice, favorite: false, mutation: mutationR.id };
             inventory.push(wonItem);
             state.invValue += wonItem.price;
             if (wonItem.price > state.best) state.best = wonItem.price;
@@ -3512,6 +3894,7 @@
         document.getElementById('ruletaModalIcon').textContent = item.icon;
         document.getElementById('ruletaModalName').textContent = item.name;
         document.getElementById('ruletaModalPrice').textContent = item.price.toLocaleString() + ' $';
+        applyMutationBadge('ruletaModalMutation', item.mutation);
         const overlay = document.getElementById('ruletaModal');
         const box = document.getElementById('ruletaModalBox');
         overlay.classList.add('show');
@@ -3639,8 +4022,11 @@
             caseEl.style.boxShadow = '';
             const cards = reel.querySelectorAll('.super-ruleta-card');
             const winner = cards[winIdx]._item;
-            const finalPrice = bonusActive ? winner.price * 2 : winner.price;
-            const wonItem = { ...winner, rarity:'mitico', price: Math.round(finalPrice) };
+            let finalPrice = bonusActive ? winner.price * 2 : winner.price;
+            if (moneyPotionActive) finalPrice *= 1.3;
+            const mutationSR = getMutation();
+            finalPrice = Math.round(finalPrice * mutationSR.mult);
+            const wonItem = { ...winner, rarity:'mitico', price: finalPrice, favorite: false, mutation: mutationSR.id };
             inventory.push(wonItem);
             state.invValue += wonItem.price;
             if (wonItem.price > state.best) state.best = wonItem.price;
@@ -3657,6 +4043,7 @@
     function showSuperRuletaModal(item) {
         document.getElementById('superRuletaModalIcon').textContent = item.icon;
         document.getElementById('superRuletaModalName').textContent = item.name;
+        applyMutationBadge('superRuletaModalMutation', item.mutation);
         document.getElementById('superRuletaModalPrice').textContent = item.price.toLocaleString() + ' $';
         const overlay = document.getElementById('superRuletaModal');
         const box = document.getElementById('superRuletaModalBox');
@@ -3710,6 +4097,21 @@
     document.getElementById('superRuletaSpinBtn').addEventListener('click', spinSuperRuleta);
     document.getElementById('superRuletaModalCloseBtn').addEventListener('click', closeSuperRuletaModal);
     setupSuperRuleta();
+
+    // TIENDA
+    document.getElementById('shopBtn').addEventListener('click', openShop);
+    document.getElementById('shopCloseBtn').addEventListener('click', closeShop);
+    document.getElementById('buyLuckPotion').addEventListener('click', () => buyPotion('luck'));
+    document.getElementById('buySpeedPotion').addEventListener('click', () => buyPotion('speed'));
+    document.getElementById('buyMoneyPotion').addEventListener('click', () => buyPotion('money'));
+
+    // Cerrar tienda clicando fuera
+    document.getElementById('shopModal').addEventListener('click', (e) => {
+        if (e.target === document.getElementById('shopModal')) closeShop();
+    });
+
+    startPotionTimers();
+
     document.getElementById('playBtn').addEventListener('click', () => {
         startGame();
     });
