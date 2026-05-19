@@ -4217,7 +4217,11 @@
 
     function generateAuction() {
         const pool = getAuctionPool();
-        const item = pool[Math.floor(Math.random() * pool.length)];
+        // Elegir rareza según probabilidades: Épico 40%, Legendario 40%, Mítico 20%
+        const r = Math.random() * 100;
+        const targetRarity = r < 40 ? 'epico' : r < 80 ? 'legendario' : 'mitico';
+        const filtered = pool.filter(i => i.rarity === targetRarity);
+        const item = filtered[Math.floor(Math.random() * filtered.length)];
 
         // Precio aleatorio: puede ser desde un 40% más barato hasta un 60% más caro
         // (verdadera apuesta — a veces ganas, a veces pierdes)
