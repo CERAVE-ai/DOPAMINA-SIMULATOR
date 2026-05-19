@@ -3276,8 +3276,8 @@
 
     function openCoinModal() {
         if (state.over || state.spinning || coinCooldown > 0) return;
-        const win50 = Math.floor(state.balance * 0.5);
-        const lose75 = Math.floor(state.balance * 0.75);
+        const win50 = Math.floor(state.balance * 1.3);
+        const lose75 = Math.floor(state.balance * 0.85);
         document.getElementById('coinWinAmt').textContent = win50.toLocaleString() + ' $';
         document.getElementById('coinLoseAmt').textContent = lose75.toLocaleString() + ' $';
         document.getElementById('coinResult').textContent = '';
@@ -3324,7 +3324,7 @@
         setTimeout(() => {
             const resultEl = document.getElementById('coinResult');
             if (won) {
-                const gain = Math.floor(state.balance * 0.5);
+                const gain = Math.floor(state.balance * 1.3);
                 state.balance += gain;
                 resultEl.textContent = `+${gain.toLocaleString()} $ ✨`;
                 resultEl.className = 'win';
@@ -3383,7 +3383,7 @@
                 state.coinWinStreak++;
                 state.coinLoseStreak = 0;
             } else {
-                const loss = Math.floor(state.balance * 0.75);
+                const loss = Math.floor(state.balance * 0.85);
                 state.balance -= loss;
                 resultEl.textContent = `-${loss.toLocaleString()} $ 💸`;
                 resultEl.className = 'lose';
