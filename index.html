@@ -1018,6 +1018,431 @@
             z-index: 200;
             border-radius: 50%;
         }
+
+        /* COIN FLIP */
+        #coinBtn {
+            width: 48px; height: 48px;
+            background: rgba(251,191,36,0.12);
+            border: 1px solid rgba(251,191,36,0.35);
+            border-radius: 12px;
+            font-size: 22px;
+            cursor: pointer;
+            transition: all 0.25s;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+            position: relative;
+        }
+        #coinBtn:hover:not(:disabled) {
+            background: rgba(251,191,36,0.25);
+            box-shadow: 0 0 20px rgba(251,191,36,0.3);
+            transform: translateY(-2px);
+        }
+        #coinBtn:disabled {
+            opacity: 0.45; cursor: not-allowed; pointer-events: none;
+        }
+        #coinCooldownLabel {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 8px; font-weight: 700;
+            letter-spacing: 1px; color: #fbbf24;
+            position: absolute; bottom: -16px; left: 50%;
+            transform: translateX(-50%);
+            white-space: nowrap;
+        }
+
+        #coinModal {
+            position: fixed; inset: 0;
+            background: rgba(5,8,16,0.93);
+            backdrop-filter: blur(24px);
+            display: none; align-items: center; justify-content: center;
+            z-index: 60; padding: 20px;
+        }
+        #coinModal.show { display: flex; }
+
+        #coinBox {
+            background: #0a0f1e;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 28px;
+            padding: 44px 36px 36px;
+            max-width: 380px; width: 100%;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            transform: scale(0.85) translateY(20px);
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.23,1,0.32,1);
+        }
+        #coinBox.open { transform: scale(1) translateY(0); opacity: 1; }
+
+        #coinBox::before {
+            content: '';
+            position: absolute; top: 0; left: 0; right: 0; height: 3px;
+            background: linear-gradient(90deg, transparent, #fbbf24, transparent);
+            border-radius: 28px 28px 0 0;
+        }
+
+        .coin-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 28px; letter-spacing: 4px; margin-bottom: 4px;
+        }
+        .coin-subtitle {
+            font-size: 10px; font-weight: 700; letter-spacing: 2px;
+            text-transform: uppercase; color: #475569; margin-bottom: 28px;
+        }
+        .coin-subtitle span { color: #4ade80; }
+        .coin-subtitle .lose-text { color: #f43f5e; }
+
+        #coinFace {
+            width: 140px; height: 140px;
+            margin: 0 auto 28px;
+            position: relative;
+            transform-style: preserve-3d;
+            cursor: default;
+        }
+
+        .coin-side {
+            position: absolute; inset: 0;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 72px;
+            backface-visibility: hidden;
+            box-shadow: 0 0 30px rgba(251,191,36,0.4), inset 0 2px 0 rgba(255,255,255,0.2);
+        }
+        .coin-heads {
+            background: radial-gradient(circle at 35% 35%, #fde68a, #f59e0b, #92400e);
+            border: 4px solid #fbbf24;
+        }
+        .coin-tails {
+            background: radial-gradient(circle at 35% 35%, #e2e8f0, #94a3b8, #334155);
+            border: 4px solid #94a3b8;
+            transform: rotateY(180deg);
+        }
+
+        @keyframes coinSpin {
+            0%   { transform: rotateY(0deg); }
+            100% { transform: rotateY(1800deg); }
+        }
+        @keyframes coinSpinHeads {
+            0%   { transform: rotateY(0deg); }
+            100% { transform: rotateY(1800deg); }
+        }
+        @keyframes coinSpinTails {
+            0%   { transform: rotateY(0deg); }
+            100% { transform: rotateY(1980deg); }
+        }
+
+        /* AURA WIN EFFECT */
+        @keyframes auraRing {
+            0%   { transform: translate(-50%,-50%) scale(0.6); opacity: 1; }
+            100% { transform: translate(-50%,-50%) scale(2.4); opacity: 0; }
+        }
+        @keyframes auraFloat {
+            0%   { transform: translateY(0px) scale(1); opacity: 1; }
+            100% { transform: translateY(-90px) scale(1.6); opacity: 0; }
+        }
+        @keyframes auraCoinGlow {
+            0%,100% { box-shadow: 0 0 30px rgba(251,191,36,0.4), inset 0 2px 0 rgba(255,255,255,0.2); }
+            50%      { box-shadow: 0 0 80px rgba(251,191,36,1), 0 0 140px rgba(251,191,36,0.6), inset 0 2px 0 rgba(255,255,255,0.4); }
+        }
+        @keyframes auraShake {
+            0%,100% { transform: rotateY(1800deg) translateX(0); }
+            20%     { transform: rotateY(1800deg) translateX(-6px); }
+            40%     { transform: rotateY(1800deg) translateX(6px); }
+            60%     { transform: rotateY(1800deg) translateX(-4px); }
+            80%     { transform: rotateY(1800deg) translateX(4px); }
+        }
+        @keyframes auraPulse {
+            0%   { opacity: 0; transform: translate(-50%,-50%) scale(1); }
+            30%  { opacity: 0.8; }
+            100% { opacity: 0; transform: translate(-50%,-50%) scale(1.8); }
+        }
+        .aura-win-ring {
+            position: absolute;
+            width: 140px; height: 140px;
+            border-radius: 50%;
+            border: 3px solid #fbbf24;
+            top: 50%; left: 50%;
+            pointer-events: none;
+            animation: auraRing 0.7s ease-out forwards;
+        }
+        .aura-win-emoji {
+            position: absolute;
+            font-size: 28px;
+            pointer-events: none;
+            animation: auraFloat 1s ease-out forwards;
+            z-index: 10;
+        }
+
+        .coin-btns {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+            margin-bottom: 14px;
+        }
+        .coin-choice-btn {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 20px; letter-spacing: 4px;
+            padding: 16px;
+            border: none; border-radius: 14px;
+            cursor: pointer; transition: all 0.25s;
+            position: relative; overflow: hidden;
+        }
+        .coin-choice-btn::before {
+            content: ''; position: absolute; inset: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.12) 0%, transparent 50%);
+        }
+        #btnHeads {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+            box-shadow: 0 4px 20px rgba(245,158,11,0.4);
+        }
+        #btnHeads:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(245,158,11,0.5); }
+        #btnTails {
+            background: linear-gradient(135deg, #475569, #334155);
+            color: white;
+            box-shadow: 0 4px 20px rgba(71,85,105,0.4);
+        }
+        #btnTails:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(71,85,105,0.5); }
+
+        .coin-choice-btn:disabled { opacity: 0.35; pointer-events: none; }
+
+        #coinCloseBtn {
+            width: 100%; padding: 13px;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 16px; letter-spacing: 3px;
+            background: rgba(255,255,255,0.06);
+            color: #475569; border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 12px; cursor: pointer; transition: all 0.25s;
+            display: none;
+        }
+        #coinCloseBtn.visible { display: block; }
+        #coinCloseBtn:hover { background: rgba(255,255,255,0.1); color: white; }
+
+        #coinResult {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 32px; letter-spacing: 4px;
+            margin-bottom: 14px; min-height: 40px;
+            transition: all 0.4s;
+        }
+        #coinResult.win { color: #4ade80; text-shadow: 0 0 20px rgba(74,222,128,0.5); }
+        #coinResult.lose { color: #f43f5e; text-shadow: 0 0 20px rgba(244,63,94,0.5); }
+        #bancaMsg {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 13px; font-weight: 700;
+            letter-spacing: 2px; text-transform: uppercase;
+            color: #f43f5e;
+            text-shadow: 0 0 15px rgba(244,63,94,0.6);
+            margin-top: 6px; min-height: 20px;
+            opacity: 0; transition: opacity 0.4s ease;
+        }
+        #bancaMsg.show { opacity: 1; }
+
+        /* WIN ANIMATION - PELÍCULA DE ACCIÓN */
+        #winScreen { z-index: 100; }
+
+        @keyframes crownBlink {
+            0%,100% { opacity: 1; transform: scale(1); }
+            50%      { opacity: 0.1; transform: scale(0.85); }
+        }
+        @keyframes titleSlideUp {
+            0%   { transform: translateY(120px) skewY(4deg); opacity: 0; filter: blur(8px); }
+            60%  { transform: translateY(-10px) skewY(-1deg); opacity: 1; filter: blur(0); }
+            80%  { transform: translateY(6px) skewY(0.5deg); }
+            100% { transform: translateY(0) skewY(0); opacity: 1; filter: blur(0); }
+        }
+        @keyframes subtitleFade {
+            0%   { opacity: 0; letter-spacing: 8px; }
+            100% { opacity: 1; letter-spacing: 2px; }
+        }
+        @keyframes lensFlare {
+            0%   { opacity: 0; transform: translateX(-50%) scaleX(0.1); }
+            40%  { opacity: 1; transform: translateX(-50%) scaleX(1); }
+            100% { opacity: 0; transform: translateX(-50%) scaleX(0.3); }
+        }
+        @keyframes smokeRise {
+            0%   { opacity: 0; transform: translateX(-50%) translateY(0) scaleX(1); }
+            50%  { opacity: 0.35; }
+            100% { opacity: 0; transform: translateX(-50%) translateY(-180px) scaleX(2.5); }
+        }
+        @keyframes btnAppear {
+            0%   { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes winCrownFloat {
+            0%,100% { transform: translateY(0) rotate(-3deg); }
+            50%      { transform: translateY(-18px) rotate(3deg); }
+        }
+        .win-smoke {
+            position: absolute;
+            bottom: 0; left: 50%;
+            width: 320px; height: 220px;
+            border-radius: 50%;
+            background: radial-gradient(ellipse, rgba(251,191,36,0.18) 0%, transparent 70%);
+            pointer-events: none;
+            animation: smokeRise 2.2s ease-out infinite;
+        }
+        .win-lens {
+            position: absolute;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.9), rgba(251,191,36,0.6), rgba(255,255,255,0.9), transparent);
+            border-radius: 2px;
+            pointer-events: none;
+            left: 50%;
+            animation: lensFlare 0.6s ease-out forwards;
+        }
+
+        /* SELL ONE CSS */
+        .inv-card { cursor: pointer; }
+        .inv-card .sell-overlay {
+            position: absolute; inset: 0;
+            background: rgba(74,222,128,0.15);
+            border-radius: 14px;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            gap: 4px;
+            opacity: 0;
+            transition: opacity 0.2s;
+            backdrop-filter: blur(2px);
+        }
+        .inv-card:hover .sell-overlay { opacity: 1; }
+        .sell-overlay-text {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 15px; letter-spacing: 3px;
+            color: #4ade80;
+            text-shadow: 0 0 10px rgba(74,222,128,0.8);
+        }
+        .sell-overlay-price {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px; font-weight: 700;
+            color: #4ade80;
+        }
+        .inv-card.selling {
+            animation: sellPop 0.35s ease forwards;
+        }
+        @keyframes sellPop {
+            0%   { transform: scale(1); opacity: 1; }
+            40%  { transform: scale(1.1); opacity: 0.6; }
+            100% { transform: scale(0); opacity: 0; }
+        }
+
+        /* RULETA MÍTICA */
+        .ruleta-wrap {
+            position: relative;
+            width: 100%;
+            max-width: 820px;
+            height: 170px;
+            margin: 0 auto 16px;
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid rgba(251,191,36,0.25);
+            background: rgba(0,0,0,0.5);
+            box-shadow: 0 0 40px rgba(251,191,36,0.08), inset 0 1px 0 rgba(255,255,255,0.05);
+        }
+        .ruleta-wrap::before, .ruleta-wrap::after {
+            content: '';
+            position: absolute; top: 0; bottom: 0; width: 100px; z-index: 10; pointer-events: none;
+        }
+        .ruleta-wrap::before { left: 0; background: linear-gradient(90deg, rgba(5,8,16,0.95), transparent); }
+        .ruleta-wrap::after  { right: 0; background: linear-gradient(-90deg, rgba(5,8,16,0.95), transparent); }
+
+        .ruleta-marker {
+            position: absolute; left: 50%; top: 0; bottom: 0; width: 3px;
+            background: #fbbf24; z-index: 20; transform: translateX(-50%);
+            box-shadow: 0 0 16px #fbbf24, 0 0 40px rgba(251,191,36,0.5);
+            pointer-events: none;
+        }
+        .ruleta-marker::before {
+            content: ''; position: absolute; left: 50%; transform: translateX(-50%);
+            top: 0; width: 0; height: 0;
+            border-left: 8px solid transparent; border-right: 8px solid transparent;
+            border-top: 10px solid #fbbf24;
+        }
+        .ruleta-marker::after {
+            content: ''; position: absolute; left: 50%; transform: translateX(-50%);
+            bottom: 0; width: 0; height: 0;
+            border-left: 8px solid transparent; border-right: 8px solid transparent;
+            border-bottom: 10px solid #fbbf24;
+        }
+
+        .ruleta-reel {
+            display: flex; position: absolute; left: 0; top: 0; bottom: 0; align-items: center;
+            transition: transform 5s cubic-bezier(0.12, 0, 0.04, 1);
+        }
+
+        .ruleta-card {
+            min-width: 140px; width: 140px; height: 90%;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            padding: 10px 8px; border-right: 1px solid rgba(255,255,255,0.04);
+            text-align: center; border-radius: 4px; position: relative;
+            border-top: 3px solid #fbbf24;
+            background: radial-gradient(circle at 50% 0%, rgba(251,191,36,0.12), transparent 70%);
+            animation: mythicPulse 2s infinite;
+        }
+        .ruleta-card .r-icon  { font-size: 42px; line-height: 1; margin-bottom: 8px; }
+        .ruleta-card .r-name  { font-size: 9px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: rgba(255,255,255,0.7); line-height: 1.3; }
+        .ruleta-card .r-price { font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; color: #fbbf24; margin-top: 4px; }
+
+        .ruleta-spin-btn {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 20px; letter-spacing: 5px;
+            padding: 16px 56px;
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white; border: none; border-radius: 14px; cursor: pointer;
+            position: relative; overflow: hidden;
+            transition: all 0.3s;
+            box-shadow: 0 0 30px rgba(251,191,36,0.4), 0 8px 24px rgba(0,0,0,0.4);
+            display: block; margin: 0 auto 10px;
+        }
+        .ruleta-spin-btn::before {
+            content: ''; position: absolute; inset: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 50%);
+        }
+        .ruleta-spin-btn::after {
+            content: ''; position: absolute;
+            top: -50%; left: -120%; width: 60%; height: 200%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transform: skewX(-20deg); transition: left 0.6s;
+        }
+        .ruleta-spin-btn:hover::after { left: 160%; }
+        .ruleta-spin-btn:hover { transform: translateY(-3px); box-shadow: 0 0 50px rgba(251,191,36,0.6), 0 12px 32px rgba(0,0,0,0.5); }
+        .ruleta-spin-btn:disabled { opacity: 0.4; pointer-events: none; }
+
+        .ruleta-cost-info {
+            text-align: center; font-size: 11px; font-weight: 700;
+            letter-spacing: 2px; text-transform: uppercase; color: #475569;
+            margin-bottom: 20px;
+        }
+        .ruleta-cost-info span { color: #fbbf24; }
+
+        /* Ruleta result modal overlay */
+        #ruletaModal {
+            position: fixed; inset: 0;
+            background: rgba(5,8,16,0.92); backdrop-filter: blur(20px);
+            display: none; align-items: center; justify-content: center; z-index: 50; padding: 20px;
+        }
+        #ruletaModal.show { display: flex; }
+        #ruletaModalBox {
+            background: #0a0f1e; border: 1px solid rgba(251,191,36,0.3);
+            border-radius: 28px; padding: 48px 40px; max-width: 360px; width: 100%;
+            text-align: center; position: relative; overflow: hidden;
+            transform: scale(0.8) translateY(30px); opacity: 0;
+            transition: all 0.4s cubic-bezier(0.23,1,0.32,1);
+        }
+        #ruletaModalBox.open { transform: scale(1) translateY(0); opacity: 1; }
+        #ruletaModalBox::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+            background: linear-gradient(90deg, transparent, #fbbf24, transparent);
+            border-radius: 28px 28px 0 0;
+        }
+
+        /* RULETA CHARGE TOAST */
+        #ruletaChargeToast {
+            position: fixed; bottom: -100px; left: 50%; transform: translateX(-50%);
+            z-index: 500; background: #0a0f1e;
+            border: 1px solid #fbbf24; border-radius: 16px;
+            padding: 12px 20px; display: flex; align-items: center; gap: 12px;
+            box-shadow: 0 0 30px rgba(251,191,36,0.35), 0 8px 32px rgba(0,0,0,0.6);
+            transition: bottom 0.5s cubic-bezier(0.23,1,0.32,1);
+            min-width: 260px; max-width: 90vw;
+        }
+        #ruletaChargeToast.show { bottom: 80px; }
     </style>
 </head>
 <body>
@@ -1031,11 +1456,11 @@
             <div style="font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;color:#f43f5e;letter-spacing:1px;line-height:1.5;">☕ El creador necesita cafeína para programar las actualizaciones. Invítame a un café de 2€ o el Cofre CeraVe subirá de precio un 500% por avaricioso.</div>
         </div>
         <div class="splash-title">THE BEST<br><span>COLLECTOR</span></div>
-        <div class="splash-subtitle">By Aritz &nbsp;·&nbsp; Llega a 2.000.000 monedas</div>
+        <div class="splash-subtitle">By Aritz &nbsp;·&nbsp; Llega a 4.000.000 monedas</div>
         <button class="splash-play-btn" id="playBtn">▶ &nbsp;JUGAR</button>
-        <div class="splash-by">Empieza con <span>1.000 monedas</span></div>
-        <div style="margin-top:14px;font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;color:#f43f5e;letter-spacing:2px;">🔧 PRÓXIMA ACTUALIZACIÓN &nbsp; 19 / 05 / 2026</div>
-        <div style="margin-top:8px;font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;color:#f43f5e;letter-spacing:2px;">Versión Del Juego Actual #24</div>
+        <div class="splash-by">Empieza con <span>2.000 monedas</span></div>
+        <div style="margin-top:14px;font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;color:#f43f5e;letter-spacing:2px;">🔧 PRÓXIMA ACTUALIZACIÓN &nbsp; 23 / 05 / 2026</div>
+        <div style="margin-top:8px;font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;color:#f43f5e;letter-spacing:2px;">Versión Del Juego Actual #25</div>
     </div>
 </div>
 
@@ -1053,12 +1478,12 @@
     <header>
         <div>
             <div class="header-title">THE BEST <span id="titleTheme">COLLECTOR</span></div>
-            <div class="header-sub">Meta: 2.000.000 monedas · By Aritz</div>
+            <div class="header-sub">Meta: 4.000.000 monedas · By Aritz</div>
         </div>
         <div style="display:flex;align-items:center;gap:20px;" id="header-right">
             <div id="bonusBox" style="text-align:center;">
                 <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#475569;margin-bottom:2px;" id="bonusLabel">💰 x2 Dinero en</div>
-                <div id="bonusTimer" style="font-family:'JetBrains Mono',monospace;font-size:28px;font-weight:700;color:#a855f7;text-shadow:0 0 20px rgba(168,85,247,0.5);">60:00</div>
+                <div id="bonusTimer" style="font-family:'JetBrains Mono',monospace;font-size:28px;font-weight:700;color:#a855f7;text-shadow:0 0 20px rgba(168,85,247,0.5);">45:00</div>
             </div>
             <div id="luckyBox" style="text-align:center;">
                 <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#475569;margin-bottom:2px;" id="luckyLabel">🍀 x2 Suerte en</div>
@@ -1068,6 +1493,7 @@
                 <div class="balance-label">Tu Fortuna</div>
                 <div class="balance-amount" id="balance">650</div>
             </div>
+            <div style="position:relative;flex-shrink:0;"><button id="coinBtn" title="Apostar monedas">🪙</button><div id="coinCooldownLabel"></div></div>
         </div>
     </header>
 
@@ -1159,7 +1585,48 @@
         <div id="achievements-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;"></div>
     </div>
 
+    <!-- RULETA MÍTICA -->
+    <div style="margin-top:40px;">
+        <div class="inventory-header">
+            <div class="inventory-title">🎰 Ruleta Mítica</div>
+            <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#fbbf24;">Solo Objetos Míticos</div>
+        </div>
+        <div style="text-align:center;margin-bottom:16px;">
+            <div class="box-badge" style="border-color:#fbbf24;color:#fbbf24;background:rgba(251,191,36,0.08);">MÍTICO</div>
+        </div>
+        <div class="ruleta-wrap" id="ruletaCase">
+            <div class="ruleta-marker"></div>
+            <div class="ruleta-reel" id="ruletaReel"></div>
+        </div>
+        <div class="ruleta-cost-info">Consigue un objeto mítico en cualquier cofre para ganar <span style="color:#fbbf24;">1 tirada</span> · Tiradas disponibles: <span id="ruletaChargesDisplay" style="color:#fbbf24;font-size:14px;">0</span></div>
+        <button class="ruleta-spin-btn" id="ruletaSpinBtn">🎰 GIRAR RULETA</button>
+    </div>
 
+
+</div>
+
+<!-- RULETA MÍTICA MODAL -->
+<div id="ruletaModal">
+    <div id="ruletaModalBox">
+        <div style="position:absolute;top:-60px;left:50%;transform:translateX(-50%);width:200px;height:200px;border-radius:50%;background:#fbbf24;filter:blur(60px);opacity:0.2;pointer-events:none;"></div>
+        <div style="font-size:10px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#fbbf24;margin-bottom:16px;">✨ OBJETO MÍTICO</div>
+        <div id="ruletaModalIcon" style="font-size:96px;line-height:1;margin:16px 0;filter:drop-shadow(0 0 30px rgba(251,191,36,0.5));animation:floatIcon 3s ease-in-out infinite;">⭐</div>
+        <div id="ruletaModalName" style="font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:4px;margin-bottom:20px;color:white;"></div>
+        <div style="background:rgba(0,0,0,0.4);border:1px solid rgba(255,255,255,0.07);border-radius:14px;padding:16px;margin-bottom:24px;">
+            <div style="font-size:9px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#475569;margin-bottom:4px;">Valor de Reventa</div>
+            <div id="ruletaModalPrice" style="font-family:'JetBrains Mono',monospace;font-size:32px;font-weight:700;color:#4ade80;"></div>
+        </div>
+        <button class="modal-close-btn" id="ruletaModalCloseBtn" style="background:#fbbf24;color:#0a0f1e;">COLECCIONAR ✨</button>
+    </div>
+</div>
+
+<!-- RULETA CHARGE TOAST -->
+<div id="ruletaChargeToast">
+    <div style="font-size:32px;">🎰</div>
+    <div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:3px;color:#fbbf24;">¡TIRADA DESBLOQUEADA!</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;color:white;">Ruleta Mítica disponible</div>
+    </div>
 </div>
 
 <!-- ACHIEVEMENT TOAST -->
@@ -1188,13 +1655,8 @@
 </div>
 
 <!-- WIN -->
-<div class="fullscreen" id="winScreen">
-    <div>
-        <div class="screen-emoji">👑</div>
-        <div class="screen-title" style="color:#fbbf24">¡MÁXIMA GLORIA!</div>
-        <div class="screen-sub">Has conquistado el mercado y alcanzado los 2M. Eres una leyenda.</div>
-        <button class="screen-btn" onclick="location.reload()">VOLVER A EMPEZAR</button>
-    </div>
+<div class="fullscreen" id="winScreen" style="background:#000;flex-direction:column;justify-content:flex-end;padding:0;overflow:hidden;">
+    <!-- filled dynamically by triggerWinAnimation() -->
 </div>
 
 <!-- LOSE -->
@@ -1204,6 +1666,28 @@
         <div class="screen-title" style="color:#f43f5e">EN LA RUINA</div>
         <div class="screen-sub">Te has quedado sin un céntimo. La banca siempre gana...</div>
         <button class="screen-btn" onclick="location.reload()">VENDER MIS ZAPATOS</button>
+    </div>
+</div>
+
+
+<!-- COIN FLIP MODAL -->
+<div id="coinModal">
+    <div id="coinBox">
+        <div class="coin-title">🪙 CARA O CRUZ</div>
+        <div class="coin-subtitle" id="coinSubtitle">
+            Ganar: +<span id="coinWinAmt">0</span> &nbsp;·&nbsp; <span class="lose-text">Perder: -<span id="coinLoseAmt">0</span></span>
+        </div>
+        <div id="coinFace">
+            <div class="coin-side coin-heads">👑</div>
+            <div class="coin-side coin-tails">🌑</div>
+        </div>
+        <div id="coinResult"></div>
+        <div id="bancaMsg"></div>
+        <div class="coin-btns">
+            <button class="coin-choice-btn" id="btnHeads">👑 CARA</button>
+            <button class="coin-choice-btn" id="btnTails">🌑 CRUZ</button>
+        </div>
+        <button id="coinCloseBtn">CERRAR</button>
     </div>
 </div>
 
@@ -1367,12 +1851,26 @@
             {name:"Bowser",rarity:"legendario",icon:"🐢",price:200000},
             {name:"Darth Vader",rarity:"mitico",icon:"🌑",price:450000}
         ]},
-        cerave: { label:"Cerave", emoji:"🧴", cost:40000, color:"#38bdf8", title:"Santuario Cerave", items:[
-            {name:"Copia Barata",rarity:"comun",icon:"🧴",price:27500},
-            {name:"Cerave Barato",rarity:"especial",icon:"💧",price:35000},
-            {name:"Cerave Original",rarity:"epico",icon:"✨",price:75000},
-            {name:"Cerave de Oro",rarity:"legendario",icon:"🥇",price:400000},
-            {name:"Cerave Cósmico",rarity:"mitico",icon:"🌌",price:2250000}
+        pacific_rim: { label:"Pacific Rim", emoji:"🤖", cost:35000, color:"#06b6d4", title:"Cofre Pacific Rim", items:[
+            {name:"Gipsy Avenger",rarity:"comun",icon:"🦾",price:29500},
+            {name:"Crimson Typhoon",rarity:"especial",icon:"🔴",price:34500},
+            {name:"Cherno Alpha",rarity:"epico",icon:"⚙️",price:55000},
+            {name:"Striker Eureka",rarity:"legendario",icon:"⚡",price:350000},
+            {name:"Gipsy Danger",rarity:"mitico",icon:"🌊",price:750000}
+        ]},
+        transformers: { label:"Transformers", emoji:"🚗", cost:50000, color:"#eab308", title:"Cofre Transformers", items:[
+            {name:"Starscream",rarity:"comun",icon:"✈️",price:42000},
+            {name:"Bumblebee",rarity:"especial",icon:"🐝",price:49000},
+            {name:"Shockwave",rarity:"epico",icon:"🔮",price:80000},
+            {name:"Optimus Prime",rarity:"legendario",icon:"🔴",price:600000},
+            {name:"Megatron",rarity:"mitico",icon:"💀",price:1250000}
+        ]},
+        cerave: { label:"Cerave", emoji:"🧴", cost:100000, color:"#38bdf8", title:"Santuario Cerave", items:[
+            {name:"Copia Barata",rarity:"comun",icon:"🧴",price:85000},
+            {name:"Cerave Barato",rarity:"especial",icon:"💧",price:97500},
+            {name:"Cerave Original",rarity:"epico",icon:"✨",price:155000},
+            {name:"Cerave de Oro",rarity:"legendario",icon:"🥇",price:750000},
+            {name:"Cerave Cósmico",rarity:"mitico",icon:"🌌",price:3750000}
         ]}
     };
 
@@ -1386,8 +1884,8 @@
 
     let currentKey = 'tech';
     let inventory = [];
-    let state = { balance:1000, spent:0, invValue:0, opened:0, best:0, spinning:false, over:false, items:[], commonCount:0, miticoCount:0, consecutiveMiticos:0, lastWasmitico:false, timeInGame:0, gotSuerteMax:false };
-    const WIN_GOAL = 2000000;
+    let state = { balance:2000, spent:0, invValue:0, opened:0, best:0, spinning:false, over:false, items:[], commonCount:0, miticoCount:0, consecutiveMiticos:0, lastWasmitico:false, timeInGame:0, gotSuerteMax:false, coinWinStreak:0, coinLoseStreak:0, ruletaCharges:0 };
+    const WIN_GOAL = 4000000;
 
     const reel = document.getElementById('caseReel');
     const spinBtn = document.getElementById('spinBtn');
@@ -1561,6 +2059,10 @@
             state.miticoCount++;
             state.consecutiveMiticos = state.lastWasmitico ? state.consecutiveMiticos + 1 : 1;
             state.lastWasmitico = true;
+            // Grant one ruleta charge
+            state.ruletaCharges++;
+            updateRuletaBtn();
+            showRuletaChargeToast();
         } else {
             state.consecutiveMiticos = 0;
             state.lastWasmitico = false;
@@ -1677,17 +2179,48 @@
     function renderInventory() {
         const c = document.getElementById('inventory');
         c.innerHTML = '';
-        [...inventory].reverse().forEach(item => {
+        // Store original indices for selling by reference
+        const reversed = [...inventory].map((item, origIdx) => ({ item, origIdx })).reverse();
+        reversed.forEach(({ item, origIdx }) => {
+            const salePrice = Math.round(item.price * 0.80);
             const d = document.createElement('div');
             d.className = 'inv-card';
             d.innerHTML = `
                 <div class="inv-card-bar" style="background:${rarities[item.rarity].color}"></div>
                 <div class="inv-card-icon">${item.icon}</div>
                 <div class="inv-card-name">${item.name}</div>
-                <div class="inv-card-price">${Math.round(item.price * 0.80).toLocaleString()} $</div>
+                <div class="inv-card-price">${salePrice.toLocaleString()} $</div>
+                <div class="sell-overlay">
+                    <div class="sell-overlay-text">💰 VENDER</div>
+                    <div class="sell-overlay-price">${salePrice.toLocaleString()} $</div>
+                </div>
             `;
+            d.addEventListener('click', () => sellOne(origIdx, d, salePrice));
             c.appendChild(d);
         });
+    }
+
+    function sellOne(origIdx, cardEl, salePrice) {
+        if (state.over || state.spinning) return;
+        // Animate card out then remove
+        cardEl.classList.add('selling');
+        playSound('money');
+        createParticles(
+            cardEl.getBoundingClientRect().left + cardEl.offsetWidth / 2,
+            cardEl.getBoundingClientRect().top + cardEl.offsetHeight / 2,
+            '#4ade80', 8
+        );
+        setTimeout(() => {
+            state.balance += salePrice;
+            state.invValue -= inventory[origIdx].price;
+            if (state.invValue < 0) state.invValue = 0;
+            inventory.splice(origIdx, 1);
+            renderInventory();
+            updateStats();
+            checkAchievements();
+            saveGame();
+            checkEnd();
+        }, 350);
     }
 
     function sellAll() {
@@ -1717,6 +2250,123 @@
         document.getElementById('progressFill').style.width = `${Math.min((state.balance / WIN_GOAL) * 100, 100)}%`;
     }
 
+
+    function triggerWinAnimation() {
+        const screen = document.getElementById('winScreen');
+        screen.innerHTML = '';
+        screen.classList.add('show');
+
+        // FASE 1: Pantalla negra total — corona parpadeando (0-2.5s)
+        const phase1 = document.createElement('div');
+        phase1.style.cssText = 'position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;z-index:2;';
+        const crownEl = document.createElement('div');
+        crownEl.textContent = '👑';
+        crownEl.style.cssText = 'font-size:120px;animation:crownBlink 0.5s ease-in-out 5;filter:drop-shadow(0 0 40px rgba(251,191,36,0.8));';
+        phase1.appendChild(crownEl);
+        screen.appendChild(phase1);
+
+        // Niebla dorada desde abajo
+        for (let i = 0; i < 5; i++) {
+            const smoke = document.createElement('div');
+            smoke.className = 'win-smoke';
+            smoke.style.animationDelay = (i * 0.4) + 's';
+            smoke.style.width = (200 + i * 60) + 'px';
+            screen.appendChild(smoke);
+        }
+
+        // FASE 2: a los 2.5s — flash blanco + título entra desde abajo
+        setTimeout(() => {
+            // Flash blanco
+            const flash = document.createElement('div');
+            flash.style.cssText = 'position:fixed;inset:0;background:white;z-index:200;opacity:0;transition:opacity 0.08s;pointer-events:none;';
+            document.body.appendChild(flash);
+            requestAnimationFrame(() => { requestAnimationFrame(() => { flash.style.opacity = '1'; }); });
+            setTimeout(() => {
+                flash.style.transition = 'opacity 0.4s';
+                flash.style.opacity = '0';
+                setTimeout(() => flash.remove(), 400);
+            }, 80);
+
+            // Lens flare lines
+            [0, 80, 160].forEach((delay, i) => {
+                setTimeout(() => {
+                    const lens = document.createElement('div');
+                    lens.className = 'win-lens';
+                    lens.style.top = (30 + i * 18) + '%';
+                    lens.style.width = (300 + i * 120) + 'px';
+                    screen.appendChild(lens);
+                    setTimeout(() => lens.remove(), 700);
+                }, delay);
+            });
+
+            // Título principal
+            phase1.style.display = 'none';
+            const phase2 = document.createElement('div');
+            phase2.style.cssText = 'position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:28px;padding:40px;z-index:3;';
+
+            const crown2 = document.createElement('div');
+            crown2.textContent = '👑';
+            crown2.style.cssText = 'font-size:100px;animation:winCrownFloat 3s ease-in-out infinite;filter:drop-shadow(0 0 60px rgba(251,191,36,1));';
+
+            const title = document.createElement('div');
+            title.style.cssText = `
+                font-family:'Bebas Neue',sans-serif;
+                font-size:clamp(36px,8vw,72px);
+                letter-spacing:6px;
+                color:#fbbf24;
+                text-shadow:0 0 60px rgba(251,191,36,0.8), 0 0 120px rgba(251,191,36,0.4);
+                animation:titleSlideUp 0.8s cubic-bezier(0.23,1,0.32,1) forwards;
+                text-align:center;
+                line-height:1.1;
+            `;
+            title.textContent = '¡MÁXIMA GLORIA!';
+
+            const sub = document.createElement('div');
+            sub.style.cssText = `
+                font-family:'Rajdhani',sans-serif;
+                font-size:clamp(14px,2.5vw,20px);
+                font-weight:700;
+                letter-spacing:2px;
+                color:rgba(255,255,255,0.75);
+                text-align:center;
+                max-width:520px;
+                line-height:1.6;
+                opacity:0;
+                animation:subtitleFade 1s ease 0.6s forwards;
+                text-transform:uppercase;
+            `;
+            sub.textContent = 'Has llegado a la máxima gloria felicidades, esta vez has ganado a la banca pero no volverá a repetirse nunca más';
+
+            const btn = document.createElement('button');
+            btn.className = 'screen-btn';
+            btn.textContent = 'VOLVER A EMPEZAR';
+            btn.style.cssText = `
+                background:#fbbf24;color:#0a0f1e;
+                box-shadow:0 0 40px rgba(251,191,36,0.5);
+                opacity:0;
+                animation:btnAppear 0.6s ease 1.4s forwards;
+                font-family:'Bebas Neue',sans-serif;
+                font-size:20px;letter-spacing:4px;
+                padding:20px 56px;border:none;border-radius:14px;cursor:pointer;
+            `;
+            btn.addEventListener('click', () => location.reload());
+
+            phase2.appendChild(crown2);
+            phase2.appendChild(title);
+            phase2.appendChild(sub);
+            phase2.appendChild(btn);
+            screen.appendChild(phase2);
+
+            // Confetti escalonado
+            setTimeout(() => confetti({ particleCount:120, spread:70, origin:{y:0.5}, colors:['#fbbf24','#ffffff','#a855f7'] }), 300);
+            setTimeout(() => confetti({ particleCount:80, angle:60, spread:55, origin:{x:0, y:0.6}, colors:['#fbbf24','#4ade80'] }), 700);
+            setTimeout(() => confetti({ particleCount:80, angle:120, spread:55, origin:{x:1, y:0.6}, colors:['#fbbf24','#f43f5e'] }), 700);
+            setTimeout(() => confetti({ particleCount:200, spread:120, origin:{y:0.4}, colors:['#fbbf24','#ffffff','#4ade80','#a855f7'] }), 1200);
+            playSound('win');
+
+        }, 2500);
+    }
+
     function checkEnd() {
         if (state.balance >= WIN_GOAL) {
             // ✅ FIX: clearSave PRIMERO para que el autosave de 15s no pueda re-guardar el estado
@@ -1727,9 +2377,7 @@
             saveRecord(newWins, rec.losses);
             updateRecordDisplay();
             checkAchievements();
-            document.getElementById('winScreen').classList.add('show');
-            confetti({ particleCount:300, spread:120, origin:{y:0.6} });
-            playSound('win');
+            triggerWinAnimation();
         } else if ((state.balance + state.invValue) < 80 && !state.spinning) {
             // ✅ FIX: clearSave PRIMERO para que el autosave de 15s no pueda re-guardar el estado
             clearSave();
@@ -2022,10 +2670,10 @@
         {
             id: 'ya_casi',
             name: 'Ya casi bro...',
-            desc: 'Llega a 1.000.000$ de fortuna',
+            desc: 'Llega a 2.000.000$ de fortuna',
             icon: '💰',
             done: false,
-            check: () => state.balance >= 1000000
+            check: () => state.balance >= 2000000
         },
         {
             id: 'suceso',
@@ -2054,10 +2702,10 @@
         {
             id: 'te_queda_nada',
             name: 'Te Queda Nada Bro...',
-            desc: 'Llega a 1.750.000$ de fortuna',
+            desc: 'Llega a 3.750.000$ de fortuna',
             icon: '🤑',
             done: false,
-            check: () => state.balance >= 1750000
+            check: () => state.balance >= 3750000
         },
         {
             id: 'esto_es_enserio',
@@ -2082,6 +2730,22 @@
             icon: '🏆',
             done: false,
             check: () => getRecord().wins >= 20
+        },
+        {
+            id: 'que_aura',
+            name: 'Que Aura....',
+            desc: 'Gana a cara o cruz tres veces seguidas',
+            icon: '😎',
+            done: false,
+            check: () => state.coinWinStreak >= 3
+        },
+        {
+            id: 'que_laura',
+            name: 'Que Laura.....',
+            desc: 'Pierde a cara o cruz tres veces seguidas',
+            icon: '😭',
+            done: false,
+            check: () => state.coinLoseStreak >= 3
         }
     ];
 
@@ -2164,7 +2828,10 @@
                 consecutiveMiticos: state.consecutiveMiticos,
                 lastWasmitico: state.lastWasmitico,
                 timeInGame: state.timeInGame,
-                gotSuerteMax: state.gotSuerteMax
+                gotSuerteMax: state.gotSuerteMax,
+                coinWinStreak: state.coinWinStreak,
+                coinLoseStreak: state.coinLoseStreak,
+                ruletaCharges: state.ruletaCharges
             },
             inventory: inventory,
             achievements: achievements.map(a => ({ id: a.id, done: a.done })),
@@ -2213,6 +2880,7 @@
         
         const hasSave = loadGame();
         initTabs();
+        updateRuletaBtn();
         if (hasSave) {
             renderInventory();
             showSaveNotice();
@@ -2311,7 +2979,7 @@
 
     // BONUS x2 TIMER
     let bonusActive = false;
-    let bonusSecondsLeft = 60 * 60;
+    let bonusSecondsLeft = 45 * 60;
     let bonusDurationLeft = 0;
 
     // SISTEMA DE EVENTOS
@@ -2448,7 +3116,7 @@
                 document.getElementById('bonusBox').style.animation = 'mythicPulse 0.8s infinite';
                 if (bonusDurationLeft <= 0) {
                     bonusActive = false;
-                    bonusSecondsLeft = 60 * 60;
+                    bonusSecondsLeft = 45 * 60;
                     document.getElementById('bonusLabel').textContent = '💰 x2 Dinero en';
                     document.getElementById('bonusTimer').style.color = '#a855f7';
                     document.getElementById('bonusTimer').style.textShadow = '0 0 20px rgba(168,85,247,0.5)';
@@ -2501,6 +3169,303 @@
     }
 
     // EVENT LISTENERS (reemplaza todos los onclick del HTML)
+
+    // COIN FLIP
+    let coinCooldown = 0;
+    setInterval(() => {
+        if (coinCooldown <= 0) return;
+        coinCooldown--;
+        const btn = document.getElementById('coinBtn');
+        const lbl = document.getElementById('coinCooldownLabel');
+        if (coinCooldown <= 0) {
+            btn.disabled = false;
+            lbl.textContent = '';
+        } else {
+            const m = Math.floor(coinCooldown / 60);
+            const s = coinCooldown % 60;
+            lbl.textContent = m > 0 ? `${m}:${String(s).padStart(2,'0')}` : `${s}s`;
+        }
+    }, 1000);
+
+    function openCoinModal() {
+        if (state.over || state.spinning || coinCooldown > 0) return;
+        const win50 = Math.floor(state.balance * 0.5);
+        const lose75 = Math.floor(state.balance * 0.75);
+        document.getElementById('coinWinAmt').textContent = win50.toLocaleString() + ' $';
+        document.getElementById('coinLoseAmt').textContent = lose75.toLocaleString() + ' $';
+        document.getElementById('coinResult').textContent = '';
+        document.getElementById('coinResult').className = '';
+        document.getElementById('bancaMsg').textContent = '';
+        document.getElementById('bancaMsg').classList.remove('show');
+        document.getElementById('coinCloseBtn').classList.remove('visible');
+        document.getElementById('btnHeads').disabled = false;
+        document.getElementById('btnTails').disabled = false;
+        const coinFace = document.getElementById('coinFace');
+        coinFace.style.animation = 'none';
+        coinFace.style.transform = 'rotateY(0deg)';
+        const modal = document.getElementById('coinModal');
+        const box = document.getElementById('coinBox');
+        modal.classList.add('show');
+        setTimeout(() => box.classList.add('open'), 10);
+        playSound('click');
+    }
+
+    function closeCoinModal() {
+        const box = document.getElementById('coinBox');
+        box.classList.remove('open');
+        setTimeout(() => document.getElementById('coinModal').classList.remove('show'), 350);
+    }
+
+    function flipCoin(playerChoice) {
+        if (state.balance <= 0) return;
+        document.getElementById('btnHeads').disabled = true;
+        document.getElementById('btnTails').disabled = true;
+        document.getElementById('coinResult').textContent = '';
+
+        const result = Math.random() < 0.45 ? 'heads' : 'tails';
+        const won = playerChoice === result;
+        const coinFace = document.getElementById('coinFace');
+
+        // Animate: lands on heads (0 or 3600) or tails (180 + multiple of 360)
+        const finalDeg = result === 'heads' ? 1800 : 1980;
+        coinFace.style.transition = 'none';
+        coinFace.style.transform = 'rotateY(0deg)';
+        void coinFace.offsetWidth;
+        coinFace.style.transition = 'transform 2s cubic-bezier(0.33,0,0.1,1)';
+        coinFace.style.transform = `rotateY(${finalDeg}deg)`;
+
+        setTimeout(() => {
+            const resultEl = document.getElementById('coinResult');
+            if (won) {
+                const gain = Math.floor(state.balance * 0.5);
+                state.balance += gain;
+                resultEl.textContent = `+${gain.toLocaleString()} $ ✨`;
+                resultEl.className = 'win';
+                playSound('win');
+
+                // AURA ANIMATION
+                const coinFaceEl = document.getElementById('coinFace');
+                coinFaceEl.style.transition = 'transform 0.25s ease';
+                coinFaceEl.style.animation = 'auraCoinGlow 0.6s ease-in-out 3, auraShake 0.4s ease 0.1s';
+
+                // Expanding rings
+                for (let r = 0; r < 4; r++) {
+                    setTimeout(() => {
+                        const ring = document.createElement('div');
+                        ring.className = 'aura-win-ring';
+                        ring.style.borderColor = r % 2 === 0 ? '#fbbf24' : '#4ade80';
+                        ring.style.animationDelay = '0s';
+                        coinFaceEl.appendChild(ring);
+                        setTimeout(() => ring.remove(), 800);
+                    }, r * 160);
+                }
+
+                // Floating emojis from coin
+                const winEmojis = ['✨','💛','⭐','🔥','💫','👑','💰'];
+                const coinRect = coinFaceEl.getBoundingClientRect();
+                for (let e = 0; e < 8; e++) {
+                    setTimeout(() => {
+                        const em = document.createElement('div');
+                        em.className = 'aura-win-emoji';
+                        em.textContent = winEmojis[e % winEmojis.length];
+                        const ox = (Math.random() - 0.5) * 120;
+                        em.style.left = (coinRect.left + coinRect.width/2 + ox) + 'px';
+                        em.style.top = (coinRect.top + coinRect.height/2) + 'px';
+                        em.style.position = 'fixed';
+                        em.style.animationDuration = (0.8 + Math.random()*0.5) + 's';
+                        document.body.appendChild(em);
+                        setTimeout(() => em.remove(), 1200);
+                    }, e * 80);
+                }
+
+                // Confetti burst
+                setTimeout(() => {
+                    confetti({ particleCount: 80, spread: 60, origin: { x: (coinRect.left + coinRect.width/2)/window.innerWidth, y: coinRect.top/window.innerHeight }, colors: ['#fbbf24', '#4ade80', '#ffffff', '#a855f7'] });
+                }, 200);
+                setTimeout(() => {
+                    confetti({ particleCount: 60, spread: 100, origin: { x: (coinRect.left + coinRect.width/2)/window.innerWidth, y: coinRect.top/window.innerHeight }, colors: ['#fbbf24', '#f43f5e', '#ffffff'] });
+                }, 500);
+
+                // Screen flash gold
+                const flash = document.createElement('div');
+                flash.style.cssText = 'position:fixed;inset:0;background:#fbbf24;z-index:55;pointer-events:none;opacity:0;transition:opacity 0.1s;';
+                document.body.appendChild(flash);
+                requestAnimationFrame(() => { requestAnimationFrame(() => { flash.style.opacity = '0.18'; }); });
+                setTimeout(() => { flash.style.transition = 'opacity 0.5s'; flash.style.opacity = '0'; setTimeout(() => flash.remove(), 500); }, 150);
+
+                state.coinWinStreak++;
+                state.coinLoseStreak = 0;
+            } else {
+                const loss = Math.floor(state.balance * 0.75);
+                state.balance -= loss;
+                resultEl.textContent = `-${loss.toLocaleString()} $ 💸`;
+                resultEl.className = 'lose';
+                playSound('click');
+                createParticles(window.innerWidth/2, window.innerHeight/2, '#f43f5e', 20);
+                state.coinLoseStreak++;
+                state.coinWinStreak = 0;
+                const bancaEl = document.getElementById('bancaMsg');
+                bancaEl.textContent = '🏦 La Banca Siempre Gana, eso tenlo claro...';
+                setTimeout(() => bancaEl.classList.add('show'), 50);
+            }
+            updateStats();
+            saveGame();
+            checkEnd();
+            document.getElementById('coinCloseBtn').classList.add('visible');
+            // Start 180s cooldown
+            coinCooldown = 180;
+            const btn = document.getElementById('coinBtn');
+            btn.disabled = true;
+        }, 2100);
+    }
+
+    document.getElementById('coinBtn').addEventListener('click', openCoinModal);
+    document.getElementById('coinCloseBtn').addEventListener('click', closeCoinModal);
+    document.getElementById('btnHeads').addEventListener('click', () => flipCoin('heads'));
+    document.getElementById('btnTails').addEventListener('click', () => flipCoin('tails'));
+
+    // RULETA MÍTICA
+    let ruletaSpinning = false;
+    let ruletaItems = [];
+
+    function getRuletaMiticos() {
+        const miticos = [];
+        Object.entries(boxes).forEach(([key, box]) => {
+            const m = box.items.find(i => i.rarity === 'mitico');
+            if (m) miticos.push({ ...m, boxLabel: box.label });
+        });
+        return miticos;
+    }
+
+    function setupRuleta() {
+        const reel = document.getElementById('ruletaReel');
+        reel.innerHTML = '';
+        ruletaItems = [];
+        const miticos = getRuletaMiticos();
+        const cardW = window.innerWidth <= 700 ? 100 : 140;
+        for (let i = 0; i < 60; i++) {
+            const item = miticos[Math.floor(Math.random() * miticos.length)];
+            ruletaItems.push(item);
+            const d = document.createElement('div');
+            d.className = 'ruleta-card';
+            d.style.minWidth = cardW + 'px';
+            d.style.width = cardW + 'px';
+            d.innerHTML = `<div class="r-icon">${item.icon}</div><div class="r-name">${item.name}</div><div class="r-price">${item.price.toLocaleString()} $</div>`;
+            reel.appendChild(d);
+        }
+        reel.style.transition = 'none';
+        reel.style.transform = 'translateX(0px)';
+    }
+
+    function spinRuleta() {
+        if (state.over || ruletaSpinning) return;
+        if (state.ruletaCharges <= 0) {
+            playSound('click');
+            document.getElementById('ruletaSpinBtn').classList.add('shake');
+            setTimeout(() => document.getElementById('ruletaSpinBtn').classList.remove('shake'), 400);
+            return;
+        }
+        state.ruletaCharges--;
+        updateRuletaBtn();
+        ruletaSpinning = true;
+        document.getElementById('ruletaSpinBtn').disabled = true;
+        saveGame();
+        setupRuleta();
+        void document.getElementById('ruletaReel').offsetWidth;
+
+        const caseEl = document.getElementById('ruletaCase');
+        caseEl.style.boxShadow = '0 0 60px rgba(251,191,36,0.25), inset 0 1px 0 rgba(255,255,255,0.05)';
+
+        const reel = document.getElementById('ruletaReel');
+        reel.style.transition = 'transform 5s cubic-bezier(0.12, 0, 0.04, 1)';
+        const winIdx = 55;
+        const cardW = window.innerWidth <= 700 ? 100 : 140;
+        const caseW = caseEl.offsetWidth;
+        const tx = -((winIdx * cardW) - (caseW / 2) + cardW / 2);
+        reel.style.transform = `translateX(${tx}px)`;
+
+        // Tick sounds
+        let lastTickIdx = -1;
+        const tickCheck = () => {
+            if (!ruletaSpinning) return;
+            const rect = reel.getBoundingClientRect();
+            const mid = window.innerWidth / 2;
+            const idx = Math.floor((mid - rect.left) / cardW);
+            if (idx !== lastTickIdx && idx >= 0) { playSound('tick'); lastTickIdx = idx; }
+            requestAnimationFrame(tickCheck);
+        };
+        tickCheck();
+
+        setTimeout(() => {
+            caseEl.style.boxShadow = '';
+            const winner = ruletaItems[winIdx];
+            // Add to inventory with bonus check
+            const finalPrice = bonusActive ? winner.price * 2 : winner.price;
+            const wonItem = { ...winner, price: Math.round(finalPrice) };
+            inventory.push(wonItem);
+            state.invValue += wonItem.price;
+            if (wonItem.price > state.best) state.best = wonItem.price;
+            state.miticoCount++;
+            state.consecutiveMiticos = state.lastWasmitico ? state.consecutiveMiticos + 1 : 1;
+            state.lastWasmitico = true;
+            renderInventory();
+            updateStats();
+            checkAchievements();
+            saveGame();
+            showRuletaModal(wonItem);
+            ruletaSpinning = false;
+            document.getElementById('ruletaSpinBtn').disabled = false;
+        }, 5200);
+    }
+
+    function showRuletaModal(item) {
+        document.getElementById('ruletaModalIcon').textContent = item.icon;
+        document.getElementById('ruletaModalName').textContent = item.name;
+        document.getElementById('ruletaModalPrice').textContent = item.price.toLocaleString() + ' $';
+        const overlay = document.getElementById('ruletaModal');
+        const box = document.getElementById('ruletaModalBox');
+        overlay.classList.add('show');
+        setTimeout(() => box.classList.add('open'), 10);
+        confetti({ particleCount:300, spread:160, colors:['#fbbf24','#ffffff','#a855f7'] });
+        playSound('win');
+        playScream();
+    }
+
+    function closeRuletaModal() {
+        const box = document.getElementById('ruletaModalBox');
+        box.classList.remove('open');
+        setTimeout(() => {
+            document.getElementById('ruletaModal').classList.remove('show');
+            checkEnd();
+        }, 350);
+    }
+
+
+    function updateRuletaBtn() {
+        const btn = document.getElementById('ruletaSpinBtn');
+        const disp = document.getElementById('ruletaChargesDisplay');
+        if (disp) disp.textContent = state.ruletaCharges;
+        if (state.ruletaCharges > 0) {
+            btn.disabled = false;
+            btn.textContent = `🎰 GIRAR RULETA (${state.ruletaCharges})`;
+            btn.style.opacity = '1';
+        } else {
+            btn.disabled = true;
+            btn.textContent = '🎰 NECESITAS UN MÍTICO';
+            btn.style.opacity = '0.45';
+        }
+    }
+
+    function showRuletaChargeToast() {
+        const t = document.getElementById('ruletaChargeToast');
+        t.classList.add('show');
+        if (window._ruletaToastTimer) clearTimeout(window._ruletaToastTimer);
+        window._ruletaToastTimer = setTimeout(() => t.classList.remove('show'), 3500);
+    }
+
+    document.getElementById('ruletaSpinBtn').addEventListener('click', spinRuleta);
+    document.getElementById('ruletaModalCloseBtn').addEventListener('click', closeRuletaModal);
+    setupRuleta();
     document.getElementById('playBtn').addEventListener('click', () => {
         startGame();
     });
