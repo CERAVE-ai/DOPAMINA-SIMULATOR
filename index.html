@@ -1736,7 +1736,7 @@
         <div class="splash-subtitle">By Aritz &nbsp;·&nbsp; Llega a 10.000.000 monedas</div>
         <button class="splash-play-btn" id="playBtn">▶ &nbsp;JUGAR</button>
         <div class="splash-by">Empieza con <span>2.000 monedas</span></div>
-        <div style="margin-top:14px;font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;color:#f43f5e;letter-spacing:2px;">🔧 PRÓXIMA ACTUALIZACIÓN &nbsp; 22 / 05 / 2026</div>
+        <div style="margin-top:14px;font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;color:#f43f5e;letter-spacing:2px;">🔧 PRÓXIMA ACTUALIZACIÓN &nbsp; 23 / 05 / 2026</div>
         <div style="margin-top:8px;font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;color:#f43f5e;letter-spacing:2px;">Versión Del Juego Actual #26</div>
     </div>
 </div>
@@ -2285,7 +2285,7 @@
 
     let currentKey = 'tech';
     let inventory = [];
-    let state = { balance:2000, spent:0, invValue:0, opened:0, best:0, spinning:false, over:false, items:[], commonCount:0, miticoCount:0, consecutiveMiticos:0, lastWasmitico:false, timeInGame:0, gotSuerteMax:false, coinWinStreak:0, coinLoseStreak:0, ruletaCharges:0, miticosForRuleta:0, superRuletaCharges:0, miticosForSuperRuleta:0 };
+    let state = { balance:2000, spent:0, invValue:0, opened:0, best:0, spinning:false, over:false, items:[], commonCount:0, miticoCount:0, consecutiveMiticos:0, lastWasmitico:false, timeInGame:0, gotSuerteMax:false, coinWinStreak:0, coinLoseStreak:0, ruletaCharges:0, miticosForRuleta:0, superRuletaCharges:0, miticosForSuperRuleta:0, auctionWins:0, universalCount:0, potionsBought:0 };
     const WIN_GOAL = 10000000;
 
     const reel = document.getElementById('caseReel');
@@ -2481,6 +2481,7 @@
         state.invValue += finalPrice;
         if (finalPrice > state.best) state.best = finalPrice;
         inventory.push(bonusWinner);
+        if (mutation.id === 'universal') state.universalCount++;
 
         // Efecto visual en la carta ganadora
         playReelLandEffect(winner.rarity);
@@ -3215,6 +3216,38 @@
             icon: '😭',
             done: false,
             check: () => state.coinLoseStreak >= 3
+        },
+        {
+            id: 'maestro_subasta',
+            name: 'Maestro De La Subasta',
+            desc: 'Sal ganando en una subasta 15 veces',
+            icon: '🏷️',
+            done: false,
+            check: () => state.auctionWins >= 15
+        },
+        {
+            id: 'ser_universal',
+            name: 'Ser Universal',
+            desc: 'Consigue 10 objetos con la mutación Universal',
+            icon: '✨',
+            done: false,
+            check: () => state.universalCount >= 10
+        },
+        {
+            id: 'loco_pociones',
+            name: 'Loco Por Las Pociones',
+            desc: 'Compra 50 pociones',
+            icon: '🧪',
+            done: false,
+            check: () => state.potionsBought >= 50
+        },
+        {
+            id: 'aura_maxima',
+            name: 'Aura Máxima...',
+            desc: 'Consigue la gloria máxima 45 veces',
+            icon: '🌟',
+            done: false,
+            check: () => getRecord().wins >= 45
         }
     ];
 
@@ -3303,7 +3336,10 @@
                 ruletaCharges: state.ruletaCharges,
                 miticosForRuleta: state.miticosForRuleta,
                 superRuletaCharges: state.superRuletaCharges,
-                miticosForSuperRuleta: state.miticosForSuperRuleta
+                miticosForSuperRuleta: state.miticosForSuperRuleta,
+                auctionWins: state.auctionWins,
+                universalCount: state.universalCount,
+                potionsBought: state.potionsBought
             },
             inventory: inventory,
             achievements: achievements.map(a => ({ id: a.id, done: a.done })),
@@ -3473,6 +3509,7 @@
                 if (luckPotionSecondsLeft <= 0) {
                     luckPotionActive = false;
                     document.getElementById('luckPotionInd').classList.remove('active');
+                    refreshShopPotionBtns();
                 }
             }
             // Poción de Velocidad
@@ -3485,6 +3522,7 @@
                 if (speedPotionSecondsLeft <= 0) {
                     speedPotionActive = false;
                     document.getElementById('speedPotionInd').classList.remove('active');
+                    refreshShopPotionBtns();
                 }
             }
             // Poción de Dinero
@@ -3497,6 +3535,7 @@
                 if (moneyPotionSecondsLeft <= 0) {
                     moneyPotionActive = false;
                     document.getElementById('moneyPotionInd').classList.remove('active');
+                    refreshShopPotionBtns();
                 }
             }
         }, 1000);
@@ -3505,6 +3544,7 @@
     function openShop() {
         if (state.over) return;
         playSound('click');
+        refreshShopPotionBtns();
         const modal = document.getElementById('shopModal');
         const box = document.getElementById('shopBox');
         modal.classList.add('show');
@@ -3517,7 +3557,40 @@
         setTimeout(() => document.getElementById('shopModal').classList.remove('show'), 350);
     }
 
+    function refreshShopPotionBtns() {
+        const lBtn = document.getElementById('buyLuckPotion');
+        const sBtn = document.getElementById('buySpeedPotion');
+        const mBtn = document.getElementById('buyMoneyPotion');
+        if (!lBtn) return;
+        if (luckPotionActive) {
+            lBtn.disabled = true;
+            lBtn.textContent = '⏳ En uso';
+        } else {
+            lBtn.disabled = false;
+            lBtn.textContent = '50.000 $';
+        }
+        if (speedPotionActive) {
+            sBtn.disabled = true;
+            sBtn.textContent = '⏳ En uso';
+        } else {
+            sBtn.disabled = false;
+            sBtn.textContent = '55.000 $';
+        }
+        if (moneyPotionActive) {
+            mBtn.disabled = true;
+            mBtn.textContent = '⏳ En uso';
+        } else {
+            mBtn.disabled = false;
+            mBtn.textContent = '60.000 $';
+        }
+    }
+
     function buyPotion(type) {
+        // Bloquear si la poción ya está activa
+        if (type === 'luck'  && luckPotionActive)  return;
+        if (type === 'speed' && speedPotionActive) return;
+        if (type === 'money' && moneyPotionActive) return;
+
         const prices = { luck: 50000, speed: 55000, money: 60000 };
         const price = prices[type];
         if (state.balance < price) {
@@ -3527,6 +3600,7 @@
             return;
         }
         state.balance -= price;
+        state.potionsBought++;
         updateStats();
         saveGame();
         playSound('win');
@@ -3545,6 +3619,8 @@
             moneyPotionSecondsLeft = 3 * 60;
             document.getElementById('moneyPotionInd').classList.add('active');
         }
+        refreshShopPotionBtns();
+        checkAchievements();
         closeShop();
     }
 
@@ -3981,6 +4057,7 @@
             inventory.push(wonItem);
             state.invValue += wonItem.price;
             if (wonItem.price > state.best) state.best = wonItem.price;
+            if (mutationR.id === 'universal') state.universalCount++;
             state.miticoCount++;
             state.consecutiveMiticos = state.lastWasmitico ? state.consecutiveMiticos + 1 : 1;
             state.lastWasmitico = true;
@@ -4134,6 +4211,7 @@
             inventory.push(wonItem);
             state.invValue += wonItem.price;
             if (wonItem.price > state.best) state.best = wonItem.price;
+            if (mutationSR.id === 'universal') state.universalCount++;
             renderInventory();
             updateStats();
             checkAchievements();
@@ -4311,6 +4389,8 @@
         state.invValue += finalPrice;
         if (finalPrice > state.best) state.best = finalPrice;
         state.opened++;
+        if (mut.id === 'universal') state.universalCount++;
+        if (finalPrice > currentAuction.price) state.auctionWins++;
 
         renderInventory();
         updateStats();
