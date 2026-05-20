@@ -4752,6 +4752,11 @@
         setTimeout(() => m.classList.remove('shake'), 400);
     }
 
+    // Expose slot functions globally so inline onclick handlers can reach them
+    // (this script uses type="module" which scopes everything to the module)
+    window.spinSlot = spinSlot;
+    window.setSlotBet = setSlotBet;
+
     // ─── SUBASTAS ───────────────────────────────────────────────────────────────
     let currentAuction = null;
     let auctionSecondsLeft = 120;
