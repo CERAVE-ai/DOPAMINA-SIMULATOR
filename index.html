@@ -1562,6 +1562,42 @@
         .super-ruleta-card .sr-name  { font-size: 8px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: rgba(255,255,255,0.8); line-height: 1.3; }
         .super-ruleta-card .sr-price { font-family: 'JetBrains Mono', monospace; font-size: 9px; font-weight: 700; color: #a855f7; margin-top: 4px; }
 
+        #hyperRuletaModal {
+            position: fixed; inset: 0;
+            background: rgba(5,8,16,0.95); backdrop-filter: blur(24px);
+            display: none; align-items: center; justify-content: center; z-index: 50; padding: 20px;
+        }
+        #hyperRuletaModal.show { display: flex; }
+        #hyperRuletaModalBox {
+            background: #0a0f1e; border: 1px solid rgba(249,115,22,0.4);
+            border-radius: 28px; padding: 48px 40px; max-width: 400px; width: 100%;
+            text-align: center; position: relative; overflow: hidden;
+            transform: scale(0.8) translateY(30px); opacity: 0;
+            transition: all 0.4s cubic-bezier(0.23,1,0.32,1);
+        }
+        #hyperRuletaModalBox.open { transform: scale(1) translateY(0); opacity: 1; }
+        #hyperRuletaModalBox::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+            background: linear-gradient(90deg, transparent, #ef4444, #f97316, #fbbf24, #f97316, #ef4444, transparent);
+            border-radius: 28px 28px 0 0;
+        }
+        .hyper-ruleta-card {
+            min-width: 140px; width: 140px; height: 90%;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            padding: 10px 8px; border-right: 1px solid rgba(255,255,255,0.04);
+            text-align: center; border-radius: 4px; position: relative;
+            border-top: 3px solid #f97316;
+            background: radial-gradient(circle at 50% 0%, rgba(249,115,22,0.25), transparent 70%);
+            animation: hyperPulse 1.5s infinite;
+        }
+        @keyframes hyperPulse {
+            0%, 100% { box-shadow: inset 0 0 20px rgba(249,115,22,0.08); }
+            50% { box-shadow: inset 0 0 40px rgba(249,115,22,0.22); }
+        }
+        .hyper-ruleta-card .hr-icon  { font-size: 38px; line-height: 1; margin-bottom: 6px; }
+        .hyper-ruleta-card .hr-name  { font-size: 8px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: rgba(255,255,255,0.85); line-height: 1.3; }
+        .hyper-ruleta-card .hr-price { font-family: 'JetBrains Mono', monospace; font-size: 9px; font-weight: 700; color: #f97316; margin-top: 4px; }
+
         /* FAVORITOS */
         .fav-btn {
             position: absolute;
@@ -1903,13 +1939,13 @@
     <div class="splash-content">
         <div class="splash-icon">🏆</div>
         <div style="margin-bottom:20px;padding:12px 24px;border:1px solid rgba(244,63,94,0.4);border-radius:12px;background:rgba(244,63,94,0.08);max-width:480px;text-align:center;">
-            <div style="font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;color:#f43f5e;letter-spacing:1px;line-height:1.5;">☕ Por Favor lea esto con maxia atencion, despues de el mantenimiento previsto el enlace de este juego va a cambiar, el nuevo enlace sera este cerave-ai.github.io/Gambling-Simulator/ no me hago responsable si despues no sabes el enlace, perdon por las molestias.</div>
+            <div style="font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;color:#f43f5e;letter-spacing:1px;line-height:1.5;">☕ Gracias Por Todo El Apoyo Que Veo En El Juego, Gracias Por El Apoyo .</div>
         </div>
         <div class="splash-title">THE BEST<br><span>COLLECTOR</span></div>
-        <div class="splash-subtitle">By Aritz &nbsp;·&nbsp; Llega a 275.000.000 monedas</div>
+        <div class="splash-subtitle">By Aritz &nbsp;·&nbsp; Llega a 2.200.000.000 monedas</div>
         <button class="splash-play-btn" id="playBtn">▶ &nbsp;JUGAR</button>
         <div class="splash-by">Empieza con <span>2.000 monedas</span></div>
-        <div style="margin-top:14px;font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;color:#f43f5e;letter-spacing:2px;">🔧 MANTANEMIENTO &nbsp;De 22 / 05 / 2026 hasta 23 / 05 / 2026</div>
+        <div style="margin-top:14px;font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;color:#f43f5e;letter-spacing:2px;">🔧 ACTUALICACION &nbsp; 25 / 05 / 2026</div>
         <div style="margin-top:8px;font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;color:#f43f5e;letter-spacing:2px;">Versión Del Juego Actual #32</div>
     </div>
 </div>
@@ -2087,6 +2123,23 @@
         </div>
         <div class="ruleta-cost-info">Cada <span style="color:#a855f7;">10 míticos</span> en cofres = 1 tirada · Progreso: <span id="superRuletaProgressDisplay" style="color:#a855f7;">0/10</span> · Tiradas: <span id="superRuletaChargesDisplay" style="color:#a855f7;">0</span></div>
         <button class="ruleta-spin-btn" id="superRuletaSpinBtn" style="background:linear-gradient(135deg,#7c3aed,#a855f7);box-shadow:0 0 30px rgba(168,85,247,0.4),0 8px 24px rgba(0,0,0,0.4);">⚡ GIRAR SÚPER RULETA</button>
+    </div>
+
+    <!-- RULETA HYPER MÍTICA -->
+    <div style="margin-top:40px;margin-bottom:20px;">
+        <div class="inventory-header">
+            <div class="inventory-title" style="background:linear-gradient(90deg,#ef4444,#f97316,#fbbf24);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">🔥 Ruleta Hyper Mítica</div>
+            <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#f97316;">Objetos de Valor Extremo</div>
+        </div>
+        <div style="text-align:center;margin-bottom:16px;">
+            <div class="box-badge" style="border-color:#f97316;color:#f97316;background:rgba(249,115,22,0.08);">HYPER MÍTICO</div>
+        </div>
+        <div class="ruleta-wrap" id="hyperRuletaCase" style="border-color:rgba(249,115,22,0.5);box-shadow:0 0 40px rgba(249,115,22,0.12),inset 0 1px 0 rgba(255,255,255,0.05);">
+            <div class="ruleta-marker" style="background:#f97316;box-shadow:0 0 16px #f97316,0 0 40px rgba(249,115,22,0.6);"></div>
+            <div class="ruleta-reel" id="hyperRuletaReel"></div>
+        </div>
+        <div class="ruleta-cost-info">Cada <span style="color:#f97316;">2 tiradas Súper Mítica</span> = 1 tirada · Progreso: <span id="hyperRuletaProgressDisplay" style="color:#f97316;">0/2</span> · Tiradas: <span id="hyperRuletaChargesDisplay" style="color:#f97316;">0</span></div>
+        <button class="ruleta-spin-btn" id="hyperRuletaSpinBtn" style="background:linear-gradient(135deg,#b91c1c,#ef4444,#f97316);box-shadow:0 0 30px rgba(249,115,22,0.5),0 8px 24px rgba(0,0,0,0.4);">🔥 GIRAR HYPER RULETA</button>
     </div>
 
     <!-- SUBASTAS -->
@@ -2279,6 +2332,31 @@
     <div>
         <div style="font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:3px;color:#a855f7;">¡TIRADA SÚPER DESBLOQUEADA!</div>
         <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;color:white;">Ruleta Súper Mítica disponible</div>
+    </div>
+</div>
+
+<!-- HYPER RULETA MODAL -->
+<div id="hyperRuletaModal">
+    <div id="hyperRuletaModalBox">
+        <div style="position:absolute;top:-60px;left:50%;transform:translateX(-50%);width:240px;height:240px;border-radius:50%;background:linear-gradient(135deg,#ef4444,#f97316,#fbbf24);filter:blur(80px);opacity:0.3;pointer-events:none;"></div>
+        <div style="font-size:10px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#f97316;margin-bottom:16px;">🔥 HYPER MÍTICO</div>
+        <div id="hyperRuletaModalIcon" style="font-size:96px;line-height:1;margin:16px 0;filter:drop-shadow(0 0 40px rgba(249,115,22,0.8));animation:floatIcon 3s ease-in-out infinite;">🔥</div>
+        <div id="hyperRuletaModalName" style="font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:3px;margin-bottom:12px;color:white;"></div>
+        <div id="hyperRuletaModalMutation" class="modal-mutation-badge" style="display:none;margin-bottom:16px;"></div>
+        <div style="background:rgba(0,0,0,0.4);border:1px solid rgba(255,255,255,0.07);border-radius:14px;padding:16px;margin-bottom:24px;">
+            <div style="font-size:9px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#475569;margin-bottom:4px;">Valor de Reventa</div>
+            <div id="hyperRuletaModalPrice" style="font-family:'JetBrains Mono',monospace;font-size:28px;font-weight:700;color:#f97316;"></div>
+        </div>
+        <button class="modal-close-btn" id="hyperRuletaModalCloseBtn" style="background:linear-gradient(135deg,#b91c1c,#f97316);color:white;">COLECCIONAR 🔥</button>
+    </div>
+</div>
+
+<!-- HYPER RULETA CHARGE TOAST -->
+<div id="hyperRuletaChargeToast" style="position:fixed;bottom:-100px;left:50%;transform:translateX(-50%);z-index:500;background:#0a0f1e;border:1px solid #f97316;border-radius:16px;padding:12px 20px;display:flex;align-items:center;gap:12px;box-shadow:0 0 30px rgba(249,115,22,0.4),0 8px 32px rgba(0,0,0,0.6);transition:bottom 0.5s cubic-bezier(0.23,1,0.32,1);min-width:260px;max-width:90vw;">
+    <div style="font-size:32px;">🔥</div>
+    <div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:3px;color:#f97316;">¡TIRADA HYPER DESBLOQUEADA!</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;color:white;">Ruleta Hyper Mítica disponible</div>
     </div>
 </div>
 
@@ -2538,8 +2616,8 @@
 
     let currentKey = 'tech';
     let inventory = [];
-    let state = { balance:2000, spent:0, invValue:0, opened:0, best:0, spinning:false, over:false, items:[], commonCount:0, miticoCount:0, consecutiveMiticos:0, lastWasmitico:false, timeInGame:0, gotSuerteMax:false, coinWinStreak:0, coinLoseStreak:0, ruletaCharges:0, miticosForRuleta:0, superRuletaCharges:0, miticosForSuperRuleta:0, auctionWins:0, universalCount:0, potionsBought:0, pityCount:0 };
-    const WIN_GOAL = 275000000;
+    let state = { balance:2000, spent:0, invValue:0, opened:0, best:0, spinning:false, over:false, items:[], commonCount:0, miticoCount:0, consecutiveMiticos:0, lastWasmitico:false, timeInGame:0, gotSuerteMax:false, coinWinStreak:0, coinLoseStreak:0, ruletaCharges:0, miticosForRuleta:0, superRuletaCharges:0, miticosForSuperRuleta:0, hyperRuletaCharges:0, superSpinsForHyper:0, auctionWins:0, universalCount:0, potionsBought:0, pityCount:0 };
+    const WIN_GOAL = 2250000000;
 
     const reel = document.getElementById('caseReel');
     const spinBtn = document.getElementById('spinBtn');
@@ -3611,6 +3689,8 @@
                 miticosForRuleta: state.miticosForRuleta,
                 superRuletaCharges: state.superRuletaCharges,
                 miticosForSuperRuleta: state.miticosForSuperRuleta,
+                hyperRuletaCharges: state.hyperRuletaCharges,
+                superSpinsForHyper: state.superSpinsForHyper,
                 auctionWins: state.auctionWins,
                 universalCount: state.universalCount,
                 potionsBought: state.potionsBought,
@@ -3668,6 +3748,8 @@
         updateRuletaProgress();
         updateSuperRuletaBtn();
         updateSuperRuletaProgress();
+        updateHyperRuletaBtn();
+        updateHyperRuletaProgress();
         if (hasSave) {
             renderInventory();
             showSaveNotice();
@@ -4526,6 +4608,17 @@
         }
         state.superRuletaCharges--;
         updateSuperRuletaBtn();
+        // Cada 2 tiradas Súper = 1 tirada Hyper
+        state.superSpinsForHyper++;
+        if (state.superSpinsForHyper >= 2) {
+            state.superSpinsForHyper = 0;
+            state.hyperRuletaCharges++;
+            updateHyperRuletaBtn();
+            updateHyperRuletaProgress();
+            showHyperRuletaChargeToast();
+        } else {
+            updateHyperRuletaProgress();
+        }
         superRuletaSpinning = true;
         document.getElementById('superRuletaSpinBtn').disabled = true;
         saveGame();
@@ -4634,6 +4727,158 @@
     document.getElementById('superRuletaModalCloseBtn').addEventListener('click', closeSuperRuletaModal);
     setupSuperRuleta();
 
+    // ─── RULETA HYPER MÍTICA ─────────────────────────────────────────────────────
+    const hyperMiticos = [
+        { name:"Tridente de Poseidón",    icon:"🔱", price:45000000  },
+        { name:"ADN de la Inmortalidad",  icon:"🧬", price:120000000 },
+        { name:"Antimateria",             icon:"⚛️", price:90000000  },
+        { name:"Cerave Multiversal",      icon:"🧴", price:750000000 },
+        { name:"Oier Feo",                icon:"😬", price:50000000  },
+        { name:"Air-Fryer Universal",     icon:"🍳", price:220000000 },
+        { name:"PornHub",                 icon:"🔞", price:550000000 },
+        { name:"Galactus",                icon:"🌌", price:65000000  },
+        { name:"Rolls-Royce Droptail",    icon:"🚗", price:75000000  },
+        { name:"The Pink Star",           icon:"💎", price:70000000  }
+    ];
+
+    let hyperRuletaSpinning = false;
+
+    function setupHyperRuleta() {
+        const reel = document.getElementById('hyperRuletaReel');
+        reel.innerHTML = '';
+        const cardW = window.innerWidth <= 700 ? 100 : 140;
+        for (let i = 0; i < 60; i++) {
+            const item = hyperMiticos[Math.floor(Math.random() * hyperMiticos.length)];
+            const d = document.createElement('div');
+            d.className = 'hyper-ruleta-card';
+            d.style.minWidth = cardW + 'px';
+            d.style.width = cardW + 'px';
+            d.innerHTML = `<div class="hr-icon">${item.icon}</div><div class="hr-name">${item.name}</div><div class="hr-price">${(item.price/1000000).toFixed(0)}M $</div>`;
+            d._item = item;
+            reel.appendChild(d);
+        }
+        reel.style.transition = 'none';
+        reel.style.transform = 'translateX(0px)';
+    }
+
+    function spinHyperRuleta() {
+        if (state.over || hyperRuletaSpinning) return;
+        if (state.hyperRuletaCharges <= 0) {
+            playSound('click');
+            document.getElementById('hyperRuletaSpinBtn').classList.add('shake');
+            setTimeout(() => document.getElementById('hyperRuletaSpinBtn').classList.remove('shake'), 400);
+            return;
+        }
+        state.hyperRuletaCharges--;
+        updateHyperRuletaBtn();
+        hyperRuletaSpinning = true;
+        document.getElementById('hyperRuletaSpinBtn').disabled = true;
+        saveGame();
+        setupHyperRuleta();
+        void document.getElementById('hyperRuletaReel').offsetWidth;
+
+        const caseEl = document.getElementById('hyperRuletaCase');
+        caseEl.style.boxShadow = '0 0 60px rgba(249,115,22,0.5), inset 0 1px 0 rgba(255,255,255,0.05)';
+
+        const reel = document.getElementById('hyperRuletaReel');
+        reel.style.transition = 'transform 5s cubic-bezier(0.12, 0, 0.04, 1)';
+        const winIdx = 55;
+        const cardW = window.innerWidth <= 700 ? 100 : 140;
+        const tx = -((winIdx * cardW) - (caseEl.offsetWidth / 2) + cardW / 2);
+        reel.style.transform = `translateX(${tx}px)`;
+
+        let lastTickIdx = -1;
+        const tickCheck = () => {
+            if (!hyperRuletaSpinning) return;
+            const rect = reel.getBoundingClientRect();
+            const idx = Math.floor((window.innerWidth / 2 - rect.left) / cardW);
+            if (idx !== lastTickIdx && idx >= 0) { playSound('tick'); lastTickIdx = idx; }
+            requestAnimationFrame(tickCheck);
+        };
+        tickCheck();
+
+        setTimeout(() => {
+            caseEl.style.boxShadow = '';
+            const cards = reel.querySelectorAll('.hyper-ruleta-card');
+            const winner = cards[winIdx]._item;
+            let finalPrice = bonusActive ? winner.price * 2 : winner.price;
+            if (moneyPotionActive) finalPrice *= 1.3;
+            if (darkPotionActive)  finalPrice *= 1.5;
+            const mutationHR = getMutation();
+            finalPrice = Math.round(finalPrice * mutationHR.mult);
+            const wonItem = { ...winner, rarity:'mitico', price: finalPrice, favorite: false, mutation: mutationHR.id };
+            inventory.push(wonItem);
+            state.invValue += wonItem.price;
+            if (wonItem.price > state.best) state.best = wonItem.price;
+            if (mutationHR.id === 'universal') state.universalCount++;
+            renderInventory();
+            updateStats();
+            checkAchievements();
+            saveGame();
+            showHyperRuletaModal(wonItem);
+            hyperRuletaSpinning = false;
+            document.getElementById('hyperRuletaSpinBtn').disabled = false;
+        }, 5200);
+    }
+
+    function showHyperRuletaModal(item) {
+        document.getElementById('hyperRuletaModalIcon').textContent = item.icon;
+        document.getElementById('hyperRuletaModalName').textContent = item.name;
+        applyMutationBadge('hyperRuletaModalMutation', item.mutation);
+        document.getElementById('hyperRuletaModalPrice').textContent = item.price.toLocaleString() + ' $';
+        const overlay = document.getElementById('hyperRuletaModal');
+        const box = document.getElementById('hyperRuletaModalBox');
+        overlay.classList.add('show');
+        setTimeout(() => box.classList.add('open'), 10);
+        confetti({ particleCount:500, spread:180, colors:['#ef4444','#f97316','#fbbf24','#ffffff'] });
+        setTimeout(() => confetti({ particleCount:250, spread:120, origin:{x:0.1,y:0.5}, colors:['#f97316','#ffffff'] }), 300);
+        setTimeout(() => confetti({ particleCount:250, spread:120, origin:{x:0.9,y:0.5}, colors:['#ef4444','#fbbf24'] }), 500);
+        playSound('win');
+        playScream();
+    }
+
+    function closeHyperRuletaModal() {
+        const box = document.getElementById('hyperRuletaModalBox');
+        box.classList.remove('open');
+        setTimeout(() => {
+            document.getElementById('hyperRuletaModal').classList.remove('show');
+            checkEnd();
+        }, 350);
+    }
+
+    function updateHyperRuletaBtn() {
+        const btn = document.getElementById('hyperRuletaSpinBtn');
+        const disp = document.getElementById('hyperRuletaChargesDisplay');
+        if (disp) disp.textContent = state.hyperRuletaCharges;
+        const prog = document.getElementById('hyperRuletaProgressDisplay');
+        if (prog) prog.textContent = state.superSpinsForHyper + '/2';
+        if (state.hyperRuletaCharges > 0) {
+            btn.disabled = false;
+            btn.textContent = `🔥 GIRAR HYPER RULETA (${state.hyperRuletaCharges})`;
+            btn.style.opacity = '1';
+        } else {
+            btn.disabled = true;
+            btn.textContent = '🔥 NECESITAS 2 TIRADAS SÚPER';
+            btn.style.opacity = '0.45';
+        }
+    }
+
+    function updateHyperRuletaProgress() {
+        const prog = document.getElementById('hyperRuletaProgressDisplay');
+        if (prog) prog.textContent = state.superSpinsForHyper + '/2';
+    }
+
+    function showHyperRuletaChargeToast() {
+        const t = document.getElementById('hyperRuletaChargeToast');
+        t.style.bottom = '80px';
+        if (window._hyperRuletaToastTimer) clearTimeout(window._hyperRuletaToastTimer);
+        window._hyperRuletaToastTimer = setTimeout(() => { t.style.bottom = '-100px'; }, 3500);
+    }
+
+    document.getElementById('hyperRuletaSpinBtn').addEventListener('click', spinHyperRuleta);
+    document.getElementById('hyperRuletaModalCloseBtn').addEventListener('click', closeHyperRuletaModal);
+    setupHyperRuleta();
+
     // ─── MÁQUINA DE JACKPOT ─────────────────────────────────────────────────────
     const slotSymbols = [
         { icon: '🍒', label: 'Cereza',   weight: 35, mult3: 2   },
@@ -4740,6 +4985,7 @@
         resultEl.className = 'slot-result ' + cls;
         slotSpinning = false;
         document.getElementById('slotSpinBtn').disabled = false;
+        checkEnd();
     }
 
     function flashSlotMsg(msg, cls) {
