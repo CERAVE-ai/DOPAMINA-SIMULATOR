@@ -1611,6 +1611,114 @@
         .shop-btn:hover { transform: translateY(-3px); box-shadow: 0 0 50px rgba(16,185,129,0.6), 0 16px 40px rgba(0,0,0,0.5); }
         .shop-btn:active { transform: scale(0.97); }
 
+        /* ─── MÁQUINA DE JACKPOT ─── */
+        .jackpot-section {
+            margin: 28px 0 10px;
+            padding: 24px 16px;
+            background: linear-gradient(135deg, rgba(251,191,36,0.06), rgba(168,85,247,0.05));
+            border: 1px solid rgba(251,191,36,0.25);
+            border-radius: 22px;
+        }
+        .jackpot-header { text-align:center; margin-bottom:18px; }
+        .jackpot-title  { font-family:'Bebas Neue',sans-serif; font-size:26px; letter-spacing:4px; color:#fbbf24; text-shadow:0 0 20px rgba(251,191,36,0.5); }
+        .jackpot-subtitle { font-size:12px; color:#64748b; letter-spacing:2px; margin-top:2px; }
+
+        .slot-machine { display:flex; flex-direction:column; align-items:center; gap:16px; }
+
+        .slot-reels {
+            display:flex; align-items:center; gap:10px;
+            background: rgba(0,0,0,0.5);
+            border: 2px solid rgba(251,191,36,0.35);
+            border-radius: 16px;
+            padding: 18px 24px;
+            box-shadow: 0 0 30px rgba(251,191,36,0.1), inset 0 0 30px rgba(0,0,0,0.3);
+        }
+        .slot-reel-wrap {
+            width: 80px; height: 80px;
+            background: linear-gradient(180deg,rgba(0,0,0,0.6) 0%,rgba(20,20,40,0.9) 100%);
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.12);
+            display:flex; align-items:center; justify-content:center;
+            overflow:hidden;
+            box-shadow: inset 0 2px 8px rgba(0,0,0,0.5);
+        }
+        .slot-reel {
+            font-size: 44px;
+            line-height: 1;
+            transition: transform 0.1s;
+            user-select: none;
+        }
+        .slot-reel.spinning { animation: slotSpin 0.1s steps(1) infinite; }
+        .slot-reel.land     { animation: slotLand 0.35s cubic-bezier(0.3,1.5,0.5,1); }
+        @keyframes slotSpin {
+            0%  { transform: translateY(0);    opacity:0.9; }
+            50% { transform: translateY(-4px); opacity:1;   }
+        }
+        @keyframes slotLand {
+            0%   { transform: scale(1.4); }
+            100% { transform: scale(1);   }
+        }
+        .slot-reel-sep { font-size:28px; color:rgba(251,191,36,0.4); font-weight:900; }
+
+        .slot-result {
+            min-height:28px; font-family:'Bebas Neue',sans-serif; font-size:20px;
+            letter-spacing:2px; text-align:center; transition:all 0.3s;
+        }
+        .slot-result-jackpot { color:#fbbf24; text-shadow:0 0 20px #fbbf24; animation:pityPulse 0.6s infinite alternate; font-size:24px; }
+        .slot-result-big     { color:#a855f7; text-shadow:0 0 14px #a855f7; }
+        .slot-result-win     { color:#4ade80; }
+        .slot-result-partial { color:#fb923c; }
+        .slot-result-lose    { color:#f87171; }
+
+        .slot-bet-section { width:100%; max-width:440px; }
+        .slot-bet-label { font-size:12px; letter-spacing:2px; color:#94a3b8; margin-bottom:6px; text-align:center; }
+        .slot-bet-row { display:flex; gap:6px; align-items:center; flex-wrap:wrap; justify-content:center; }
+        .slot-bet-input {
+            flex:1; min-width:100px; max-width:140px;
+            background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.15);
+            border-radius:8px; padding:8px 12px; color:white; font-size:14px; font-family:inherit;
+            text-align:center;
+        }
+        .slot-bet-input:focus { outline:none; border-color:rgba(251,191,36,0.5); }
+        .slot-preset-btn {
+            background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.12);
+            color:#cbd5e1; border-radius:8px; padding:7px 10px; font-size:12px;
+            font-family:'Bebas Neue',sans-serif; letter-spacing:1px; cursor:pointer;
+            transition:all 0.2s;
+        }
+        .slot-preset-btn:hover { background:rgba(251,191,36,0.15); border-color:rgba(251,191,36,0.4); color:#fbbf24; }
+        .slot-preset-max { background:rgba(251,191,36,0.12); border-color:rgba(251,191,36,0.4); color:#fbbf24; }
+
+        .slot-spin-btn {
+            font-family:'Bebas Neue',sans-serif; font-size:22px; letter-spacing:4px;
+            padding:14px 60px; border:none; border-radius:14px; cursor:pointer;
+            background:linear-gradient(135deg,#d97706,#fbbf24);
+            color:#0a0f1e; font-weight:900;
+            box-shadow:0 0 30px rgba(251,191,36,0.4), 0 8px 20px rgba(0,0,0,0.4);
+            transition:all 0.2s;
+        }
+        .slot-spin-btn:hover  { transform:translateY(-3px); box-shadow:0 0 50px rgba(251,191,36,0.6),0 12px 28px rgba(0,0,0,0.5); }
+        .slot-spin-btn:active { transform:scale(0.97); }
+        .slot-spin-btn:disabled { opacity:0.4; pointer-events:none; }
+
+        .slot-paytable { width:100%; max-width:380px; }
+        .slot-paytable-title { font-family:'Bebas Neue',sans-serif; font-size:14px; letter-spacing:3px; color:#64748b; text-align:center; margin-bottom:8px; }
+        .slot-paytable-grid { display:flex; flex-direction:column; gap:4px; }
+        .slot-pay-row {
+            display:flex; justify-content:space-between; align-items:center;
+            background:rgba(255,255,255,0.03); border-radius:8px;
+            padding:5px 14px; font-size:14px;
+        }
+        .slot-pay-mult { font-family:'Bebas Neue',sans-serif; letter-spacing:1px; color:#4ade80; font-size:15px; }
+        .slot-pay-mult.jackpot-text { color:#fbbf24; text-shadow:0 0 10px rgba(251,191,36,0.5); }
+        .slot-pay-mult.partial { color:#fb923c; }
+
+        @media(max-width:480px) {
+            .slot-reel-wrap { width:64px; height:64px; }
+            .slot-reel { font-size:34px; }
+            .slot-spin-btn { padding:12px 40px; font-size:18px; }
+        }
+
         /* SUBASTAS */
         .subasta-section {
             margin: 20px 0;
@@ -1798,7 +1906,7 @@
             <div style="font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;color:#f43f5e;letter-spacing:1px;line-height:1.5;">☕ El creador necesita cafeína para programar las actualizaciones. Invítame a un café de 2€ o el Cofre CeraVe subirá de precio un 500% por avaricioso.</div>
         </div>
         <div class="splash-title">THE BEST<br><span>COLLECTOR</span></div>
-        <div class="splash-subtitle">By Aritz &nbsp;·&nbsp; Llega a 275.000.000 monedas</div>
+        <div class="splash-subtitle">By Aritz &nbsp;·&nbsp; Llega a 10.000.000 monedas</div>
         <button class="splash-play-btn" id="playBtn">▶ &nbsp;JUGAR</button>
         <div class="splash-by">Empieza con <span>2.000 monedas</span></div>
         <div style="margin-top:14px;font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;color:#f43f5e;letter-spacing:2px;">🔧 PRÓXIMA ACTUALIZACIÓN &nbsp; 23 / 05 / 2026</div>
@@ -1820,7 +1928,7 @@
     <header>
         <div>
             <div class="header-title">THE BEST <span id="titleTheme">COLLECTOR</span></div>
-            <div class="header-sub">Meta: 275.000.000 monedas · By Aritz</div>
+            <div class="header-sub">Meta: 10.000.000 monedas · By Aritz</div>
         </div>
         <div style="display:flex;align-items:center;gap:20px;" id="header-right">
             <div id="bonusBox" style="text-align:center;">
@@ -2001,6 +2109,49 @@
                 </div>
             </div>
             <button class="subasta-buy-btn" id="subastaBuyBtn">🏷️ PUJAR Y ABRIR</button>
+        </div>
+    </div>
+
+    <!-- MÁQUINA DE JACKPOT -->
+    <div class="jackpot-section">
+        <div class="jackpot-header">
+            <div class="jackpot-title">🎰 MÁQUINA DE JACKPOT</div>
+            <div class="jackpot-subtitle">Apuesta tus monedas · ¡Prueba tu suerte!</div>
+        </div>
+        <div id="slotMachine" class="slot-machine">
+            <div class="slot-reels">
+                <div class="slot-reel-wrap"><div class="slot-reel" id="slotReel1">🍒</div></div>
+                <div class="slot-reel-sep">|</div>
+                <div class="slot-reel-wrap"><div class="slot-reel" id="slotReel2">🍒</div></div>
+                <div class="slot-reel-sep">|</div>
+                <div class="slot-reel-wrap"><div class="slot-reel" id="slotReel3">🍒</div></div>
+            </div>
+            <div class="slot-result" id="slotResult"></div>
+            <div class="slot-bet-section">
+                <div class="slot-bet-label">💰 APUESTA</div>
+                <div class="slot-bet-row">
+                    <input type="number" id="slotBetInput" class="slot-bet-input" value="100" min="1" placeholder="Apuesta...">
+                    <button class="slot-preset-btn" onclick="setSlotBet(100)">100</button>
+                    <button class="slot-preset-btn" onclick="setSlotBet(1000)">1K</button>
+                    <button class="slot-preset-btn" onclick="setSlotBet(10000)">10K</button>
+                    <button class="slot-preset-btn" onclick="setSlotBet(100000)">100K</button>
+                    <button class="slot-preset-btn slot-preset-max" onclick="setSlotBet('max')">MAX</button>
+                </div>
+            </div>
+            <button class="slot-spin-btn" id="slotSpinBtn" onclick="spinSlot()">🎰 GIRAR</button>
+            <div class="slot-paytable">
+                <div class="slot-paytable-title">— TABLA DE PREMIOS —</div>
+                <div class="slot-paytable-grid">
+                    <div class="slot-pay-row"><span>💎 💎 💎</span><span class="slot-pay-mult jackpot-text">×100 · JACKPOT</span></div>
+                    <div class="slot-pay-row"><span>7️⃣ 7️⃣ 7️⃣</span><span class="slot-pay-mult">×50</span></div>
+                    <div class="slot-pay-row"><span>⭐ ⭐ ⭐</span><span class="slot-pay-mult">×20</span></div>
+                    <div class="slot-pay-row"><span>🔔 🔔 🔔</span><span class="slot-pay-mult">×10</span></div>
+                    <div class="slot-pay-row"><span>🍊 🍊 🍊</span><span class="slot-pay-mult">×5</span></div>
+                    <div class="slot-pay-row"><span>🍋 🍋 🍋</span><span class="slot-pay-mult">×3</span></div>
+                    <div class="slot-pay-row"><span>🍒 🍒 🍒</span><span class="slot-pay-mult">×2</span></div>
+                    <div class="slot-pay-row"><span>2 iguales</span><span class="slot-pay-mult partial">Recuperas ×0.8</span></div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -4482,6 +4633,124 @@
     document.getElementById('superRuletaSpinBtn').addEventListener('click', spinSuperRuleta);
     document.getElementById('superRuletaModalCloseBtn').addEventListener('click', closeSuperRuletaModal);
     setupSuperRuleta();
+
+    // ─── MÁQUINA DE JACKPOT ─────────────────────────────────────────────────────
+    const slotSymbols = [
+        { icon: '🍒', label: 'Cereza',   weight: 35, mult3: 2   },
+        { icon: '🍋', label: 'Limón',    weight: 25, mult3: 3   },
+        { icon: '🍊', label: 'Naranja',  weight: 18, mult3: 5   },
+        { icon: '🔔', label: 'Campana',  weight: 12, mult3: 10  },
+        { icon: '⭐', label: 'Estrella', weight: 6,  mult3: 20  },
+        { icon: '7️⃣', label: 'Siete',   weight: 1,  mult3: 50  },
+        { icon: '💎', label: 'Diamante', weight: 3,  mult3: 100 }
+    ];
+    let slotSpinning = false;
+
+    function pickSlotSymbol() {
+        const total = slotSymbols.reduce((a, s) => a + s.weight, 0);
+        let r = Math.random() * total;
+        for (const s of slotSymbols) { r -= s.weight; if (r <= 0) return s; }
+        return slotSymbols[0];
+    }
+
+    function setSlotBet(amount) {
+        const input = document.getElementById('slotBetInput');
+        if (amount === 'max') {
+            input.value = Math.max(1, state.balance);
+        } else {
+            input.value = Math.min(amount, Math.max(1, state.balance));
+        }
+    }
+
+    function spinSlot() {
+        if (slotSpinning || state.over) return;
+        const bet = parseInt(document.getElementById('slotBetInput').value) || 0;
+        if (bet <= 0) { flashSlotMsg('⚠️ Apuesta inválida', 'slot-result-lose'); return; }
+        if (bet > state.balance) { flashSlotMsg('⚠️ Saldo insuficiente', 'slot-result-lose'); return; }
+
+        slotSpinning = true;
+        document.getElementById('slotSpinBtn').disabled = true;
+        document.getElementById('slotResult').textContent = '';
+        document.getElementById('slotResult').className = 'slot-result';
+
+        state.balance -= bet;
+        updateStats();
+
+        const results = [pickSlotSymbol(), pickSlotSymbol(), pickSlotSymbol()];
+        const reelIds = ['slotReel1', 'slotReel2', 'slotReel3'];
+
+        reelIds.forEach((id, i) => {
+            const el = document.getElementById(id);
+            el.classList.add('spinning');
+            const ticker = setInterval(() => {
+                el.textContent = slotSymbols[Math.floor(Math.random() * slotSymbols.length)].icon;
+            }, 80);
+
+            setTimeout(() => {
+                clearInterval(ticker);
+                el.textContent = results[i].icon;
+                el.classList.remove('spinning');
+                el.classList.add('land');
+                setTimeout(() => el.classList.remove('land'), 400);
+                if (i === 2) setTimeout(() => resolveSlot(results, bet), 250);
+            }, 900 + i * 600);
+        });
+    }
+
+    function resolveSlot(results, bet) {
+        const icons = results.map(s => s.icon);
+        const resultEl = document.getElementById('slotResult');
+        let winAmount = 0;
+        let msg = '';
+        let cls = '';
+
+        if (icons[0] === icons[1] && icons[1] === icons[2]) {
+            const mult = results[0].mult3;
+            winAmount = Math.floor(bet * mult);
+            if (mult >= 100) {
+                msg = `💎 ¡JACKPOT! +${winAmount.toLocaleString()} $`;
+                cls = 'slot-result-jackpot';
+                confetti({ particleCount: 250, spread: 140, colors: ['#fbbf24','#f59e0b','#ffffff','#a855f7','#4ade80'] });
+            } else if (mult >= 50) {
+                msg = `7️⃣ ¡PREMIO MAYOR! +${winAmount.toLocaleString()} $`;
+                cls = 'slot-result-big';
+                confetti({ particleCount: 130, spread: 100, colors: ['#a855f7','#ffffff','#fbbf24'] });
+            } else if (mult >= 10) {
+                msg = `⭐ ¡Gran Premio! +${winAmount.toLocaleString()} $`;
+                cls = 'slot-result-big';
+            } else {
+                msg = `✅ ¡Ganaste! +${winAmount.toLocaleString()} $`;
+                cls = 'slot-result-win';
+            }
+        } else if (icons[0] === icons[1] || icons[1] === icons[2] || icons[0] === icons[2]) {
+            winAmount = Math.floor(bet * 0.8);
+            msg = `🔸 Casi... Recuperas ${winAmount.toLocaleString()} $`;
+            cls = 'slot-result-partial';
+        } else {
+            msg = `❌ Sin premio · -${bet.toLocaleString()} $`;
+            cls = 'slot-result-lose';
+        }
+
+        state.balance += winAmount;
+        updateStats();
+        saveGame();
+        playSound(winAmount > bet ? 'win' : 'click');
+
+        resultEl.textContent = msg;
+        resultEl.className = 'slot-result ' + cls;
+        slotSpinning = false;
+        document.getElementById('slotSpinBtn').disabled = false;
+    }
+
+    function flashSlotMsg(msg, cls) {
+        const el = document.getElementById('slotResult');
+        el.textContent = msg;
+        el.className = 'slot-result ' + cls;
+        playSound('click');
+        const m = document.getElementById('slotMachine');
+        m.classList.add('shake');
+        setTimeout(() => m.classList.remove('shake'), 400);
+    }
 
     // ─── SUBASTAS ───────────────────────────────────────────────────────────────
     let currentAuction = null;
