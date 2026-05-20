@@ -357,6 +357,68 @@
         }
 
         /* SPIN BUTTON */
+        /* ─── BARRA DE PITI ─── */
+        #pityWrap {
+            max-width: 700px;
+            margin: 0 auto 18px;
+            padding: 0 20px;
+        }
+        #pityHeader {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+        }
+        #pityLabel {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 15px;
+            letter-spacing: 2px;
+            color: #e2e8f0;
+        }
+        #pityHint {
+            font-size: 11px;
+            color: #64748b;
+            letter-spacing: 1px;
+        }
+        #pityBar {
+            width: 100%;
+            height: 12px;
+            background: rgba(255,255,255,0.07);
+            border-radius: 999px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.1);
+            position: relative;
+        }
+        #pityFill {
+            height: 100%;
+            width: 0%;
+            border-radius: 999px;
+            background: linear-gradient(90deg, #6366f1, #a855f7, #fbbf24);
+            transition: width 0.4s cubic-bezier(0.4,0,0.2,1);
+            position: relative;
+        }
+        #pityFill::after {
+            content: '';
+            position: absolute;
+            right: 0; top: 0; bottom: 0;
+            width: 30px;
+            background: rgba(255,255,255,0.35);
+            filter: blur(6px);
+            border-radius: 999px;
+        }
+        #pityWrap.pity-full #pityFill {
+            background: linear-gradient(90deg, #fbbf24, #f59e0b, #fbbf24);
+            animation: pityPulse 0.8s ease-in-out infinite alternate;
+        }
+        #pityWrap.pity-full #pityLabel {
+            color: #fbbf24;
+            animation: pityPulse 0.8s ease-in-out infinite alternate;
+        }
+        @keyframes pityPulse {
+            from { filter: brightness(1);   }
+            to   { filter: brightness(1.5); }
+        }
+
         .spin-wrap {
             display: flex;
             justify-content: center;
@@ -1739,8 +1801,8 @@
         <div class="splash-subtitle">By Aritz &nbsp;·&nbsp; Llega a 10.000.000 monedas</div>
         <button class="splash-play-btn" id="playBtn">▶ &nbsp;JUGAR</button>
         <div class="splash-by">Empieza con <span>2.000 monedas</span></div>
-        <div style="margin-top:14px;font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;color:#f43f5e;letter-spacing:2px;">🔧 PRÓXIMA ACTUALIZACIÓN &nbsp; 22 / 05 / 2026</div>
-        <div style="margin-top:8px;font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;color:#f43f5e;letter-spacing:2px;">Versión Del Juego Actual #31</div>
+        <div style="margin-top:14px;font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;color:#f43f5e;letter-spacing:2px;">🔧 PRÓXIMA ACTUALIZACIÓN &nbsp; 23 / 05 / 2026</div>
+        <div style="margin-top:8px;font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;color:#f43f5e;letter-spacing:2px;">Versión Del Juego Actual #26</div>
     </div>
 </div>
 
@@ -1799,6 +1861,17 @@
         <div class="box-badge" id="boxBadge">Cargando...</div>
         <div class="box-title" id="boxTitle">...</div>
         <div class="box-cost" id="boxCost">Costo: --</div>
+    </div>
+
+    <!-- BARRA DE PITI -->
+    <div id="pityWrap">
+        <div id="pityHeader">
+            <span id="pityLabel">🎯 PITI: 0 / 100</span>
+            <span id="pityHint">¡Mítico garantizado al llegar a 100!</span>
+        </div>
+        <div id="pityBar">
+            <div id="pityFill"></div>
+        </div>
     </div>
 
     <!-- REEL -->
@@ -2534,6 +2607,7 @@
         } else {
             state.pityCount++;
         }
+        updatePityBar();
 
         // Contadores de logros
         if (winner.rarity === 'comun') state.commonCount++;
@@ -3437,6 +3511,7 @@
 
         
         const hasSave = loadGame();
+        updatePityBar();
         initTabs();
         updateRuletaBtn();
         updateRuletaProgress();
@@ -3478,6 +3553,22 @@
         notice.textContent = '✅ Partida guardada cargada';
         document.body.appendChild(notice);
         setTimeout(() => { notice.style.opacity = '0'; setTimeout(() => notice.remove(), 500); }, 2500);
+    }
+
+    function updatePityBar() {
+        const pct = Math.min(state.pityCount, 100);
+        const fill = document.getElementById('pityFill');
+        const label = document.getElementById('pityLabel');
+        const wrap = document.getElementById('pityWrap');
+        if (!fill) return;
+        fill.style.width = pct + '%';
+        if (pct >= 100) {
+            label.textContent = '🔥 PITI: 100 / 100 — ¡MÍTICO GARANTIZADO!';
+            wrap.classList.add('pity-full');
+        } else {
+            label.textContent = `🎯 PITI: ${pct} / 100`;
+            wrap.classList.remove('pity-full');
+        }
     }
 
     // MUSIC PLAYER
