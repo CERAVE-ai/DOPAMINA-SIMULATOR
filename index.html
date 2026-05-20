@@ -1720,6 +1720,8 @@
         #luckPotionInd { background: rgba(251,191,36,0.15); border: 1px solid rgba(251,191,36,0.4); color: #fbbf24; }
         #speedPotionInd { background: rgba(59,130,246,0.15); border: 1px solid rgba(59,130,246,0.4); color: #3b82f6; }
         #moneyPotionInd { background: rgba(74,222,128,0.15); border: 1px solid rgba(74,222,128,0.4); color: #4ade80; }
+        #darkPotionInd  { background: rgba(124,58,237,0.15);  border: 1px solid rgba(124,58,237,0.4);  color: #a78bfa; }
+        #flashPotionInd { background: rgba(245,158,11,0.15);  border: 1px solid rgba(245,158,11,0.4);  color: #fbbf24; }
     </style>
 </head>
 <body>
@@ -1737,7 +1739,7 @@
         <button class="splash-play-btn" id="playBtn">▶ &nbsp;JUGAR</button>
         <div class="splash-by">Empieza con <span>2.000 monedas</span></div>
         <div style="margin-top:14px;font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;color:#f43f5e;letter-spacing:2px;">🔧 PRÓXIMA ACTUALIZACIÓN &nbsp; 22 / 05 / 2026</div>
-        <div style="margin-top:8px;font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;color:#f43f5e;letter-spacing:2px;">Versión Del Juego Actual #29</div>
+        <div style="margin-top:8px;font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;color:#f43f5e;letter-spacing:2px;">Versión Del Juego Actual #30</div>
     </div>
 </div>
 
@@ -1776,9 +1778,11 @@
 
     <!-- POTION INDICATORS -->
     <div id="potionIndicators">
-        <div class="potion-indicator" id="luckPotionInd">🍀 SUERTE +40% · <span id="luckPotionTimer">5:00</span></div>
-        <div class="potion-indicator" id="speedPotionInd">⚡ VELOCIDAD +35% · <span id="speedPotionTimer">3:00</span></div>
-        <div class="potion-indicator" id="moneyPotionInd">💰 DINERO +30% · <span id="moneyPotionTimer">3:00</span></div>
+        <div class="potion-indicator" id="luckPotionInd">🍀 SUERTE +40% · <span id="luckPotionTimer">05:00</span></div>
+        <div class="potion-indicator" id="speedPotionInd">⚡ VELOCIDAD +35% · <span id="speedPotionTimer">03:00</span></div>
+        <div class="potion-indicator" id="moneyPotionInd">💰 DINERO +30% · <span id="moneyPotionTimer">03:00</span></div>
+        <div class="potion-indicator" id="darkPotionInd">🖤 OSCURA ACTIVA · <span id="darkPotionTimer">04:00</span></div>
+        <div class="potion-indicator" id="flashPotionInd">⚡💥 FLASH ACTIVA · <span id="flashPotionTimer">03:00</span></div>
     </div>
 
     <!-- PROGRESS -->
@@ -1972,6 +1976,30 @@
             </div>
             <button class="pocion-buy-btn" id="buyMoneyPotion" style="background:linear-gradient(135deg,#047857,#10b981);color:white;">
                 60.000 $
+            </button>
+        </div>
+
+        <!-- Poción Oscura -->
+        <div class="pocion-card">
+            <div class="pocion-icon">🖤</div>
+            <div class="pocion-info">
+                <div class="pocion-name">Poción Oscura</div>
+                <div class="pocion-desc">+55% suerte, objetos valen 50% más y ruleta 40% más rápida durante 4 min</div>
+            </div>
+            <button class="pocion-buy-btn" id="buyDarkPotion" style="background:linear-gradient(135deg,#4c1d95,#7c3aed);color:white;">
+                300.000 $
+            </button>
+        </div>
+
+        <!-- Poción Flash -->
+        <div class="pocion-card">
+            <div class="pocion-icon">⚡💥</div>
+            <div class="pocion-info">
+                <div class="pocion-name">Poción Flash</div>
+                <div class="pocion-desc">La ruleta gira un 100% más rápido durante 3 minutos</div>
+            </div>
+            <button class="pocion-buy-btn" id="buyFlashPotion" style="background:linear-gradient(135deg,#b45309,#fbbf24);color:#0a0f1e;">
+                250.000 $
             </button>
         </div>
 
@@ -2378,6 +2406,7 @@
             if (currentEvent && currentEvent.id === 'suerte_mitica' && k === 'mitico') chance = 2;
             // Poción de Suerte: +40% a todas las rarezas mejores que común
             if (luckPotionActive && k !== 'comun') chance *= 1.4;
+            if (darkPotionActive && k !== 'comun') chance *= 1.55;
             cum += chance;
             if (rand <= cum) return items.find(i => i.rarity === k) || items[0];
         }
@@ -2426,7 +2455,10 @@
             colorIdx++;
         }, 300);
 
-        const spinDuration = speedPotionActive ? Math.round(5000 * 0.65) : 5000;
+        let spinDuration = 5000;
+        if (speedPotionActive) spinDuration = Math.round(spinDuration * 0.65);
+        if (darkPotionActive)  spinDuration = Math.round(spinDuration * 0.60);
+        if (flashPotionActive) spinDuration = Math.round(spinDuration * 0.50);
         reel.style.transition = `transform ${spinDuration/1000}s cubic-bezier(0.12, 0, 0.04, 1)`;
         const winIdx = 55;
         const caseW = caseEl.offsetWidth;
@@ -2478,8 +2510,9 @@
             if (currentEvent.id === 'dios_no') finalPrice *= 0.5;
             else if (currentEvent.id === 'dios_inmo') finalPrice *= 1.25;
         }
-        // Aplicar poción de dinero (+30%)
+        // Aplicar poción de dinero (+30%) / oscura (+50%)
         if (moneyPotionActive) finalPrice *= 1.3;
+        if (darkPotionActive)  finalPrice *= 1.5;
         // Aplicar mutación
         const mutation = getMutation();
         finalPrice = Math.round(finalPrice * mutation.mult);
@@ -3153,10 +3186,10 @@
         {
             id: 'ya_casi',
             name: 'Ya casi bro...',
-            desc: 'Llega a 2.000.000$ de fortuna',
+            desc: 'Llega a 5.000.000$ de fortuna',
             icon: '💰',
             done: false,
-            check: () => state.balance >= 2000000
+            check: () => state.balance >= 5000000
         },
         {
             id: 'suceso',
@@ -3185,10 +3218,10 @@
         {
             id: 'te_queda_nada',
             name: 'Te Queda Nada Bro...',
-            desc: 'Llega a 3.750.000$ de fortuna',
+            desc: 'Llega a 7.750.000$ de fortuna',
             icon: '🤑',
             done: false,
-            check: () => state.balance >= 3750000
+            check: () => state.balance >= 7750000
         },
         {
             id: 'esto_es_enserio',
@@ -3509,6 +3542,10 @@
     let speedPotionSecondsLeft = 0;
     let moneyPotionActive = false;
     let moneyPotionSecondsLeft = 0;
+    let darkPotionActive = false;
+    let darkPotionSecondsLeft = 0;
+    let flashPotionActive = false;
+    let flashPotionSecondsLeft = 0;
 
     function startPotionTimers() {
         setInterval(() => {
@@ -3552,6 +3589,32 @@
                     refreshShopPotionBtns();
                 }
             }
+            // Poción Oscura
+            if (darkPotionActive) {
+                darkPotionSecondsLeft--;
+                const m = Math.floor(darkPotionSecondsLeft / 60);
+                const s = darkPotionSecondsLeft % 60;
+                const timerEl = document.getElementById('darkPotionTimer');
+                if (timerEl) timerEl.textContent = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+                if (darkPotionSecondsLeft <= 0) {
+                    darkPotionActive = false;
+                    document.getElementById('darkPotionInd').classList.remove('active');
+                    refreshShopPotionBtns();
+                }
+            }
+            // Poción Flash
+            if (flashPotionActive) {
+                flashPotionSecondsLeft--;
+                const m = Math.floor(flashPotionSecondsLeft / 60);
+                const s = flashPotionSecondsLeft % 60;
+                const timerEl = document.getElementById('flashPotionTimer');
+                if (timerEl) timerEl.textContent = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+                if (flashPotionSecondsLeft <= 0) {
+                    flashPotionActive = false;
+                    document.getElementById('flashPotionInd').classList.remove('active');
+                    refreshShopPotionBtns();
+                }
+            }
         }, 1000);
     }
 
@@ -3575,6 +3638,8 @@
         const lBtn = document.getElementById('buyLuckPotion');
         const sBtn = document.getElementById('buySpeedPotion');
         const mBtn = document.getElementById('buyMoneyPotion');
+        const dBtn = document.getElementById('buyDarkPotion');
+        const fBtn = document.getElementById('buyFlashPotion');
         if (!lBtn) return;
         if (luckPotionActive) {
             lBtn.disabled = true;
@@ -3597,6 +3662,24 @@
             mBtn.disabled = false;
             mBtn.textContent = '60.000 $';
         }
+        if (dBtn) {
+            if (darkPotionActive) {
+                dBtn.disabled = true;
+                dBtn.textContent = '⏳ En uso';
+            } else {
+                dBtn.disabled = false;
+                dBtn.textContent = '300.000 $';
+            }
+        }
+        if (fBtn) {
+            if (flashPotionActive) {
+                fBtn.disabled = true;
+                fBtn.textContent = '⏳ En uso';
+            } else {
+                fBtn.disabled = false;
+                fBtn.textContent = '250.000 $';
+            }
+        }
     }
 
     function buyPotion(type) {
@@ -3604,8 +3687,10 @@
         if (type === 'luck'  && luckPotionActive)  return;
         if (type === 'speed' && speedPotionActive) return;
         if (type === 'money' && moneyPotionActive) return;
+        if (type === 'dark'  && darkPotionActive)  return;
+        if (type === 'flash' && flashPotionActive) return;
 
-        const prices = { luck: 50000, speed: 55000, money: 60000 };
+        const prices = { luck: 50000, speed: 55000, money: 60000, dark: 300000, flash: 250000 };
         const price = prices[type];
         if (state.balance < price) {
             playSound('click');
@@ -3632,6 +3717,14 @@
             moneyPotionActive = true;
             moneyPotionSecondsLeft = 3 * 60;
             document.getElementById('moneyPotionInd').classList.add('active');
+        } else if (type === 'dark') {
+            darkPotionActive = true;
+            darkPotionSecondsLeft = 4 * 60;
+            document.getElementById('darkPotionInd').classList.add('active');
+        } else if (type === 'flash') {
+            flashPotionActive = true;
+            flashPotionSecondsLeft = 3 * 60;
+            document.getElementById('flashPotionInd').classList.add('active');
         }
         refreshShopPotionBtns();
         checkAchievements();
@@ -4065,6 +4158,7 @@
             const winner = ruletaItems[winIdx];
             let finalPrice = bonusActive ? winner.price * 2 : winner.price;
             if (moneyPotionActive) finalPrice *= 1.3;
+            if (darkPotionActive)  finalPrice *= 1.5;
             const mutationR = getMutation();
             finalPrice = Math.round(finalPrice * mutationR.mult);
             const wonItem = { ...winner, price: finalPrice, favorite: false, mutation: mutationR.id };
@@ -4219,6 +4313,7 @@
             const winner = cards[winIdx]._item;
             let finalPrice = bonusActive ? winner.price * 2 : winner.price;
             if (moneyPotionActive) finalPrice *= 1.3;
+            if (darkPotionActive)  finalPrice *= 1.5;
             const mutationSR = getMutation();
             finalPrice = Math.round(finalPrice * mutationSR.mult);
             const wonItem = { ...winner, rarity:'mitico', price: finalPrice, favorite: false, mutation: mutationSR.id };
@@ -4392,9 +4487,10 @@
         state.balance -= price;
         state.spent += price;
 
-        // Aplicar mutación y poción de dinero
+        // Aplicar mutación y pociones de dinero
         let finalPrice = item.price;
         if (moneyPotionActive) finalPrice *= 1.3;
+        if (darkPotionActive)  finalPrice *= 1.5;
         const mut = getMutation();
         finalPrice = Math.round(finalPrice * mut.mult);
 
@@ -4429,6 +4525,8 @@
     document.getElementById('buyLuckPotion').addEventListener('click', () => buyPotion('luck'));
     document.getElementById('buySpeedPotion').addEventListener('click', () => buyPotion('speed'));
     document.getElementById('buyMoneyPotion').addEventListener('click', () => buyPotion('money'));
+    document.getElementById('buyDarkPotion').addEventListener('click', () => buyPotion('dark'));
+    document.getElementById('buyFlashPotion').addEventListener('click', () => buyPotion('flash'));
 
     // Cerrar tienda clicando fuera
     document.getElementById('shopModal').addEventListener('click', (e) => {
