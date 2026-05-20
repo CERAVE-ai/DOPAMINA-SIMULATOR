@@ -2285,7 +2285,7 @@
 
     let currentKey = 'tech';
     let inventory = [];
-    let state = { balance:2000, spent:0, invValue:0, opened:0, best:0, spinning:false, over:false, items:[], commonCount:0, miticoCount:0, consecutiveMiticos:0, lastWasmitico:false, timeInGame:0, gotSuerteMax:false, coinWinStreak:0, coinLoseStreak:0, ruletaCharges:0, miticosForRuleta:0, superRuletaCharges:0, miticosForSuperRuleta:0, auctionWins:0, universalCount:0, potionsBought:0 };
+    let state = { balance:2000, spent:0, invValue:0, opened:0, best:0, spinning:false, over:false, items:[], commonCount:0, miticoCount:0, consecutiveMiticos:0, lastWasmitico:false, timeInGame:0, gotSuerteMax:false, coinWinStreak:0, coinLoseStreak:0, ruletaCharges:0, miticosForRuleta:0, superRuletaCharges:0, miticosForSuperRuleta:0, auctionWins:0, universalCount:0, potionsBought:0, pityCount:0 };
     const WIN_GOAL = 10000000;
 
     const reel = document.getElementById('caseReel');
@@ -2350,6 +2350,12 @@
 
     function randomItem() {
         const items = boxes[currentKey].items;
+
+        // Piedad: cada 100 cofres sin mítico, el siguiente es mítico garantizado
+        if (state.pityCount >= 100) {
+            const miticos = items.filter(i => i.rarity === 'mitico');
+            if (miticos.length) return miticos[Math.floor(Math.random() * miticos.length)];
+        }
 
         // Con suerte x2: se tiran dos veces y se queda el más raro
         if (luckyActive) {
@@ -2485,6 +2491,13 @@
 
         // Efecto visual en la carta ganadora
         playReelLandEffect(winner.rarity);
+
+        // Contador de piedad
+        if (winner.rarity === 'mitico') {
+            state.pityCount = 0;
+        } else {
+            state.pityCount++;
+        }
 
         // Contadores de logros
         if (winner.rarity === 'comun') state.commonCount++;
@@ -3339,7 +3352,8 @@
                 miticosForSuperRuleta: state.miticosForSuperRuleta,
                 auctionWins: state.auctionWins,
                 universalCount: state.universalCount,
-                potionsBought: state.potionsBought
+                potionsBought: state.potionsBought,
+                pityCount: state.pityCount
             },
             inventory: inventory,
             achievements: achievements.map(a => ({ id: a.id, done: a.done })),
