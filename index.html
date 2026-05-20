@@ -705,8 +705,9 @@
         }
         .mutation-normal  { background: rgba(148,163,184,0.18); color: #94a3b8; border: 1px solid rgba(148,163,184,0.3); }
         .mutation-roto    { background: rgba(239,68,68,0.18);   color: #f87171; border: 1px solid rgba(239,68,68,0.35); }
-        .mutation-radiactivo { background: rgba(74,222,128,0.18); color: #4ade80; border: 1px solid rgba(74,222,128,0.35); }
-        .mutation-universal { background: rgba(245,158,11,0.18); color: #fbbf24; border: 1px solid rgba(245,158,11,0.4); }
+        .mutation-radiactivo { background: rgba(74,222,128,0.18);  color: #4ade80; border: 1px solid rgba(74,222,128,0.35); }
+        .mutation-cosmico    { background: rgba(129,140,248,0.18); color: #818cf8; border: 1px solid rgba(129,140,248,0.4); }
+        .mutation-universal  { background: rgba(245,158,11,0.18);  color: #fbbf24; border: 1px solid rgba(245,158,11,0.4); }
         .modal-mutation-badge {
             display: inline-block;
             font-size: 11px;
@@ -1738,8 +1739,8 @@
         <div class="splash-subtitle">By Aritz &nbsp;·&nbsp; Llega a 10.000.000 monedas</div>
         <button class="splash-play-btn" id="playBtn">▶ &nbsp;JUGAR</button>
         <div class="splash-by">Empieza con <span>2.000 monedas</span></div>
-        <div style="margin-top:14px;font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;color:#f43f5e;letter-spacing:2px;">🔧 PRÓXIMA ACTUALIZACIÓN &nbsp; 22 / 05 / 2026</div>
-        <div style="margin-top:8px;font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;color:#f43f5e;letter-spacing:2px;">Versión Del Juego Actual #30</div>
+        <div style="margin-top:14px;font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;color:#f43f5e;letter-spacing:2px;">🔧 PRÓXIMA ACTUALIZACIÓN &nbsp; 23 / 05 / 2026</div>
+        <div style="margin-top:8px;font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;color:#f43f5e;letter-spacing:2px;">Versión Del Juego Actual #26</div>
     </div>
 </div>
 
@@ -2480,15 +2481,17 @@
     const mutations = {
         normal:     { id: 'normal',      label: 'Normal',      mult: 1.00, color: '#94a3b8', icon: '⬜' },
         roto:       { id: 'roto',        label: 'Roto',        mult: 0.75, color: '#f87171', icon: '💔' },
-        radiactivo: { id: 'radiactivo',  label: 'Radiactivo',  mult: 1.20, color: '#4ade80', icon: '☢️' },
-        universal:  { id: 'universal',   label: 'Universal',   mult: 1.40, color: '#fbbf24', icon: '✨' }
+        radiactivo: { id: 'radiactivo',  label: 'Radiactivo',  mult: 1.25, color: '#4ade80', icon: '☢️' },
+        cosmico:    { id: 'cosmico',     label: 'Cósmico',     mult: 1.40, color: '#818cf8', icon: '🌌' },
+        universal:  { id: 'universal',   label: 'Universal',   mult: 2.00, color: '#fbbf24', icon: '✨' }
     };
 
     function getMutation() {
         const r = Math.random() * 100;
-        if (r < 40) return mutations.normal;
-        if (r < 70) return mutations.roto;
-        if (r < 90) return mutations.radiactivo;
+        if (r < 35) return mutations.normal;
+        if (r < 64) return mutations.roto;
+        if (r < 89) return mutations.radiactivo;
+        if (r < 99) return mutations.cosmico;
         return mutations.universal;
     }
 
@@ -3186,10 +3189,10 @@
         {
             id: 'ya_casi',
             name: 'Ya casi bro...',
-            desc: 'Llega a 5.000.000$ de fortuna',
+            desc: 'Llega a 2.000.000$ de fortuna',
             icon: '💰',
             done: false,
-            check: () => state.balance >= 5000000
+            check: () => state.balance >= 2000000
         },
         {
             id: 'suceso',
@@ -3218,10 +3221,10 @@
         {
             id: 'te_queda_nada',
             name: 'Te Queda Nada Bro...',
-            desc: 'Llega a 7.750.000$ de fortuna',
+            desc: 'Llega a 3.750.000$ de fortuna',
             icon: '🤑',
             done: false,
-            check: () => state.balance >= 7750000
+            check: () => state.balance >= 3750000
         },
         {
             id: 'esto_es_enserio',
