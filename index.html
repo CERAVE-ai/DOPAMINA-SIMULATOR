@@ -465,6 +465,63 @@
         .spin-btn:active { transform: scale(0.97); }
         .spin-btn:disabled { opacity: 0.4; pointer-events: none; filter: grayscale(0.5); }
 
+        /* AUTO ABRIR */
+        .spin-wrap { gap: 16px; }
+        .auto-abrir-btn {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 18px;
+            letter-spacing: 4px;
+            padding: 14px 32px;
+            background: linear-gradient(135deg, #047857, #10b981);
+            color: white;
+            border: none;
+            border-radius: 14px;
+            cursor: pointer;
+            text-align: center;
+            line-height: 1.25;
+            box-shadow: 0 0 30px rgba(16,185,129,0.4), 0 8px 24px rgba(0,0,0,0.4);
+            transition: all 0.2s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .auto-abrir-btn span { font-size: 12px; display: block; letter-spacing: 2px; opacity: 0.85; }
+        .auto-abrir-btn:hover { transform: translateY(-3px); box-shadow: 0 0 50px rgba(16,185,129,0.6), 0 16px 40px rgba(0,0,0,0.5); }
+        .auto-abrir-btn:active { transform: scale(0.97); }
+        .auto-abrir-btn:disabled { opacity: 0.4; pointer-events: none; filter: grayscale(0.5); }
+        .auto-abrir-status {
+            align-items: center;
+            justify-content: center;
+            gap: 18px;
+            margin-bottom: 28px;
+            background: rgba(16,185,129,0.08);
+            border: 1px solid rgba(16,185,129,0.3);
+            border-radius: 12px;
+            padding: 12px 28px;
+            animation: pulseGreen 2s ease-in-out infinite;
+        }
+        @keyframes pulseGreen {
+            0%, 100% { box-shadow: 0 0 10px rgba(16,185,129,0.15); }
+            50%       { box-shadow: 0 0 28px rgba(16,185,129,0.45); }
+        }
+        .auto-abrir-label { font-family: 'Bebas Neue', sans-serif; font-size: 14px; letter-spacing: 3px; color: #10b981; }
+        .auto-abrir-timer-display { font-family: 'Bebas Neue', sans-serif; font-size: 30px; letter-spacing: 5px; color: #fff; }
+        .auto-abrir-timer-display.urgent { color: #f87171; animation: blinkUrgent 0.7s step-end infinite; }
+        @keyframes blinkUrgent { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+        .auto-abrir-pause-btn {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 14px;
+            letter-spacing: 3px;
+            padding: 8px 20px;
+            background: rgba(255,255,255,0.08);
+            color: #fff;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .auto-abrir-pause-btn:hover { background: rgba(255,255,255,0.18); }
+        .auto-abrir-pause-btn.paused { background: rgba(16,185,129,0.2); border-color: rgba(16,185,129,0.5); color: #10b981; }
+
         /* STATS */
         .stats-grid {
             display: grid;
@@ -1928,7 +1985,46 @@
         #speedPotionInd { background: rgba(59,130,246,0.15); border: 1px solid rgba(59,130,246,0.4); color: #3b82f6; }
         #moneyPotionInd { background: rgba(74,222,128,0.15); border: 1px solid rgba(74,222,128,0.4); color: #4ade80; }
         #darkPotionInd  { background: rgba(124,58,237,0.15);  border: 1px solid rgba(124,58,237,0.4);  color: #a78bfa; }
-        #flashPotionInd { background: rgba(245,158,11,0.15);  border: 1px solid rgba(245,158,11,0.4);  color: #fbbf24; }
+        #flashPotionInd  { background: rgba(245,158,11,0.15);  border: 1px solid rgba(245,158,11,0.4);  color: #fbbf24; }
+        #ceravePotionInd { background: rgba(56,189,248,0.15);  border: 1px solid rgba(56,189,248,0.5);   color: #38bdf8; animation: ceravePotionGlow 1s infinite; }
+        @keyframes ceravePotionGlow {
+            0%,100% { box-shadow: 0 0 8px rgba(56,189,248,0.4); }
+            50% { box-shadow: 0 0 18px rgba(56,189,248,0.8); }
+        }
+
+        /* ── SUPER MÍTICO: rainbow glow ───────────────────────────── */
+        .inv-card-super {
+            border-top-width: 3px !important;
+            border-top-style: solid !important;
+            animation: superRainbow 2.5s linear infinite !important;
+        }
+        @keyframes superRainbow {
+            0%   { border-top-color:#ff0000; box-shadow:0 0 14px rgba(255,0,0,0.5), inset 0 0 14px rgba(255,0,0,0.08); }
+            14%  { border-top-color:#ff8800; box-shadow:0 0 14px rgba(255,136,0,0.5), inset 0 0 14px rgba(255,136,0,0.08); }
+            28%  { border-top-color:#ffff00; box-shadow:0 0 14px rgba(255,255,0,0.5), inset 0 0 14px rgba(255,255,0,0.08); }
+            42%  { border-top-color:#00ff44; box-shadow:0 0 14px rgba(0,255,68,0.5), inset 0 0 14px rgba(0,255,68,0.08); }
+            57%  { border-top-color:#00aaff; box-shadow:0 0 14px rgba(0,170,255,0.5), inset 0 0 14px rgba(0,170,255,0.08); }
+            71%  { border-top-color:#8800ff; box-shadow:0 0 14px rgba(136,0,255,0.5), inset 0 0 14px rgba(136,0,255,0.08); }
+            85%  { border-top-color:#ff00ff; box-shadow:0 0 14px rgba(255,0,255,0.5), inset 0 0 14px rgba(255,0,255,0.08); }
+            100% { border-top-color:#ff0000; box-shadow:0 0 14px rgba(255,0,0,0.5), inset 0 0 14px rgba(255,0,0,0.08); }
+        }
+
+        /* ── HYPER MÍTICO: fuego extremo ──────────────────────────── */
+        .inv-card-hyper {
+            border-top-width: 4px !important;
+            border-top-style: solid !important;
+            animation: hyperBlaze 1s linear infinite !important;
+            position: relative;
+            z-index: 1;
+        }
+        @keyframes hyperBlaze {
+            0%   { border-top-color:#f97316; box-shadow:0 0 22px #f97316, 0 0 44px rgba(249,115,22,0.55), inset 0 0 18px rgba(249,115,22,0.18); transform:scale(1); }
+            20%  { border-top-color:#ef4444; box-shadow:0 0 28px #ef4444, 0 0 56px rgba(239,68,68,0.65), inset 0 0 24px rgba(239,68,68,0.22); transform:scale(1.025); }
+            40%  { border-top-color:#fbbf24; box-shadow:0 0 34px #fbbf24, 0 0 68px rgba(251,191,36,0.75), inset 0 0 30px rgba(251,191,36,0.28); transform:scale(1.01); }
+            60%  { border-top-color:#ef4444; box-shadow:0 0 28px #ef4444, 0 0 56px rgba(239,68,68,0.65), inset 0 0 24px rgba(239,68,68,0.22); transform:scale(1.025); }
+            80%  { border-top-color:#ff6b35; box-shadow:0 0 24px #ff6b35, 0 0 48px rgba(255,107,53,0.6), inset 0 0 20px rgba(255,107,53,0.2); transform:scale(1.01); }
+            100% { border-top-color:#f97316; box-shadow:0 0 22px #f97316, 0 0 44px rgba(249,115,22,0.55), inset 0 0 18px rgba(249,115,22,0.18); transform:scale(1); }
+        }
     </style>
 </head>
 <body>
@@ -1939,13 +2035,13 @@
     <div class="splash-content">
         <div class="splash-icon">🏆</div>
         <div style="margin-bottom:20px;padding:12px 24px;border:1px solid rgba(244,63,94,0.4);border-radius:12px;background:rgba(244,63,94,0.08);max-width:480px;text-align:center;">
-            <div style="font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;color:#f43f5e;letter-spacing:1px;line-height:1.5;">☕ Por Favor lea esto con maxia atencion, despues de el mantenimiento previsto el enlace de este juego va a cambiar, el nuevo enlace sera este cerave-ai.github.io/Gambling-Simulator/ no me hago responsable si despues no sabes el enlace, perdon por las molestias.</div>
+            <div style="font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;color:#f43f5e;letter-spacing:1px;line-height:1.5;">☕ Gracias Por Todo El Apoyo Al Juego, Espero Que OS Siga Gustando.</div>
         </div>
         <div class="splash-title">THE BEST<br><span>COLLECTOR</span></div>
-        <div class="splash-subtitle">By Aritz &nbsp;·&nbsp; Llega a 275.000.000 monedas</div>
+        <div class="splash-subtitle">By Aritz &nbsp;·&nbsp; Llega a 2.200.000.000 monedas</div>
         <button class="splash-play-btn" id="playBtn">▶ &nbsp;JUGAR</button>
         <div class="splash-by">Empieza con <span>2.000 monedas</span></div>
-        <div style="margin-top:14px;font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;color:#f43f5e;letter-spacing:2px;">🔧 MANTANEMIENTO &nbsp;De 22 / 05 / 2026 hasta 23 / 05 / 2026</div>
+        <div style="margin-top:14px;font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;color:#f43f5e;letter-spacing:2px;">🔧 ACTUALICACION &nbsp;25 / 05 / 2026</div>
         <div style="margin-top:8px;font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;color:#f43f5e;letter-spacing:2px;">Versión Del Juego Actual #32</div>
     </div>
 </div>
@@ -1990,6 +2086,7 @@
         <div class="potion-indicator" id="moneyPotionInd">💰 DINERO +30% · <span id="moneyPotionTimer">03:00</span></div>
         <div class="potion-indicator" id="darkPotionInd">🖤 OSCURA ACTIVA · <span id="darkPotionTimer">04:00</span></div>
         <div class="potion-indicator" id="flashPotionInd">⚡💥 FLASH ACTIVA · <span id="flashPotionTimer">03:00</span></div>
+        <div class="potion-indicator" id="ceravePotionInd">🧴 CERAVE ACTIVA · <span id="ceravePotionTimer">03:00</span></div>
     </div>
 
     <!-- PROGRESS -->
@@ -2027,6 +2124,12 @@
     <!-- SPIN BTN -->
     <div class="spin-wrap">
         <button class="spin-btn" id="spinBtn">ABRIR COFRE</button>
+        <button class="auto-abrir-btn" id="autoAbrirBtn">AUTO ABRIR<br><span>10.000.000$</span></button>
+    </div>
+    <div class="auto-abrir-status" id="autoAbrirStatus" style="display:none">
+        <span class="auto-abrir-label">⚡ AUTO ABRIENDO</span>
+        <span class="auto-abrir-timer-display" id="autoAbrirTimer">30:00</span>
+        <button class="auto-abrir-pause-btn" id="autoAbrirPauseBtn">⏸ PAUSAR</button>
     </div>
 
     <!-- STATS -->
@@ -2278,6 +2381,18 @@
             </div>
             <button class="pocion-buy-btn" id="buyFlashPotion" style="background:linear-gradient(135deg,#b45309,#fbbf24);color:#0a0f1e;">
                 250.000 $
+            </button>
+        </div>
+
+        <!-- Poción Cerave -->
+        <div class="pocion-card" style="border:1px solid rgba(56,189,248,0.35);background:rgba(56,189,248,0.06);">
+            <div class="pocion-icon">🧴</div>
+            <div class="pocion-info">
+                <div class="pocion-name" style="color:#38bdf8;">Poción Cerave</div>
+                <div class="pocion-desc">+200% suerte, +150% dinero y ruleta 200% más rápida durante 3 minutos</div>
+            </div>
+            <button class="pocion-buy-btn" id="buyCeravePotion" style="background:linear-gradient(135deg,#0369a1,#38bdf8);color:white;">
+                5.000.000 $
             </button>
         </div>
 
@@ -2629,6 +2744,12 @@
     const reel = document.getElementById('caseReel');
     const spinBtn = document.getElementById('spinBtn');
 
+    // AUTO ABRIR
+    let autoAbrirActive = false;
+    let autoAbrirPaused = false;
+    let autoAbrirEndTime = 0;
+    let autoAbrirCountdownId = null;
+
     function initTabs() {
         const c = document.getElementById('tabsContainer');
         Object.keys(boxes).forEach(k => {
@@ -2717,6 +2838,7 @@
             // Poción de Suerte: +40% a todas las rarezas mejores que común
             if (luckPotionActive && k !== 'comun') chance *= 1.4;
             if (darkPotionActive && k !== 'comun') chance *= 1.55;
+            if (ceravePotionActive && k !== 'comun') chance *= 3.0;
             cum += chance;
             if (rand <= cum) return items.find(i => i.rarity === k) || items[0];
         }
@@ -2766,9 +2888,10 @@
         }, 300);
 
         let spinDuration = 5000;
-        if (speedPotionActive) spinDuration = Math.round(spinDuration * 0.65);
-        if (darkPotionActive)  spinDuration = Math.round(spinDuration * 0.60);
-        if (flashPotionActive) spinDuration = Math.round(spinDuration * 0.50);
+        if (speedPotionActive)  spinDuration = Math.round(spinDuration * 0.65);
+        if (darkPotionActive)   spinDuration = Math.round(spinDuration * 0.60);
+        if (flashPotionActive)  spinDuration = Math.round(spinDuration * 0.50);
+        if (ceravePotionActive) spinDuration = Math.round(spinDuration * 0.333);
         reel.style.transition = `transform ${spinDuration/1000}s cubic-bezier(0.12, 0, 0.04, 1)`;
         const winIdx = 55;
         const caseW = caseEl.offsetWidth;
@@ -2822,9 +2945,10 @@
             if (currentEvent.id === 'dios_no') finalPrice *= 0.5;
             else if (currentEvent.id === 'dios_inmo') finalPrice *= 1.25;
         }
-        // Aplicar poción de dinero (+30%) / oscura (+50%)
-        if (moneyPotionActive) finalPrice *= 1.3;
-        if (darkPotionActive)  finalPrice *= 1.5;
+        // Aplicar poción de dinero (+30%) / oscura (+50%) / cerave (+150%)
+        if (moneyPotionActive)  finalPrice *= 1.3;
+        if (darkPotionActive)   finalPrice *= 1.5;
+        if (ceravePotionActive) finalPrice *= 2.5;
         // Aplicar mutación
         const mutation = getMutation();
         finalPrice = Math.round(finalPrice * mutation.mult);
@@ -2889,6 +3013,72 @@
         showModal(bonusWinner);
         state.spinning = false;
         spinBtn.disabled = false;
+        scheduleNextAutoSpin();
+    }
+
+    function buyAutoAbrir() {
+        const COST = 10000000;
+        if (autoAbrirActive) return;
+        if (state.balance < COST) {
+            playSound('click');
+            document.getElementById('balance').parentElement.classList.add('shake');
+            setTimeout(() => document.getElementById('balance').parentElement.classList.remove('shake'), 400);
+            return;
+        }
+        state.balance -= COST;
+        state.spent += COST;
+        updateStats();
+        autoAbrirActive = true;
+        autoAbrirPaused = false;
+        autoAbrirEndTime = Date.now() + 30 * 60 * 1000;
+        document.getElementById('autoAbrirBtn').disabled = true;
+        document.getElementById('autoAbrirStatus').style.display = 'flex';
+        startAutoAbrirCountdown();
+        if (!state.spinning) scheduleNextAutoSpin();
+    }
+
+    function startAutoAbrirCountdown() {
+        clearInterval(autoAbrirCountdownId);
+        autoAbrirCountdownId = setInterval(() => {
+            const remaining = autoAbrirEndTime - Date.now();
+            if (remaining <= 0) { stopAutoAbrir(); return; }
+            const mins = Math.floor(remaining / 60000);
+            const secs = Math.floor((remaining % 60000) / 1000);
+            const el = document.getElementById('autoAbrirTimer');
+            el.textContent = `${String(mins).padStart(2,'0')}:${String(secs).padStart(2,'0')}`;
+            el.className = 'auto-abrir-timer-display' + (remaining < 60000 ? ' urgent' : '');
+        }, 500);
+    }
+
+    function scheduleNextAutoSpin() {
+        if (!autoAbrirActive || autoAbrirPaused) return;
+        if (Date.now() >= autoAbrirEndTime) { stopAutoAbrir(); return; }
+        setTimeout(() => {
+            if (!autoAbrirActive || autoAbrirPaused) return;
+            if (Date.now() >= autoAbrirEndTime) { stopAutoAbrir(); return; }
+            spin();
+        }, 600);
+    }
+
+    function pauseAutoAbrir() {
+        if (!autoAbrirActive) return;
+        autoAbrirPaused = !autoAbrirPaused;
+        const btn = document.getElementById('autoAbrirPauseBtn');
+        btn.textContent = autoAbrirPaused ? '▶ REANUDAR' : '⏸ PAUSAR';
+        btn.classList.toggle('paused', autoAbrirPaused);
+        if (!autoAbrirPaused && !state.spinning) scheduleNextAutoSpin();
+    }
+
+    function stopAutoAbrir() {
+        autoAbrirActive = false;
+        autoAbrirPaused = false;
+        clearInterval(autoAbrirCountdownId);
+        document.getElementById('autoAbrirBtn').disabled = false;
+        document.getElementById('autoAbrirStatus').style.display = 'none';
+        document.getElementById('autoAbrirTimer').textContent = '30:00';
+        document.getElementById('autoAbrirTimer').className = 'auto-abrir-timer-display';
+        document.getElementById('autoAbrirPauseBtn').textContent = '⏸ PAUSAR';
+        document.getElementById('autoAbrirPauseBtn').classList.remove('paused');
     }
 
     function playReelLandEffect(rarity) {
@@ -2998,7 +3188,10 @@
             const salePrice = item.price;
             const isFav = !!item.favorite;
             const d = document.createElement('div');
-            d.className = 'inv-card' + (isFav ? ' favorited' : '');
+            let invCardClass = 'inv-card' + (isFav ? ' favorited' : '');
+            if (item.source === 'hyper') invCardClass += ' inv-card-hyper';
+            else if (item.source === 'super') invCardClass += ' inv-card-super';
+            d.className = invCardClass;
             d.innerHTML = `
                 <div class="inv-card-bar" style="background:${rarities[item.rarity] ? rarities[item.rarity].color : '#fbbf24'}"></div>
                 <div class="fav-btn" title="${isFav ? 'Quitar favorito' : 'Marcar favorito'}">${isFav ? '⭐' : '☆'}</div>
@@ -3477,6 +3670,8 @@
     }
 
     spinBtn.addEventListener('click', () => { playSound('click'); spin(); });
+    document.getElementById('autoAbrirBtn').addEventListener('click', buyAutoAbrir);
+    document.getElementById('autoAbrirPauseBtn').addEventListener('click', pauseAutoAbrir);
 
     // LOGROS
     const achievements = [
@@ -3880,10 +4075,25 @@
     let darkPotionSecondsLeft = 0;
     let flashPotionActive = false;
     let flashPotionSecondsLeft = 0;
+    let ceravePotionActive = false;
+    let ceravePotionSecondsLeft = 0;
 
     function startPotionTimers() {
         setInterval(() => {
             if (state.over) return;
+            // Poción Cerave
+            if (ceravePotionActive) {
+                ceravePotionSecondsLeft--;
+                const m = Math.floor(ceravePotionSecondsLeft / 60);
+                const s = ceravePotionSecondsLeft % 60;
+                const timerEl = document.getElementById('ceravePotionTimer');
+                if (timerEl) timerEl.textContent = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+                if (ceravePotionSecondsLeft <= 0) {
+                    ceravePotionActive = false;
+                    document.getElementById('ceravePotionInd').classList.remove('active');
+                    refreshShopPotionBtns();
+                }
+            }
             // Poción de Suerte
             if (luckPotionActive) {
                 luckPotionSecondsLeft--;
@@ -4014,17 +4224,28 @@
                 fBtn.textContent = '250.000 $';
             }
         }
+        const crvBtn = document.getElementById('buyCeravePotion');
+        if (crvBtn) {
+            if (ceravePotionActive) {
+                crvBtn.disabled = true;
+                crvBtn.textContent = '⏳ En uso';
+            } else {
+                crvBtn.disabled = false;
+                crvBtn.textContent = '5.000.000 $';
+            }
+        }
     }
 
     function buyPotion(type) {
         // Bloquear si la poción ya está activa
-        if (type === 'luck'  && luckPotionActive)  return;
-        if (type === 'speed' && speedPotionActive) return;
-        if (type === 'money' && moneyPotionActive) return;
-        if (type === 'dark'  && darkPotionActive)  return;
-        if (type === 'flash' && flashPotionActive) return;
+        if (type === 'luck'   && luckPotionActive)   return;
+        if (type === 'speed'  && speedPotionActive)  return;
+        if (type === 'money'  && moneyPotionActive)  return;
+        if (type === 'dark'   && darkPotionActive)   return;
+        if (type === 'flash'  && flashPotionActive)  return;
+        if (type === 'cerave' && ceravePotionActive) return;
 
-        const prices = { luck: 50000, speed: 55000, money: 60000, dark: 300000, flash: 250000 };
+        const prices = { luck: 50000, speed: 55000, money: 60000, dark: 300000, flash: 250000, cerave: 5000000 };
         const price = prices[type];
         if (state.balance < price) {
             playSound('click');
@@ -4059,6 +4280,10 @@
             flashPotionActive = true;
             flashPotionSecondsLeft = 3 * 60;
             document.getElementById('flashPotionInd').classList.add('active');
+        } else if (type === 'cerave') {
+            ceravePotionActive = true;
+            ceravePotionSecondsLeft = 3 * 60;
+            document.getElementById('ceravePotionInd').classList.add('active');
         }
         refreshShopPotionBtns();
         checkAchievements();
@@ -4468,7 +4693,8 @@
         caseEl.style.boxShadow = '0 0 60px rgba(251,191,36,0.25), inset 0 1px 0 rgba(255,255,255,0.05)';
 
         const reel = document.getElementById('ruletaReel');
-        reel.style.transition = 'transform 5s cubic-bezier(0.12, 0, 0.04, 1)';
+        const ruletaMSpinDur = ceravePotionActive ? Math.round(5000 * 0.333) : 5000;
+        reel.style.transition = `transform ${ruletaMSpinDur/1000}s cubic-bezier(0.12, 0, 0.04, 1)`;
         const winIdx = 55;
         const cardW = window.innerWidth <= 700 ? 100 : 140;
         const caseW = caseEl.offsetWidth;
@@ -4491,8 +4717,9 @@
             caseEl.style.boxShadow = '';
             const winner = ruletaItems[winIdx];
             let finalPrice = bonusActive ? winner.price * 2 : winner.price;
-            if (moneyPotionActive) finalPrice *= 1.3;
-            if (darkPotionActive)  finalPrice *= 1.5;
+            if (moneyPotionActive)  finalPrice *= 1.3;
+            if (darkPotionActive)   finalPrice *= 1.5;
+            if (ceravePotionActive) finalPrice *= 2.5;
             const mutationR = getMutation();
             finalPrice = Math.round(finalPrice * mutationR.mult);
             const wonItem = { ...winner, price: finalPrice, favorite: false, mutation: mutationR.id };
@@ -4510,7 +4737,7 @@
             showRuletaModal(wonItem);
             ruletaSpinning = false;
             document.getElementById('ruletaSpinBtn').disabled = false;
-        }, 5200);
+        }, ruletaMSpinDur + 200);
     }
 
     function showRuletaModal(item) {
@@ -4636,7 +4863,8 @@
         caseEl.style.boxShadow = '0 0 60px rgba(168,85,247,0.4), inset 0 1px 0 rgba(255,255,255,0.05)';
 
         const reel = document.getElementById('superRuletaReel');
-        reel.style.transition = 'transform 5s cubic-bezier(0.12, 0, 0.04, 1)';
+        const superSpinDur = ceravePotionActive ? Math.round(5000 * 0.333) : 5000;
+        reel.style.transition = `transform ${superSpinDur/1000}s cubic-bezier(0.12, 0, 0.04, 1)`;
         const winIdx = 55;
         const cardW = window.innerWidth <= 700 ? 100 : 140;
         const tx = -((winIdx * cardW) - (caseEl.offsetWidth / 2) + cardW / 2);
@@ -4657,11 +4885,12 @@
             const cards = reel.querySelectorAll('.super-ruleta-card');
             const winner = cards[winIdx]._item;
             let finalPrice = bonusActive ? winner.price * 2 : winner.price;
-            if (moneyPotionActive) finalPrice *= 1.3;
-            if (darkPotionActive)  finalPrice *= 1.5;
+            if (moneyPotionActive)  finalPrice *= 1.3;
+            if (darkPotionActive)   finalPrice *= 1.5;
+            if (ceravePotionActive) finalPrice *= 2.5;
             const mutationSR = getMutation();
             finalPrice = Math.round(finalPrice * mutationSR.mult);
-            const wonItem = { ...winner, rarity:'mitico', price: finalPrice, favorite: false, mutation: mutationSR.id };
+            const wonItem = { ...winner, rarity:'mitico', price: finalPrice, favorite: false, mutation: mutationSR.id, source:'super' };
             inventory.push(wonItem);
             state.invValue += wonItem.price;
             if (wonItem.price > state.best) state.best = wonItem.price;
@@ -4673,7 +4902,7 @@
             showSuperRuletaModal(wonItem);
             superRuletaSpinning = false;
             document.getElementById('superRuletaSpinBtn').disabled = false;
-        }, 5200);
+        }, superSpinDur + 200);
     }
 
     function showSuperRuletaModal(item) {
@@ -4788,7 +5017,8 @@
         caseEl.style.boxShadow = '0 0 60px rgba(249,115,22,0.5), inset 0 1px 0 rgba(255,255,255,0.05)';
 
         const reel = document.getElementById('hyperRuletaReel');
-        reel.style.transition = 'transform 5s cubic-bezier(0.12, 0, 0.04, 1)';
+        const hyperSpinDur = ceravePotionActive ? Math.round(5000 * 0.333) : 5000;
+        reel.style.transition = `transform ${hyperSpinDur/1000}s cubic-bezier(0.12, 0, 0.04, 1)`;
         const winIdx = 55;
         const cardW = window.innerWidth <= 700 ? 100 : 140;
         const tx = -((winIdx * cardW) - (caseEl.offsetWidth / 2) + cardW / 2);
@@ -4809,11 +5039,12 @@
             const cards = reel.querySelectorAll('.hyper-ruleta-card');
             const winner = cards[winIdx]._item;
             let finalPrice = bonusActive ? winner.price * 2 : winner.price;
-            if (moneyPotionActive) finalPrice *= 1.3;
-            if (darkPotionActive)  finalPrice *= 1.5;
+            if (moneyPotionActive)  finalPrice *= 1.3;
+            if (darkPotionActive)   finalPrice *= 1.5;
+            if (ceravePotionActive) finalPrice *= 2.5;
             const mutationHR = getMutation();
             finalPrice = Math.round(finalPrice * mutationHR.mult);
-            const wonItem = { ...winner, rarity:'mitico', price: finalPrice, favorite: false, mutation: mutationHR.id };
+            const wonItem = { ...winner, rarity:'mitico', price: finalPrice, favorite: false, mutation: mutationHR.id, source:'hyper' };
             inventory.push(wonItem);
             state.invValue += wonItem.price;
             if (wonItem.price > state.best) state.best = wonItem.price;
@@ -4825,7 +5056,7 @@
             showHyperRuletaModal(wonItem);
             hyperRuletaSpinning = false;
             document.getElementById('hyperRuletaSpinBtn').disabled = false;
-        }, 5200);
+        }, hyperSpinDur + 200);
     }
 
     function showHyperRuletaModal(item) {
@@ -5107,8 +5338,9 @@
 
         // Aplicar mutación y pociones de dinero
         let finalPrice = item.price;
-        if (moneyPotionActive) finalPrice *= 1.3;
-        if (darkPotionActive)  finalPrice *= 1.5;
+        if (moneyPotionActive)  finalPrice *= 1.3;
+        if (darkPotionActive)   finalPrice *= 1.5;
+        if (ceravePotionActive) finalPrice *= 2.5;
         const mut = getMutation();
         finalPrice = Math.round(finalPrice * mut.mult);
 
@@ -5145,6 +5377,7 @@
     document.getElementById('buyMoneyPotion').addEventListener('click', () => buyPotion('money'));
     document.getElementById('buyDarkPotion').addEventListener('click', () => buyPotion('dark'));
     document.getElementById('buyFlashPotion').addEventListener('click', () => buyPotion('flash'));
+    document.getElementById('buyCeravePotion').addEventListener('click', () => buyPotion('cerave'));
 
     // Cerrar tienda clicando fuera
     document.getElementById('shopModal').addEventListener('click', (e) => {
