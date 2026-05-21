@@ -648,6 +648,219 @@
         .io-modal-feedback.ok  { color: #4ade80; }
         .io-modal-feedback.err { color: #f87171; }
 
+        /* ══════════════════════════════════════════
+           CRAFTEO
+        ══════════════════════════════════════════ */
+        .craft-btn {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 20px;
+            letter-spacing: 5px;
+            padding: 14px 52px;
+            background: linear-gradient(135deg, #7c3aed, #a855f7);
+            color: white;
+            border: none;
+            border-radius: 14px;
+            cursor: pointer;
+            box-shadow: 0 0 30px rgba(168,85,247,0.4), 0 8px 24px rgba(0,0,0,0.4);
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        .craft-btn::before { content:''; position:absolute; inset:0; background:linear-gradient(135deg,rgba(255,255,255,0.15) 0%,transparent 50%); pointer-events:none; }
+        .craft-btn:hover  { transform: translateY(-3px); box-shadow: 0 0 50px rgba(168,85,247,0.6), 0 16px 40px rgba(0,0,0,0.5); }
+        .craft-btn:active { transform: scale(0.97); }
+
+        /* Modal overlay */
+        .craft-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.88);
+            backdrop-filter: blur(8px);
+            z-index: 9000;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+        }
+        .craft-overlay.open { display: flex; }
+        .craft-box {
+            background: #0f172a;
+            border: 1px solid rgba(168,85,247,0.3);
+            border-radius: 20px;
+            width: min(900px, 98vw);
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 0 80px rgba(168,85,247,0.15);
+            display: flex;
+            flex-direction: column;
+        }
+        .craft-header {
+            position: sticky;
+            top: 0;
+            background: #0f172a;
+            border-bottom: 1px solid rgba(168,85,247,0.18);
+            padding: 18px 28px 14px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3px;
+            z-index: 2;
+        }
+        .craft-title    { font-family:'Bebas Neue',sans-serif; font-size:26px; letter-spacing:6px; color:#a855f7; }
+        .craft-subtitle { font-size:12px; color:#475569; text-align:center; }
+        .craft-close-btn {
+            position: absolute;
+            top: 14px; right: 18px;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: #94a3b8;
+            border-radius: 8px;
+            width: 32px; height: 32px;
+            cursor: pointer;
+            font-size: 15px;
+            transition: all 0.2s;
+        }
+        .craft-close-btn:hover { background:rgba(255,255,255,0.14); color:#fff; }
+
+        /* Two-column body */
+        .craft-body { display: grid; grid-template-columns: 1fr 1fr; }
+        .craft-left  { padding: 18px 18px 18px 24px; border-right: 1px solid rgba(255,255,255,0.05); }
+        .craft-right { padding: 18px 24px 18px 18px; }
+        .craft-section-title {
+            font-family:'Bebas Neue',sans-serif;
+            font-size: 12px;
+            letter-spacing: 3px;
+            color: #475569;
+            margin-bottom: 10px;
+        }
+
+        /* Slots */
+        .craft-slots { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:6px; }
+        .craft-slot {
+            width: 68px; height: 78px;
+            border: 2px dashed rgba(168,85,247,0.25);
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            position: relative;
+            background: rgba(168,85,247,0.03);
+        }
+        .craft-slot.empty  { color:rgba(168,85,247,0.2); font-size:26px; }
+        .craft-slot.filled { border-style:solid; border-color:rgba(168,85,247,0.5); background:rgba(168,85,247,0.09); cursor:pointer; }
+        .craft-slot.filled:hover::after {
+            content:'✕';
+            position: absolute;
+            inset: 0;
+            background: rgba(239,68,68,0.75);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            font-size: 22px;
+            color: #fff;
+        }
+        .craft-slot-name { font-size:8px; letter-spacing:1px; color:#64748b; text-align:center; margin-top:2px; width:64px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+
+        /* Fail warning */
+        .craft-fail-warn { font-size:11px; min-height:16px; margin-bottom:12px; font-weight:700; }
+        .craft-fail-warn.risk { color:#f87171; }
+        .craft-fail-warn.ok   { color:#4ade80; }
+
+        /* Probability bars */
+        .craft-prob-row { display:flex; align-items:center; gap:8px; margin-bottom:7px; }
+        .craft-prob-label { font-family:'Bebas Neue',sans-serif; font-size:11px; letter-spacing:2px; width:90px; flex-shrink:0; }
+        .craft-prob-bar-wrap { flex:1; height:8px; background:rgba(255,255,255,0.05); border-radius:4px; overflow:hidden; }
+        .craft-prob-bar  { height:100%; border-radius:4px; transition:width 0.4s ease; }
+        .craft-prob-pct  { font-family:'Bebas Neue',sans-serif; font-size:13px; width:36px; text-align:right; flex-shrink:0; }
+
+        /* Stats row */
+        .craft-stats-row { display:flex; gap:14px; flex-wrap:wrap; font-size:12px; color:#64748b; margin:14px 0 14px; }
+        .craft-stats-row span { color:#e2e8f0; font-weight:700; }
+
+        /* Fuse button */
+        .craft-fuse-btn {
+            width: 100%;
+            font-family:'Bebas Neue',sans-serif;
+            font-size: 19px;
+            letter-spacing: 5px;
+            padding: 14px;
+            background: linear-gradient(135deg,#7c3aed,#a855f7);
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            box-shadow: 0 0 28px rgba(168,85,247,0.35);
+            transition: all 0.2s;
+        }
+        .craft-fuse-btn:hover:not(:disabled) { opacity:0.88; transform:translateY(-2px); }
+        .craft-fuse-btn:disabled { opacity:0.3; pointer-events:none; }
+
+        /* Progress view */
+        .craft-prog-inner {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+            padding: 36px 28px 40px;
+        }
+        .craft-prog-title  { font-family:'Bebas Neue',sans-serif; font-size:24px; letter-spacing:6px; color:#a855f7; }
+        .craft-prog-wrap   { width:100%; height:14px; background:rgba(255,255,255,0.05); border-radius:7px; overflow:hidden; }
+        .craft-prog-fill   { height:100%; background:linear-gradient(90deg,#7c3aed,#a855f7,#c084fc); border-radius:7px; transition:width 1s linear; }
+        .craft-countdown   { font-family:'Bebas Neue',sans-serif; font-size:52px; letter-spacing:8px; color:#fff; }
+        .craft-prog-desc   { font-size:12px; color:#475569; text-align:center; }
+
+        /* Inventory inside modal */
+        .craft-inv-section { padding:14px 24px 24px; border-top:1px solid rgba(255,255,255,0.05); }
+        .craft-inv-grid    { display:grid; grid-template-columns:repeat(auto-fill,minmax(72px,1fr)); gap:8px; max-height:240px; overflow-y:auto; }
+        .craft-inv-item {
+            border-radius: 10px;
+            padding: 7px 4px 6px;
+            text-align: center;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.15s;
+            background: rgba(255,255,255,0.03);
+        }
+        .craft-inv-item:hover    { background:rgba(168,85,247,0.12); border-color:rgba(168,85,247,0.35); }
+        .craft-inv-item.selected { border-color:#a855f7; background:rgba(168,85,247,0.18); box-shadow:0 0 10px rgba(168,85,247,0.25); }
+        .craft-inv-item.disabled { opacity:0.25; pointer-events:none; }
+        .craft-inv-icon  { font-size:20px; }
+        .craft-inv-name  { font-size:8px; color:#64748b; margin-top:2px; max-width:68px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+        .craft-inv-price { font-size:8px; color:#4ade80; font-weight:700; }
+        .craft-inv-dot   { width:5px; height:5px; border-radius:50%; margin:3px auto 0; }
+
+        /* Result modal */
+        .craft-result-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.88); backdrop-filter:blur(10px); z-index:9500; align-items:center; justify-content:center; }
+        .craft-result-overlay.open { display:flex; }
+        .craft-result-box {
+            background: #0f172a;
+            border: 1px solid rgba(168,85,247,0.4);
+            border-radius: 20px;
+            padding: 36px 40px;
+            text-align: center;
+            width: min(380px, 92vw);
+            box-shadow: 0 0 80px rgba(168,85,247,0.2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+        .craft-res-title { font-family:'Bebas Neue',sans-serif; font-size:21px; letter-spacing:5px; }
+        .craft-res-icon  { font-size:76px; line-height:1; animation:craftReveal 0.6s cubic-bezier(0.34,1.56,0.64,1); }
+        @keyframes craftReveal { from{transform:scale(0) rotate(-20deg);opacity:0} to{transform:scale(1) rotate(0);opacity:1} }
+        .craft-res-name   { font-family:'Bebas Neue',sans-serif; font-size:22px; letter-spacing:3px; color:#fff; }
+        .craft-res-rarity { font-size:12px; letter-spacing:2px; font-weight:700; padding:4px 14px; border-radius:20px; }
+        .craft-res-price  { font-family:'Bebas Neue',sans-serif; font-size:28px; letter-spacing:4px; color:#4ade80; }
+        .craft-res-mutation { font-size:12px; color:#94a3b8; }
+
+        @media (max-width:700px) {
+            .craft-body { grid-template-columns:1fr; }
+            .craft-left { border-right:none; border-bottom:1px solid rgba(255,255,255,0.05); }
+        }
+
         /* STATS */
         .stats-grid {
             display: grid;
@@ -2161,14 +2374,14 @@
     <div class="splash-content">
         <div class="splash-icon">🏆</div>
         <div style="margin-bottom:20px;padding:12px 24px;border:1px solid rgba(244,63,94,0.4);border-radius:12px;background:rgba(244,63,94,0.08);max-width:480px;text-align:center;">
-            <div style="font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;color:#f43f5e;letter-spacing:1px;line-height:1.5;">☕ Si Os Gusta Este Cotenido Seria De Gran Ayuda 2€ Para La Cafeina Que Me Duermo Y Si No Lo Haceis Os Subire El Precio Del Cofre Cerave Un 500% Por Abaricioso.</div>
+            <div style="font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;color:#f43f5e;letter-spacing:1px;line-height:1.5;">☕ Por Favor Denme 2€ en Cafeina Que Me Duermo O Subo El Precio Del Cofre De Cerave n 500% .</div>
         </div>
         <div class="splash-title">THE BEST<br><span>COLLECTOR</span></div>
         <div class="splash-subtitle">By Aritz &nbsp;·&nbsp; Llega a 2.200.000.000 monedas</div>
         <button class="splash-play-btn" id="playBtn">▶ &nbsp;JUGAR</button>
         <div class="splash-by">Empieza con <span>2.000 monedas</span></div>
-        <div style="margin-top:14px;font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;color:#f43f5e;letter-spacing:2px;">🔧 MANTANEMIENTO &nbsp;25 / 05 / 2026</div>
-        <div style="margin-top:8px;font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;color:#f43f5e;letter-spacing:2px;">Versión Del Juego Actual #32</div>
+        <div style="margin-top:14px;font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;color:#f43f5e;letter-spacing:2px;">🔧 ACTUALICACION &nbsp;25 / 05 / 2026</div>
+        <div style="margin-top:8px;font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;color:#f43f5e;letter-spacing:2px;">Versión Del Juego Actual #34</div>
     </div>
 </div>
 
@@ -2482,7 +2695,73 @@
     <div class="shop-btn-wrap">
         <button class="shop-btn" id="shopBtn">🛒 &nbsp;TIENDA</button>
     </div>
+    <!-- BOTÓN CRAFTEO -->
+    <div class="shop-btn-wrap" style="margin-top:-22px;margin-bottom:40px">
+        <button class="craft-btn" id="craftBtn">⚗️ &nbsp;CRAFTEO</button>
+    </div>
 
+</div>
+
+<!-- ══════════════ CRAFT MODAL ══════════════ -->
+<div class="craft-overlay" id="craftModal">
+  <div class="craft-box">
+    <div class="craft-header">
+      <div class="craft-title">⚗️ CRAFTEO DE OBJETOS</div>
+      <div class="craft-subtitle">Fusiona hasta 5 objetos para crear algo nuevo · Los objetos Hyper Míticos no se pueden fusionar</div>
+      <button class="craft-close-btn" id="craftCloseBtn">✕</button>
+    </div>
+
+    <!-- VISTA SELECCIÓN -->
+    <div id="craftSelView">
+      <div class="craft-body">
+        <!-- Izquierda: slots + probabilidades + botón -->
+        <div class="craft-left">
+          <div class="craft-section-title">OBJETOS SELECCIONADOS (<span id="craftCount">0</span>/5)</div>
+          <div class="craft-slots" id="craftSlots"></div>
+          <div class="craft-fail-warn" id="craftFailWarn"></div>
+
+          <div class="craft-section-title" style="margin-top:6px">PROBABILIDADES DE RESULTADO</div>
+          <div id="craftProbs"></div>
+
+          <div class="craft-stats-row">
+            <div>💰 Coste estimado: <span id="craftCostDisplay">—</span></div>
+            <div>⏱️ Tiempo aprox.: <span id="craftTimeDisplay">—</span></div>
+          </div>
+          <button class="craft-fuse-btn" id="craftFuseBtn" disabled>⚗️ FUSIONAR</button>
+        </div>
+        <!-- Derecha: inventario -->
+        <div class="craft-right">
+          <div class="craft-section-title">TU INVENTARIO — Click para añadir · Click de nuevo para quitar</div>
+          <div class="craft-inv-grid" id="craftInvGrid"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- VISTA PROGRESO -->
+    <div id="craftProgView" style="display:none">
+      <div class="craft-prog-inner">
+        <div class="craft-prog-title">⚗️ FUSIONANDO...</div>
+        <div class="craft-prog-wrap" style="width:100%">
+          <div class="craft-prog-fill" id="craftProgFill" style="width:0%"></div>
+        </div>
+        <div class="craft-countdown" id="craftCountdown">00:00</div>
+        <div class="craft-prog-desc">Tu objeto se está forjando. Puedes cerrar este panel y volver luego.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ CRAFT RESULT MODAL ══════════════ -->
+<div class="craft-result-overlay" id="craftResultModal">
+  <div class="craft-result-box">
+    <div class="craft-res-title" id="craftResTitle"></div>
+    <div class="craft-res-icon"  id="craftResIcon"></div>
+    <div class="craft-res-name"  id="craftResName"></div>
+    <div class="craft-res-rarity" id="craftResRarity"></div>
+    <div class="craft-res-price"  id="craftResPrice"></div>
+    <div class="craft-res-mutation" id="craftResMutation"></div>
+    <button class="io-action-btn primary" id="craftResCloseBtn" style="margin-top:10px;min-width:160px">¡GENIAL! 🎉</button>
+  </div>
 </div>
 
 <!-- SHOP MODAL -->
@@ -5670,6 +5949,319 @@
     document.getElementById('playBtn').addEventListener('click', () => {
         startGame();
     });
+
+    // ── CRAFTEO ──────────────────────────────────────────────────────────────
+    const CRAFT_POWER_WEIGHT = { comun:1, especial:2, epico:5, legendario:10, mitico:18 };
+    const CRAFT_FAIL_CHANCE  = { 1:85, 2:65, 3:40, 4:20, 5:0 };
+    const CRAFT_FUSION_TIME  = { comun:120, especial:300, epico:420, legendario:900, mitico:1500 };
+    const CRAFT_RARITY_INFO  = {
+        comun:      { label:'COMÚN',      color:'#64748b' },
+        especial:   { label:'ESPECIAL',   color:'#3b82f6' },
+        epico:      { label:'ÉPICO',      color:'#a855f7' },
+        legendario: { label:'LEGENDARIO', color:'#f43f5e' },
+        mitico:     { label:'MÍTICO',     color:'#fbbf24' }
+    };
+
+    let craftSlots    = [];
+    let craftActive   = false;
+    let craftEndTime  = 0;
+    let craftCountId  = null;
+    let craftSecret   = null;
+    let craftSecretTime = 0;
+
+    function getCraftProbabilities(power) {
+        if (power <= 5)  return { comun:55, especial:30, epico:12, legendario:3,  mitico:0  };
+        if (power <= 15) return { comun:25, especial:35, epico:28, legendario:11, mitico:1  };
+        if (power <= 30) return { comun:5,  especial:20, epico:38, legendario:30, mitico:7  };
+        if (power <= 55) return { comun:0,  especial:5,  epico:20, legendario:42, mitico:33 };
+                         return { comun:0,  especial:0,  epico:8,  legendario:28, mitico:64 };
+    }
+
+    function getCraftPower() {
+        return craftSlots.reduce((sum, idx) => {
+            const item = inventory[idx];
+            return sum + (item ? (CRAFT_POWER_WEIGHT[item.rarity] || 1) : 0);
+        }, 0);
+    }
+
+    function getAllBoxItemsByRarity() {
+        const byRarity = { comun:[], especial:[], epico:[], legendario:[], mitico:[] };
+        Object.values(boxes).forEach(box => {
+            box.items.forEach(item => { if (byRarity[item.rarity]) byRarity[item.rarity].push({...item}); });
+        });
+        return byRarity;
+    }
+
+    function rollCraftOutput(probs) {
+        const pool = getAllBoxItemsByRarity();
+        const r = Math.random() * 100;
+        let cum = 0;
+        for (const key of ['comun','especial','epico','legendario','mitico']) {
+            cum += (probs[key] || 0);
+            if (r < cum) {
+                const items = pool[key];
+                if (items.length) return { ...items[Math.floor(Math.random() * items.length)] };
+            }
+        }
+        const fb = pool.comun;
+        return { ...fb[Math.floor(Math.random() * fb.length)] };
+    }
+
+    function getExpectedCraftCost(probs) {
+        const pool = getAllBoxItemsByRarity();
+        let total = 0, wt = 0;
+        ['comun','especial','epico','legendario','mitico'].forEach(k => {
+            const pct = probs[k] || 0;
+            if (pct <= 0 || !pool[k].length) return;
+            const avg = pool[k].reduce((s, i) => s + i.price, 0) / pool[k].length;
+            total += avg * pct; wt += pct;
+        });
+        return wt > 0 ? Math.round((total / wt) * 0.85) : 0;
+    }
+
+    function getFusionTimeLabel(secs) {
+        if (secs < 60) return `${secs}s`;
+        const m = Math.floor(secs / 60), s = secs % 60;
+        return s > 0 ? `${m}m ${s}s` : `${m}m`;
+    }
+
+    function openCraftModal() {
+        document.getElementById('craftModal').classList.add('open');
+        if (craftActive) {
+            document.getElementById('craftSelView').style.display  = 'none';
+            document.getElementById('craftProgView').style.display = '';
+            startCraftCountdown();
+        } else {
+            document.getElementById('craftSelView').style.display  = '';
+            document.getElementById('craftProgView').style.display = 'none';
+            renderCraftInvGrid();
+            updateCraftUI();
+        }
+    }
+
+    function closeCraftModal() {
+        document.getElementById('craftModal').classList.remove('open');
+    }
+
+    function renderCraftInvGrid() {
+        const grid = document.getElementById('craftInvGrid');
+        grid.innerHTML = '';
+        const eligible = inventory.map((item, idx) => ({ item, idx })).filter(({ item }) => item.source !== 'hyper');
+        if (!eligible.length) {
+            grid.innerHTML = '<div style="color:#475569;font-size:12px;padding:16px;grid-column:1/-1;text-align:center">No tienes objetos disponibles para fusionar.</div>';
+            return;
+        }
+        eligible.forEach(({ item, idx }) => {
+            const isSelected = craftSlots.includes(idx);
+            const isFull     = craftSlots.length >= 5 && !isSelected;
+            const color      = CRAFT_RARITY_INFO[item.rarity]?.color || '#94a3b8';
+            const d = document.createElement('div');
+            d.className = 'craft-inv-item' + (isSelected ? ' selected' : '') + (isFull ? ' disabled' : '');
+            d.innerHTML = `
+                <div class="craft-inv-icon">${item.icon}</div>
+                <div class="craft-inv-name">${item.name}</div>
+                <div class="craft-inv-price">${item.price.toLocaleString()}$</div>
+                <div class="craft-inv-dot" style="background:${color}"></div>`;
+            d.addEventListener('click', () => toggleCraftSlot(idx));
+            grid.appendChild(d);
+        });
+    }
+
+    function toggleCraftSlot(invIdx) {
+        if (craftActive) return;
+        const pos = craftSlots.indexOf(invIdx);
+        if (pos !== -1) craftSlots.splice(pos, 1);
+        else { if (craftSlots.length >= 5) return; craftSlots.push(invIdx); }
+        renderCraftInvGrid();
+        updateCraftUI();
+    }
+
+    function renderCraftSlots() {
+        const container = document.getElementById('craftSlots');
+        container.innerHTML = '';
+        for (let i = 0; i < 5; i++) {
+            const d = document.createElement('div');
+            if (i < craftSlots.length) {
+                const item = inventory[craftSlots[i]];
+                if (!item) continue;
+                d.className = 'craft-slot filled';
+                d.title = `Quitar: ${item.name}`;
+                d.innerHTML = `<div style="font-size:22px">${item.icon}</div><div class="craft-slot-name">${item.name}</div>`;
+                const capturedIdx = craftSlots[i];
+                d.addEventListener('click', () => toggleCraftSlot(capturedIdx));
+            } else {
+                d.className = 'craft-slot empty';
+                d.textContent = '+';
+            }
+            container.appendChild(d);
+        }
+        document.getElementById('craftCount').textContent = craftSlots.length;
+    }
+
+    function updateCraftUI() {
+        renderCraftSlots();
+        const n     = craftSlots.length;
+        const power = getCraftPower();
+        const probs = getCraftProbabilities(power);
+        const fail  = CRAFT_FAIL_CHANCE[n] ?? 100;
+
+        // Fail warning
+        const warnEl = document.getElementById('craftFailWarn');
+        if (n === 0) {
+            warnEl.textContent = ''; warnEl.className = 'craft-fail-warn';
+        } else if (n < 5) {
+            warnEl.textContent = `⚠️ Riesgo de fallo: ${fail}% — podrías perder todos los objetos`;
+            warnEl.className = 'craft-fail-warn risk';
+        } else {
+            warnEl.textContent = '✅ Sin riesgo de fallo (5/5 objetos)';
+            warnEl.className = 'craft-fail-warn ok';
+        }
+
+        // Probability bars
+        const probsEl = document.getElementById('craftProbs');
+        probsEl.innerHTML = ['comun','especial','epico','legendario','mitico'].map(k => {
+            const pct  = probs[k] || 0;
+            const info = CRAFT_RARITY_INFO[k];
+            return `<div class="craft-prob-row">
+                <div class="craft-prob-label" style="color:${info.color}">${info.label}</div>
+                <div class="craft-prob-bar-wrap"><div class="craft-prob-bar" style="width:${pct}%;background:${info.color}"></div></div>
+                <div class="craft-prob-pct" style="color:${info.color}">${pct}%</div>
+            </div>`;
+        }).join('');
+
+        // Cost + time estimates
+        if (n > 0) {
+            const cost = getExpectedCraftCost(probs);
+            document.getElementById('craftCostDisplay').textContent = `~${cost.toLocaleString()}$`;
+            const avgTime = Math.round(
+                ['comun','especial','epico','legendario','mitico']
+                    .reduce((s, k) => s + (probs[k]||0) * (CRAFT_FUSION_TIME[k]||0), 0) / 100
+            );
+            document.getElementById('craftTimeDisplay').textContent = `~${getFusionTimeLabel(avgTime)}`;
+        } else {
+            document.getElementById('craftCostDisplay').textContent = '—';
+            document.getElementById('craftTimeDisplay').textContent = '—';
+        }
+
+        document.getElementById('craftFuseBtn').disabled = n === 0;
+    }
+
+    function startCraft() {
+        if (craftActive || craftSlots.length === 0) return;
+        const n    = craftSlots.length;
+        const fail = Math.random() * 100 < (CRAFT_FAIL_CHANCE[n] ?? 100);
+
+        let output = null, fusionTime = 5, cost = 0;
+        if (!fail) {
+            const power = getCraftPower();
+            const probs = getCraftProbabilities(power);
+            output = rollCraftOutput(probs);
+            const mut = getMutation();
+            output.price    = Math.round(output.price * mut.mult);
+            output.mutation = mut.id;
+            output.favorite = false;
+            fusionTime = CRAFT_FUSION_TIME[output.rarity] || 5;
+            cost = Math.round(output.price * 0.85);
+        }
+
+        // Check balance
+        if (!fail && state.balance < cost) {
+            const btn = document.getElementById('craftFuseBtn');
+            btn.style.boxShadow = '0 0 24px rgba(239,68,68,0.7)';
+            setTimeout(() => { btn.style.boxShadow = ''; }, 700);
+            return;
+        }
+
+        // Deduct cost
+        if (!fail) { state.balance -= cost; state.spent += cost; }
+
+        // Remove crafted items (high index first to avoid shift)
+        [...craftSlots].sort((a, b) => b - a).forEach(idx => {
+            if (inventory[idx]) state.invValue -= inventory[idx].price;
+            inventory.splice(idx, 1);
+        });
+        craftSlots = [];
+        updateStats(); renderInventory(); saveGame();
+
+        craftSecret     = fail ? null : output;
+        craftSecretTime = fusionTime;
+        craftActive     = true;
+        craftEndTime    = Date.now() + fusionTime * 1000;
+
+        document.getElementById('craftSelView').style.display  = 'none';
+        document.getElementById('craftProgView').style.display = '';
+        startCraftCountdown();
+    }
+
+    function startCraftCountdown() {
+        clearInterval(craftCountId);
+        const totalMs = craftSecretTime * 1000;
+        craftCountId = setInterval(() => {
+            const remaining = craftEndTime - Date.now();
+            if (remaining <= 0) { clearInterval(craftCountId); finishCraft(); return; }
+            const progress = Math.min(((totalMs - remaining) / totalMs) * 100, 100);
+            const mins = Math.floor(remaining / 60000);
+            const secs = Math.floor((remaining % 60000) / 1000);
+            const fill = document.getElementById('craftProgFill');
+            const cd   = document.getElementById('craftCountdown');
+            if (fill) fill.style.width = progress + '%';
+            if (cd)   cd.textContent  = `${String(mins).padStart(2,'0')}:${String(secs).padStart(2,'0')}`;
+        }, 500);
+    }
+
+    function finishCraft() {
+        craftActive = false;
+        clearInterval(craftCountId);
+        const result = craftSecret;
+        craftSecret  = null;
+        closeCraftModal();
+        if (result) {
+            inventory.push(result);
+            state.invValue += result.price;
+            if (result.price > state.best) state.best = result.price;
+            updateStats(); renderInventory(); saveGame();
+        }
+        showCraftResult(result);
+    }
+
+    function showCraftResult(item) {
+        const modal = document.getElementById('craftResultModal');
+        if (!item) {
+            document.getElementById('craftResTitle').textContent   = '💀 FUSIÓN FALLIDA';
+            document.getElementById('craftResTitle').style.color   = '#f87171';
+            document.getElementById('craftResIcon').textContent    = '💥';
+            document.getElementById('craftResName').textContent    = 'Los objetos se han destruido en el proceso';
+            document.getElementById('craftResRarity').textContent  = '';
+            document.getElementById('craftResPrice').textContent   = '';
+            document.getElementById('craftResMutation').textContent= '';
+        } else {
+            const info = CRAFT_RARITY_INFO[item.rarity] || { label:'MÍTICO', color:'#fbbf24' };
+            document.getElementById('craftResTitle').textContent   = '⚗️ ¡FUSIÓN COMPLETADA!';
+            document.getElementById('craftResTitle').style.color   = '#a855f7';
+            document.getElementById('craftResIcon').textContent    = item.icon;
+            document.getElementById('craftResName').textContent    = item.name;
+            const rar = document.getElementById('craftResRarity');
+            rar.textContent   = info.label;
+            rar.style.background = info.color + '22';
+            rar.style.color      = info.color;
+            rar.style.border     = `1px solid ${info.color}44`;
+            document.getElementById('craftResPrice').textContent    = `+${item.price.toLocaleString()}$`;
+            document.getElementById('craftResMutation').textContent = item.mutation ? `Mutación: ${item.mutation}` : '';
+        }
+        modal.classList.add('open');
+    }
+
+    // CRAFTEO — event listeners
+    document.getElementById('craftBtn').addEventListener('click', openCraftModal);
+    document.getElementById('craftCloseBtn').addEventListener('click', closeCraftModal);
+    document.getElementById('craftModal').addEventListener('click', (e) => {
+        if (e.target === document.getElementById('craftModal')) closeCraftModal();
+    });
+    document.getElementById('craftFuseBtn').addEventListener('click', startCraft);
+    document.getElementById('craftResCloseBtn').addEventListener('click', () => {
+        document.getElementById('craftResultModal').classList.remove('open');
+    });
+    // ──────────────────────────────────────────────────────────────────────────
 
     document.getElementById('sellAllBtn').addEventListener('click', sellAll);
     document.getElementById('modalCloseBtn').addEventListener('click', closeModal);
