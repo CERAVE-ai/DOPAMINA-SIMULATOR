@@ -522,6 +522,132 @@
         .auto-abrir-pause-btn:hover { background: rgba(255,255,255,0.18); }
         .auto-abrir-pause-btn.paused { background: rgba(16,185,129,0.2); border-color: rgba(16,185,129,0.5); color: #10b981; }
 
+        /* EXPORTAR / IMPORTAR */
+        .save-io-bar {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-bottom: 28px;
+        }
+        .save-io-btn {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 15px;
+            letter-spacing: 3px;
+            padding: 10px 28px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .save-io-btn.export-btn {
+            background: linear-gradient(135deg, #1d4ed8, #3b82f6);
+            color: #fff;
+            box-shadow: 0 0 20px rgba(59,130,246,0.35), 0 4px 16px rgba(0,0,0,0.35);
+        }
+        .save-io-btn.export-btn:hover { transform: translateY(-2px); box-shadow: 0 0 36px rgba(59,130,246,0.55), 0 8px 24px rgba(0,0,0,0.4); }
+        .save-io-btn.import-btn {
+            background: linear-gradient(135deg, #92400e, #f59e0b);
+            color: #fff;
+            box-shadow: 0 0 20px rgba(245,158,11,0.35), 0 4px 16px rgba(0,0,0,0.35);
+        }
+        .save-io-btn.import-btn:hover { transform: translateY(-2px); box-shadow: 0 0 36px rgba(245,158,11,0.55), 0 8px 24px rgba(0,0,0,0.4); }
+        .save-io-btn:active { transform: scale(0.97); }
+        /* Modal export/import */
+        .io-modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.75);
+            backdrop-filter: blur(6px);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+        }
+        .io-modal-overlay.open { display: flex; }
+        .io-modal-box {
+            background: #0f172a;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 18px;
+            padding: 32px;
+            width: min(540px, 94vw);
+            box-shadow: 0 0 60px rgba(0,0,0,0.8);
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .io-modal-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 26px;
+            letter-spacing: 5px;
+            text-align: center;
+            color: #fff;
+        }
+        .io-modal-desc {
+            font-size: 13px;
+            color: #94a3b8;
+            text-align: center;
+            line-height: 1.5;
+        }
+        .io-modal-textarea {
+            width: 100%;
+            height: 120px;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 10px;
+            color: #e2e8f0;
+            font-family: monospace;
+            font-size: 11px;
+            padding: 12px;
+            resize: none;
+            box-sizing: border-box;
+            word-break: break-all;
+        }
+        .io-modal-textarea:focus { outline: none; border-color: rgba(99,102,241,0.5); }
+        .io-modal-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+        .io-action-btn {
+            flex: 1;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 15px;
+            letter-spacing: 3px;
+            padding: 10px 16px;
+            border: none;
+            border-radius: 9px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+        .io-action-btn.primary { background: linear-gradient(135deg,#4f46e5,#6366f1); color:#fff; }
+        .io-action-btn.primary:hover { opacity: 0.88; }
+        .io-action-btn.success { background: linear-gradient(135deg,#047857,#10b981); color:#fff; }
+        .io-action-btn.success:hover { opacity: 0.88; }
+        .io-action-btn.danger  { background: linear-gradient(135deg,#991b1b,#ef4444); color:#fff; }
+        .io-action-btn.danger:hover  { opacity: 0.88; }
+        .io-action-btn.neutral { background: rgba(255,255,255,0.08); color:#cbd5e1; border:1px solid rgba(255,255,255,0.12); }
+        .io-action-btn.neutral:hover { background: rgba(255,255,255,0.15); }
+        .io-modal-file-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 10px;
+            border: 1px dashed rgba(255,255,255,0.2);
+            border-radius: 9px;
+            color: #94a3b8;
+            font-size: 13px;
+            cursor: pointer;
+            transition: border-color 0.2s, color 0.2s;
+        }
+        .io-modal-file-label:hover { border-color: rgba(245,158,11,0.5); color: #f59e0b; }
+        .io-modal-file-input { display: none; }
+        .io-modal-feedback {
+            font-size: 13px;
+            text-align: center;
+            min-height: 18px;
+            font-weight: 600;
+        }
+        .io-modal-feedback.ok  { color: #4ade80; }
+        .io-modal-feedback.err { color: #f87171; }
+
         /* STATS */
         .stats-grid {
             display: grid;
@@ -2035,13 +2161,13 @@
     <div class="splash-content">
         <div class="splash-icon">🏆</div>
         <div style="margin-bottom:20px;padding:12px 24px;border:1px solid rgba(244,63,94,0.4);border-radius:12px;background:rgba(244,63,94,0.08);max-width:480px;text-align:center;">
-            <div style="font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;color:#f43f5e;letter-spacing:1px;line-height:1.5;">☕ Gracias Por Todo El Apoyo Al Juego, Espero Que OS Siga Gustando.</div>
+            <div style="font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;color:#f43f5e;letter-spacing:1px;line-height:1.5;">☕ Por Favor lea esto con maxia atencion, despues de el mantenimiento previsto el enlace de este juego va a cambiar, el nuevo enlace sera este cerave-ai.github.io/Gambling-Simulator/ no me hago responsable si despues no sabes el enlace, perdon por las molestias.</div>
         </div>
         <div class="splash-title">THE BEST<br><span>COLLECTOR</span></div>
-        <div class="splash-subtitle">By Aritz &nbsp;·&nbsp; Llega a 2.200.000.000 monedas</div>
+        <div class="splash-subtitle">By Aritz &nbsp;·&nbsp; Llega a 275.000.000 monedas</div>
         <button class="splash-play-btn" id="playBtn">▶ &nbsp;JUGAR</button>
         <div class="splash-by">Empieza con <span>2.000 monedas</span></div>
-        <div style="margin-top:14px;font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;color:#f43f5e;letter-spacing:2px;">🔧 ACTUALICACION &nbsp;25 / 05 / 2026</div>
+        <div style="margin-top:14px;font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;color:#f43f5e;letter-spacing:2px;">🔧 MANTANEMIENTO &nbsp;De 22 / 05 / 2026 hasta 23 / 05 / 2026</div>
         <div style="margin-top:8px;font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;color:#f43f5e;letter-spacing:2px;">Versión Del Juego Actual #32</div>
     </div>
 </div>
@@ -2165,6 +2291,47 @@
             <div class="stat-label" style="color:#fbbf24;">Glorias Alcanzadas</div>
             <div class="stat-value" id="statWins" style="color:#fbbf24;">0</div>
             <div style="font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#475569;margin-top:4px;">veces en la gloria</div>
+        </div>
+    </div>
+
+    <!-- EXPORTAR / IMPORTAR PARTIDA -->
+    <div class="save-io-bar">
+        <button class="save-io-btn export-btn" id="exportSaveBtn">📤 EXPORTAR PARTIDA</button>
+        <button class="save-io-btn import-btn" id="importSaveBtn">📥 IMPORTAR PARTIDA</button>
+    </div>
+
+    <!-- MODAL EXPORTAR -->
+    <div class="io-modal-overlay" id="exportModal">
+        <div class="io-modal-box">
+            <div class="io-modal-title">📤 EXPORTAR PARTIDA</div>
+            <div class="io-modal-desc">Copia el código y guárdalo en un lugar seguro, o descarga el archivo. Úsalo para restaurar tu partida en cualquier dispositivo.</div>
+            <textarea class="io-modal-textarea" id="exportCodeArea" readonly></textarea>
+            <div class="io-modal-actions">
+                <button class="io-action-btn primary" id="exportCopyBtn">📋 COPIAR CÓDIGO</button>
+                <button class="io-action-btn success" id="exportDownloadBtn">⬇️ DESCARGAR ARCHIVO</button>
+            </div>
+            <div class="io-modal-feedback" id="exportFeedback"></div>
+            <div class="io-modal-actions">
+                <button class="io-action-btn neutral" onclick="document.getElementById('exportModal').classList.remove('open')">CERRAR</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL IMPORTAR -->
+    <div class="io-modal-overlay" id="importModal">
+        <div class="io-modal-box">
+            <div class="io-modal-title">📥 IMPORTAR PARTIDA</div>
+            <div class="io-modal-desc">Pega el código de tu partida exportada, o sube el archivo .json. <strong style="color:#f87171">¡Esto reemplazará tu partida actual!</strong></div>
+            <textarea class="io-modal-textarea" id="importCodeArea" placeholder="Pega aquí tu código de partida..."></textarea>
+            <label class="io-modal-file-label">
+                📁 O sube tu archivo de partida (.json)
+                <input class="io-modal-file-input" type="file" id="importFileInput" accept=".json,application/json">
+            </label>
+            <div class="io-modal-feedback" id="importFeedback"></div>
+            <div class="io-modal-actions">
+                <button class="io-action-btn danger" id="importConfirmBtn">✅ IMPORTAR Y RECARGAR</button>
+                <button class="io-action-btn neutral" onclick="document.getElementById('importModal').classList.remove('open')">CANCELAR</button>
+            </div>
         </div>
     </div>
 
@@ -3673,6 +3840,40 @@
     document.getElementById('autoAbrirBtn').addEventListener('click', buyAutoAbrir);
     document.getElementById('autoAbrirPauseBtn').addEventListener('click', pauseAutoAbrir);
 
+    // EXPORTAR / IMPORTAR
+    document.getElementById('exportSaveBtn').addEventListener('click', openExportModal);
+    document.getElementById('exportCopyBtn').addEventListener('click', copyExportCode);
+    document.getElementById('exportDownloadBtn').addEventListener('click', downloadExportFile);
+    document.getElementById('importSaveBtn').addEventListener('click', openImportModal);
+    document.getElementById('importConfirmBtn').addEventListener('click', () => {
+        const code = document.getElementById('importCodeArea').value.trim();
+        if (!code) {
+            const fb = document.getElementById('importFeedback');
+            fb.textContent = '❌ Pega un código o sube un archivo primero.';
+            fb.className = 'io-modal-feedback err';
+            return;
+        }
+        validateAndImport(code);
+    });
+    document.getElementById('importFileInput').addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+            document.getElementById('importCodeArea').value = ev.target.result.trim();
+            document.getElementById('importFeedback').textContent = `📁 Archivo cargado: ${file.name}`;
+            document.getElementById('importFeedback').className = 'io-modal-feedback ok';
+        };
+        reader.readAsText(file);
+    });
+    // Cerrar modales clickando fuera
+    document.getElementById('exportModal').addEventListener('click', (e) => {
+        if (e.target === document.getElementById('exportModal')) document.getElementById('exportModal').classList.remove('open');
+    });
+    document.getElementById('importModal').addEventListener('click', (e) => {
+        if (e.target === document.getElementById('importModal')) document.getElementById('importModal').classList.remove('open');
+    });
+
     // LOGROS
     const achievements = [
         {
@@ -3931,6 +4132,86 @@
             return true;
         } catch(e) { return false; }
     }
+
+    // EXPORTAR PARTIDA
+    function openExportModal() {
+        saveGame();
+        const raw = localStorage.getItem(SAVE_KEY);
+        if (!raw) { alert('No hay partida guardada todavía.'); return; }
+        const code = btoa(unescape(encodeURIComponent(raw)));
+        document.getElementById('exportCodeArea').value = code;
+        document.getElementById('exportFeedback').textContent = '';
+        document.getElementById('exportFeedback').className = 'io-modal-feedback';
+        document.getElementById('exportModal').classList.add('open');
+    }
+
+    function copyExportCode() {
+        const area = document.getElementById('exportCodeArea');
+        area.select();
+        const fb = document.getElementById('exportFeedback');
+        try {
+            navigator.clipboard.writeText(area.value).then(() => {
+                fb.textContent = '✅ ¡Código copiado al portapapeles!';
+                fb.className = 'io-modal-feedback ok';
+            }).catch(() => {
+                document.execCommand('copy');
+                fb.textContent = '✅ ¡Código copiado!';
+                fb.className = 'io-modal-feedback ok';
+            });
+        } catch(e) {
+            document.execCommand('copy');
+            fb.textContent = '✅ ¡Código copiado!';
+            fb.className = 'io-modal-feedback ok';
+        }
+    }
+
+    function downloadExportFile() {
+        const code = document.getElementById('exportCodeArea').value;
+        if (!code) return;
+        const raw = decodeURIComponent(escape(atob(code)));
+        const blob = new Blob([raw], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `the_best_collector_save_${Date.now()}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
+        const fb = document.getElementById('exportFeedback');
+        fb.textContent = '✅ Archivo descargado correctamente';
+        fb.className = 'io-modal-feedback ok';
+    }
+
+    // IMPORTAR PARTIDA
+    function openImportModal() {
+        document.getElementById('importCodeArea').value = '';
+        document.getElementById('importFeedback').textContent = '';
+        document.getElementById('importFeedback').className = 'io-modal-feedback';
+        document.getElementById('importFileInput').value = '';
+        document.getElementById('importModal').classList.add('open');
+    }
+
+    function validateAndImport(raw) {
+        const fb = document.getElementById('importFeedback');
+        try {
+            let jsonStr = raw.trim();
+            // Intentar decodificar base64 si no es JSON directo
+            if (!jsonStr.startsWith('{')) {
+                jsonStr = decodeURIComponent(escape(atob(jsonStr)));
+            }
+            const data = JSON.parse(jsonStr);
+            if (!data.state || !Array.isArray(data.inventory)) {
+                throw new Error('Formato inválido');
+            }
+            localStorage.setItem(SAVE_KEY, JSON.stringify(data));
+            fb.textContent = '✅ ¡Partida importada! Recargando...';
+            fb.className = 'io-modal-feedback ok';
+            setTimeout(() => location.reload(), 1200);
+        } catch(e) {
+            fb.textContent = '❌ Código inválido o corrupto. Comprueba que lo pegaste completo.';
+            fb.className = 'io-modal-feedback err';
+        }
+    }
+
 
     function clearSave() {
         try { localStorage.removeItem(SAVE_KEY); } catch(e) {}
