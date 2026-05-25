@@ -464,6 +464,26 @@
         .spin-btn:hover { transform: translateY(-3px); box-shadow: 0 0 50px var(--theme-glow), 0 16px 40px rgba(0,0,0,0.5); }
         .spin-btn:active { transform: scale(0.97); }
         .spin-btn:disabled { opacity: 0.4; pointer-events: none; filter: grayscale(0.5); }
+        .spin-btn.ghost-trap {
+            background: linear-gradient(135deg, #7f1d1d, #dc2626) !important;
+            box-shadow: 0 0 40px rgba(220,38,38,0.7), 0 8px 32px rgba(0,0,0,0.5) !important;
+            color: #fca5a5 !important; letter-spacing: 2px !important;
+            animation: ghostPulse 0.4s ease-in-out infinite alternate;
+        }
+        @keyframes ghostPulse {
+            from { box-shadow: 0 0 30px rgba(220,38,38,0.5); transform: scale(1); }
+            to   { box-shadow: 0 0 60px rgba(220,38,38,0.9); transform: scale(1.02); }
+        }
+        .ghost-toast {
+            position: fixed; top: 80px; left: 50%; transform: translateX(-50%);
+            background: linear-gradient(135deg,#7f1d1d,#991b1b);
+            border: 1px solid rgba(220,38,38,0.5);
+            color: #fca5a5; padding: 12px 28px; border-radius: 14px;
+            font-family: 'Rajdhani',sans-serif; font-size: 16px; font-weight: 700;
+            letter-spacing: 2px; z-index: 9999; text-align: center;
+            box-shadow: 0 4px 30px rgba(220,38,38,0.35);
+            animation: fadeFlash 3.5s forwards;
+        }
 
         /* AUTO ABRIR */
         .spin-wrap { gap: 16px; }
@@ -2151,15 +2171,15 @@
             .slot-spin-btn { padding:12px 40px; font-size:18px; }
         }
 
-        /* SUBASTAS */
+        /* BATALLAS DE SUBASTAS EN VIVO */
         .subasta-section {
             margin: 20px 0;
-            padding: 20px 16px;
-            background: linear-gradient(135deg, rgba(251,191,36,0.05), rgba(244,63,94,0.04));
-            border: 1px solid rgba(251,191,36,0.22);
-            border-radius: 20px;
+            padding: 24px 16px;
+            background: linear-gradient(135deg, rgba(251,191,36,0.06), rgba(244,63,94,0.05));
+            border: 1px solid rgba(251,191,36,0.25);
+            border-radius: 24px;
         }
-        .subasta-header { text-align: center; margin-bottom: 16px; }
+        .subasta-header { text-align: center; margin-bottom: 18px; }
         .subasta-title {
             font-family: 'Bebas Neue', sans-serif;
             font-size: 26px;
@@ -2169,64 +2189,167 @@
             -webkit-text-fill-color: transparent;
         }
         .subasta-subtitle { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-top: 4px; }
-        .subasta-card {
-            background: rgba(0,0,0,0.3);
-            border: 1px solid rgba(251,191,36,0.14);
-            border-radius: 16px;
+        .battle-card {
+            background: rgba(0,0,0,0.35);
+            border: 1px solid rgba(251,191,36,0.2);
+            border-radius: 18px;
             padding: 20px 16px;
+        }
+        .battle-secret-box {
             text-align: center;
+            margin-bottom: 16px;
+            padding: 14px;
+            background: rgba(0,0,0,0.4);
+            border: 1px solid rgba(148,163,184,0.14);
+            border-radius: 14px;
         }
-        .subasta-chest {
-            font-size: 62px;
-            line-height: 1;
-            margin-bottom: 8px;
-            filter: drop-shadow(0 0 18px rgba(251,191,36,0.45));
-            animation: floatIcon 3s ease-in-out infinite;
+        .battle-secret-icon { font-size: 56px; line-height: 1; margin-bottom: 8px; filter: drop-shadow(0 0 14px rgba(251,191,36,0.4)); animation: floatIcon 3s ease-in-out infinite; }
+        .battle-secret-label { font-size: 10px; font-weight: 800; letter-spacing: 3px; text-transform: uppercase; color: #94a3b8; padding: 3px 14px; background: rgba(148,163,184,0.1); border: 1px solid rgba(148,163,184,0.22); border-radius: 20px; display: inline-block; }
+        .battle-bots-row { display: flex; gap: 8px; margin-bottom: 14px; }
+        .battle-bot-card {
+            flex: 1; background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 12px; padding: 10px 6px; text-align: center;
+            transition: all 0.3s; position: relative; overflow: hidden;
         }
-        .subasta-rarity-hint {
-            font-size: 10px;
-            font-weight: 800;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            margin-bottom: 14px;
-            padding: 3px 12px;
-            border-radius: 20px;
-            display: inline-block;
-        }
-        .subasta-rarity-epico     { color:#a855f7; background:rgba(168,85,247,0.12); border:1px solid rgba(168,85,247,0.3); }
-        .subasta-rarity-legendario{ color:#f43f5e; background:rgba(244,63,94,0.12);  border:1px solid rgba(244,63,94,0.3); }
-        .subasta-rarity-mitico    { color:#fbbf24; background:rgba(251,191,36,0.12); border:1px solid rgba(251,191,36,0.35); }
-        .subasta-row { display: flex; gap: 10px; margin-bottom: 14px; }
-        .subasta-info-box {
-            flex: 1;
-            background: rgba(255,255,255,0.03);
+        .battle-bot-card.active  { border-color: rgba(251,191,36,0.4); background: rgba(251,191,36,0.06); }
+        .battle-bot-card.frozen  { border-color: rgba(56,189,248,0.5);  background: rgba(56,189,248,0.08); }
+        .battle-bot-card.frozen::after { content:'🔇'; position:absolute; top:3px; right:4px; font-size:11px; }
+        .battle-bot-card.retired { opacity: 0.32; filter: grayscale(1); }
+        .battle-bot-avatar { font-size: 22px; line-height: 1; margin-bottom: 4px; }
+        .battle-bot-name   { font-size: 8px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #94a3b8; margin-bottom: 4px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+        .battle-bot-bid    { font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #fbbf24; }
+        .battle-bot-status { font-size: 8px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #475569; margin-top: 2px; }
+        .battle-bid-row { display: flex; gap: 10px; margin-bottom: 12px; }
+        .battle-info-box {
+            flex: 1; background: rgba(255,255,255,0.03);
             border: 1px solid rgba(255,255,255,0.07);
-            border-radius: 10px;
-            padding: 10px 8px;
+            border-radius: 10px; padding: 10px 8px; text-align: center;
         }
-        .subasta-info-label { font-size: 8px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
-        .subasta-price { font-family: 'JetBrains Mono', monospace; font-size: 20px; font-weight: 700; color: #fbbf24; }
-        .subasta-timer { font-family: 'JetBrains Mono', monospace; font-size: 18px; font-weight: 700; color: #94a3b8; }
-        .subasta-timer.urgent { color: #f43f5e; animation: blink 0.8s step-end infinite; }
+        .battle-info-label    { font-size: 8px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
+        .battle-bid-amount    { font-family: 'JetBrains Mono', monospace; font-size: 20px; font-weight: 700; color: #fbbf24; }
+        .battle-timer-display { font-family: 'JetBrains Mono', monospace; font-size: 18px; font-weight: 700; color: #94a3b8; }
+        .battle-timer-display.urgent { color: #f43f5e; animation: blink 0.8s step-end infinite; }
         @keyframes blink { 50% { opacity: 0.3; } }
-        .subasta-buy-btn {
-            width: 100%;
-            padding: 13px;
-            border-radius: 12px;
-            border: none;
-            background: linear-gradient(135deg, #b45309, #fbbf24);
-            color: #0a0f1e;
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 18px;
-            letter-spacing: 3px;
-            cursor: pointer;
-            font-weight: 700;
-            transition: all 0.2s;
-            box-shadow: 0 0 20px rgba(251,191,36,0.25), 0 6px 18px rgba(0,0,0,0.4);
+        .battle-tactics-row { display: flex; gap: 8px; margin-bottom: 10px; }
+        .battle-tactic-btn {
+            flex: 1; padding: 9px 4px; border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.04);
+            color: white; font-family: 'Rajdhani', sans-serif; font-size: 11px;
+            font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+            cursor: pointer; transition: all 0.2s; text-align: center;
         }
-        .subasta-buy-btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 0 35px rgba(251,191,36,0.45), 0 10px 28px rgba(0,0,0,0.4); }
-        .subasta-buy-btn:active:not(:disabled) { transform: scale(0.97); }
-        .subasta-buy-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+        .battle-tactic-btn:hover:not(:disabled) { transform: translateY(-2px); filter: brightness(1.25); }
+        .battle-tactic-btn:disabled { opacity: 0.32; cursor: not-allowed; }
+        .battle-tactic-farol   { border-color: rgba(251,191,36,0.3);  background: rgba(251,191,36,0.06);  color: #fbbf24; }
+        .battle-tactic-silence { border-color: rgba(56,189,248,0.3);  background: rgba(56,189,248,0.06);  color: #38bdf8; }
+        .battle-tactic-espio   { border-color: rgba(168,85,247,0.3);  background: rgba(168,85,247,0.06);  color: #a855f7; }
+        .silence-charge-badge {
+            display: inline-block; background: rgba(56,189,248,0.15);
+            border: 1px solid rgba(56,189,248,0.3); border-radius: 8px;
+            padding: 1px 6px; font-size: 9px; font-weight: 700; color: #38bdf8; margin-left: 3px;
+        }
+        .battle-action-row { display: flex; gap: 8px; }
+        .battle-bid-btn {
+            flex: 1; padding: 13px; border-radius: 12px; border: none;
+            background: linear-gradient(135deg, #b45309, #fbbf24);
+            color: #0a0f1e; font-family: 'Bebas Neue', sans-serif;
+            font-size: 18px; letter-spacing: 3px; cursor: pointer; font-weight: 700;
+            transition: all 0.2s; box-shadow: 0 0 20px rgba(251,191,36,0.25), 0 6px 18px rgba(0,0,0,0.4);
+        }
+        .battle-bid-btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 0 35px rgba(251,191,36,0.45), 0 10px 28px rgba(0,0,0,0.4); }
+        .battle-bid-btn:active:not(:disabled) { transform: scale(0.97); }
+        .battle-bid-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+        .battle-surrender-btn {
+            padding: 13px 14px; border-radius: 12px;
+            border: 1px solid rgba(244,63,94,0.4); background: rgba(244,63,94,0.08);
+            color: #f43f5e; font-family: 'Bebas Neue', sans-serif;
+            font-size: 14px; letter-spacing: 2px; cursor: pointer; font-weight: 700;
+            transition: all 0.2s;
+        }
+        .battle-surrender-btn:hover:not(:disabled) { background: rgba(244,63,94,0.2); transform: translateY(-1px); }
+        .battle-surrender-btn:disabled { opacity: 0.32; cursor: not-allowed; }
+        /* ── PARÁSITOS ─────────────────────────────── */
+        .infected-badge {
+            position: absolute; top: 4px; left: 4px;
+            font-size: 14px; z-index: 5;
+            animation: infectPulse 1.8s ease-in-out infinite;
+        }
+        @keyframes infectPulse {
+            0%,100% { transform: scale(1); opacity: 1; }
+            50%      { transform: scale(1.35); opacity: 0.7; }
+        }
+        #glitchCursor {
+            display: none; position: fixed; pointer-events: none;
+            z-index: 99999; font-size: 22px; transform: translate(-50%,-50%);
+            filter: drop-shadow(0 0 6px #f43f5e);
+            transition: none;
+        }
+        #thiefDiv {
+            display: none; position: fixed; z-index: 99998;
+            background: linear-gradient(135deg,#7c3aed,#a855f7);
+            color: #fff; padding: 10px 18px; border-radius: 12px;
+            font-family: 'Bebas Neue', sans-serif; font-size: 15px;
+            letter-spacing: 2px; cursor: pointer; user-select: none;
+            box-shadow: 0 0 24px rgba(168,85,247,0.6);
+            align-items: center; gap: 8px;
+            border: 2px solid #c084fc;
+            transition: transform 0.1s;
+        }
+        #thiefDiv:active { transform: scale(0.9); }
+        .parasite-alert {
+            position: fixed; top: 24px; left: 50%; transform: translateX(-50%);
+            background: #1e0a2e; border: 1.5px solid #a855f7;
+            border-radius: 12px; padding: 10px 22px;
+            font-family: 'Rajdhani', sans-serif; font-size: 14px;
+            font-weight: 700; letter-spacing: 1.5px; color: #e879f9;
+            z-index: 100000; box-shadow: 0 0 28px rgba(168,85,247,0.4);
+            pointer-events: none; text-align: center;
+            animation: parasiteIn 0.3s ease;
+        }
+        @keyframes parasiteIn {
+            from { opacity:0; transform: translateX(-50%) translateY(-12px); }
+            to   { opacity:1; transform: translateX(-50%) translateY(0); }
+        }
+        /* ──────────────────────────────────────────── */
+        .battle-start-row {
+            display: flex; justify-content: center; margin: 12px 0 4px;
+        }
+        .battle-start-btn {
+            width: 100%; padding: 16px; border-radius: 14px; border: none;
+            background: linear-gradient(135deg, #059669, #34d399);
+            color: #0a0f1e; font-family: 'Bebas Neue', sans-serif;
+            font-size: 22px; letter-spacing: 4px; cursor: pointer; font-weight: 700;
+            transition: all 0.2s;
+            box-shadow: 0 0 28px rgba(52,211,153,0.35), 0 8px 24px rgba(0,0,0,0.4);
+        }
+        .battle-start-btn:hover { transform: translateY(-2px); box-shadow: 0 0 42px rgba(52,211,153,0.55), 0 12px 32px rgba(0,0,0,0.4); }
+        .battle-start-btn:active { transform: scale(0.97); }
+        .battle-log {
+            margin-top: 12px; max-height: 88px; overflow-y: auto;
+            background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 10px; padding: 8px 10px;
+        }
+        .battle-log::-webkit-scrollbar { width: 4px; }
+        .battle-log::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
+        .battle-log-entry { font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #475569; margin-bottom: 2px; }
+        .battle-log-entry.player { color: #4ade80; }
+        .battle-log-entry.bot    { color: #94a3b8; }
+        .battle-log-entry.event  { color: #fbbf24; }
+        .battle-log-entry.win    { color: #4ade80; font-size: 11px; }
+        .battle-log-entry.lose   { color: #f43f5e; font-size: 11px; }
+        .battle-spy-info {
+            margin-top: 10px; padding: 8px 12px;
+            background: rgba(168,85,247,0.08); border: 1px solid rgba(168,85,247,0.25);
+            border-radius: 10px; font-size: 10px; font-weight: 700;
+            letter-spacing: 1px; text-transform: uppercase; color: #a855f7;
+            display: none; text-align: center;
+        }
+        .battle-waiting-info {
+            text-align: center; padding: 18px 16px;
+            color: #475569; font-size: 10px; font-weight: 700;
+            letter-spacing: 2px; text-transform: uppercase;
+        }
 
         /* MODAL TIENDA */
         #shopModal {
@@ -2331,6 +2454,306 @@
             50% { box-shadow: 0 0 18px rgba(56,189,248,0.8); }
         }
 
+        /* ── MI MUSEO ─────────────────────────────────────────────── */
+        #museoOverlay {
+            display: none; position: fixed; inset: 0; z-index: 500;
+            background: #05070f; flex-direction: column; overflow: hidden;
+        }
+        #museoOverlay.open { display: flex; }
+        .museo-topbar {
+            display: flex; align-items: center; gap: 14px;
+            padding: 10px 18px; flex-shrink: 0;
+            background: rgba(0,0,0,0.6);
+            border-bottom: 1px solid rgba(251,191,36,0.15);
+        }
+        #museoBackBtn {
+            padding: 7px 14px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.15);
+            background: rgba(255,255,255,0.04); color: #94a3b8;
+            font-family: 'Rajdhani',sans-serif; font-size: 12px;
+            font-weight: 700; letter-spacing: 2px; cursor: pointer; transition: all 0.2s;
+        }
+        #museoBackBtn:hover { background: rgba(255,255,255,0.1); color: white; }
+        .museo-topbar-title {
+            font-family: 'Bebas Neue',sans-serif; font-size: 24px;
+            letter-spacing: 5px; color: #fbbf24;
+            text-shadow: 0 0 20px rgba(251,191,36,0.4);
+        }
+        .museo-topbar-stats { display: flex; gap: 20px; margin-left: auto; }
+        .museo-stat-pill {
+            padding: 5px 14px; border-radius: 20px;
+            font-family: 'Rajdhani',sans-serif; font-size: 13px;
+            font-weight: 700; letter-spacing: 1px;
+        }
+        #museoIncomeDisplay {
+            background: rgba(74,222,128,0.1); border: 1px solid rgba(74,222,128,0.3); color: #4ade80;
+        }
+        #museoVisitorDisplay {
+            background: rgba(96,165,250,0.1); border: 1px solid rgba(96,165,250,0.3); color: #60a5fa;
+        }
+        #museoBtnHeader {
+            padding: 7px 14px; border-radius: 10px; border: 1px solid rgba(251,191,36,0.3);
+            background: rgba(251,191,36,0.08); color: #fbbf24;
+            font-family: 'Rajdhani',sans-serif; font-size: 12px;
+            font-weight: 700; letter-spacing: 2px; cursor: pointer;
+            transition: all 0.2s; white-space: nowrap;
+        }
+        #museoBtnHeader:hover { background: rgba(251,191,36,0.18); box-shadow: 0 0 14px rgba(251,191,36,0.25); }
+        /* ── BANCO ─────────────────────────────────────────────────────── */
+        #bancoBtnHeader {
+            padding: 7px 14px; border-radius: 10px; border: 1px solid rgba(52,211,153,0.3);
+            background: rgba(52,211,153,0.08); color: #34d399;
+            font-family: 'Rajdhani',sans-serif; font-size: 12px;
+            font-weight: 700; letter-spacing: 2px; cursor: pointer;
+            transition: all 0.2s; white-space: nowrap;
+        }
+        #bancoBtnHeader:hover { background: rgba(52,211,153,0.18); box-shadow: 0 0 14px rgba(52,211,153,0.25); }
+        #bancoOverlay {
+            display: none; position: fixed; inset: 0; z-index: 9000;
+            background: #050a10;
+            flex-direction: column; overflow: hidden;
+        }
+        #bancoOverlay.open { display: flex; }
+        .banco-topbar {
+            display: flex; align-items: center; gap: 14px;
+            padding: 12px 20px; background: rgba(0,0,0,0.5);
+            border-bottom: 1px solid rgba(52,211,153,0.15); flex-shrink: 0;
+        }
+        .banco-topbar-title {
+            font-family: 'Rajdhani',sans-serif; font-size: 17px; font-weight: 700;
+            letter-spacing: 3px; color: #34d399; flex: 1;
+        }
+        #bancoBackBtn {
+            padding: 6px 16px; border-radius: 8px; border: 1px solid rgba(52,211,153,0.25);
+            background: rgba(52,211,153,0.07); color: #34d399;
+            font-family: 'Rajdhani',sans-serif; font-size: 13px; font-weight: 700;
+            letter-spacing: 1px; cursor: pointer; transition: all 0.2s;
+        }
+        #bancoBackBtn:hover { background: rgba(52,211,153,0.18); }
+        .banco-body {
+            flex: 1; display: flex; align-items: center; justify-content: center;
+            padding: 30px 20px; overflow-y: auto;
+        }
+        .banco-card {
+            background: rgba(10,20,15,0.95); border: 1px solid rgba(52,211,153,0.2);
+            border-radius: 20px; padding: 36px 42px; max-width: 560px; width: 100%;
+            box-shadow: 0 0 60px rgba(52,211,153,0.06);
+        }
+        .banco-icon { font-size: 52px; text-align: center; margin-bottom: 6px; }
+        .banco-card-title {
+            font-family: 'Rajdhani',sans-serif; font-size: 22px; font-weight: 700;
+            letter-spacing: 3px; color: #34d399; text-align: center; margin-bottom: 4px;
+        }
+        .banco-subtitle {
+            font-size: 12px; color: #64748b; text-align: center; letter-spacing: 1px;
+            margin-bottom: 28px;
+        }
+        .banco-stats {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 28px;
+        }
+        .banco-stat {
+            background: rgba(0,0,0,0.4); border: 1px solid rgba(52,211,153,0.12);
+            border-radius: 12px; padding: 14px 16px; text-align: center;
+        }
+        .banco-stat-label {
+            font-size: 10px; letter-spacing: 2px; color: #64748b;
+            text-transform: uppercase; margin-bottom: 6px;
+        }
+        .banco-stat-value {
+            font-family: 'JetBrains Mono',monospace; font-size: 18px; font-weight: 700; color: #34d399;
+        }
+        .banco-stat-value.wallet { color: #60a5fa; }
+        .banco-timer-bar {
+            background: rgba(0,0,0,0.4); border: 1px solid rgba(52,211,153,0.12);
+            border-radius: 12px; padding: 14px 16px; margin-bottom: 28px; text-align: center;
+        }
+        .banco-timer-label { font-size: 10px; letter-spacing: 2px; color: #64748b; text-transform: uppercase; margin-bottom: 6px; }
+        .banco-timer-track {
+            background: rgba(255,255,255,0.05); border-radius: 99px; height: 8px; margin-bottom: 6px; overflow: hidden;
+        }
+        .banco-timer-fill {
+            height: 100%; background: linear-gradient(90deg,#34d399,#10b981);
+            border-radius: 99px; transition: width 1s linear;
+        }
+        .banco-timer-text { font-family: 'JetBrains Mono',monospace; font-size: 13px; color: #34d399; }
+        .banco-actions { display: flex; flex-direction: column; gap: 16px; }
+        .banco-input-row {
+            display: flex; gap: 10px; align-items: center;
+        }
+        .banco-input {
+            flex: 1; background: rgba(0,0,0,0.5); border: 1px solid rgba(52,211,153,0.2);
+            border-radius: 10px; padding: 10px 14px; color: #e2e8f0;
+            font-family: 'JetBrains Mono',monospace; font-size: 14px; outline: none;
+        }
+        .banco-input:focus { border-color: rgba(52,211,153,0.5); }
+        .banco-btn {
+            padding: 10px 20px; border-radius: 10px; border: none; cursor: pointer;
+            font-family: 'Rajdhani',sans-serif; font-size: 14px; font-weight: 700;
+            letter-spacing: 1.5px; transition: all 0.2s; white-space: nowrap;
+        }
+        .banco-btn-deposit {
+            background: linear-gradient(135deg,#065f46,#047857); color: #a7f3d0;
+            border: 1px solid rgba(52,211,153,0.3);
+        }
+        .banco-btn-deposit:hover { background: linear-gradient(135deg,#047857,#059669); box-shadow: 0 0 16px rgba(52,211,153,0.25); }
+        .banco-btn-withdraw {
+            background: linear-gradient(135deg,#1e3a5f,#1e40af); color: #93c5fd;
+            border: 1px solid rgba(96,165,250,0.3);
+        }
+        .banco-btn-withdraw:hover { background: linear-gradient(135deg,#1e40af,#2563eb); box-shadow: 0 0 16px rgba(96,165,250,0.2); }
+        .banco-quick-btns { display: flex; gap: 8px; flex-wrap: wrap; }
+        .banco-quick { padding: 5px 12px; border-radius: 8px; border: 1px solid rgba(52,211,153,0.2); background: rgba(52,211,153,0.06); color: #34d399; font-size: 12px; font-weight: 700; cursor: pointer; transition: all 0.15s; }
+        .banco-quick:hover { background: rgba(52,211,153,0.15); }
+        .banco-interest-note {
+            text-align: center; font-size: 11px; color: #475569; margin-top: 16px; letter-spacing: 1px;
+        }
+        .banco-interest-flash {
+            position: fixed; top: 70px; left: 50%; transform: translateX(-50%);
+            background: linear-gradient(135deg,#065f46,#047857); color: #a7f3d0;
+            padding: 10px 24px; border-radius: 12px; font-family: 'Rajdhani',sans-serif;
+            font-size: 15px; font-weight: 700; letter-spacing: 2px;
+            box-shadow: 0 4px 24px rgba(52,211,153,0.3); z-index: 9999;
+            animation: fadeFlash 3s forwards;
+        }
+        @keyframes fadeFlash { 0%{opacity:0;transform:translateX(-50%) translateY(-8px)} 15%{opacity:1;transform:translateX(-50%) translateY(0)} 70%{opacity:1} 100%{opacity:0} }
+        .museo-content {
+            display: flex; flex: 1; overflow: hidden; min-height: 0;
+        }
+        .museo-room {
+            flex: 1; display: flex; flex-direction: column;
+            overflow: hidden; position: relative;
+        }
+        .museo-back-wall {
+            background: linear-gradient(180deg,#06091a 0%,#0d1525 100%);
+            padding: 20px 24px 18px; flex-shrink: 0;
+            border-bottom: 3px solid #1a2540; position: relative;
+        }
+        .museo-back-wall::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+            background: linear-gradient(90deg,transparent,#fbbf24 30%,#fbbf24 70%,transparent);
+        }
+        .museo-back-wall::after {
+            content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
+            background: linear-gradient(90deg,transparent,rgba(251,191,36,0.3),transparent);
+        }
+        .museo-wall-label {
+            font-family: 'Rajdhani',sans-serif; font-size: 9px; font-weight: 700;
+            letter-spacing: 3px; color: rgba(251,191,36,0.4);
+            text-align: center; margin-bottom: 12px; text-transform: uppercase;
+        }
+        .museo-wall-row { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
+        .museo-floor-section {
+            flex: 1; overflow: hidden; position: relative;
+            background: linear-gradient(180deg,#080d18 0%,#050810 100%);
+        }
+        .museo-floor-label {
+            font-family: 'Rajdhani',sans-serif; font-size: 9px; font-weight: 700;
+            letter-spacing: 3px; color: rgba(255,255,255,0.15); text-align: center;
+            padding-top: 10px; text-transform: uppercase;
+        }
+        .museo-floor-persp {
+            transform: perspective(700px) rotateX(22deg);
+            transform-origin: top center;
+            display: grid; grid-template-columns: repeat(4,1fr);
+            gap: 14px; padding: 12px 20px 0;
+            background:
+                repeating-linear-gradient(0deg,transparent,transparent 59px,rgba(255,255,255,0.03) 59px,rgba(255,255,255,0.03) 60px),
+                repeating-linear-gradient(90deg,transparent,transparent 59px,rgba(255,255,255,0.03) 59px,rgba(255,255,255,0.03) 60px);
+        }
+        .museo-spot {
+            border: 1.5px dashed rgba(255,255,255,0.1); border-radius: 10px;
+            cursor: pointer; display: flex; flex-direction: column;
+            align-items: center; justify-content: center; transition: all 0.2s;
+            position: relative; padding: 8px; min-height: 80px;
+            background: rgba(255,255,255,0.02);
+        }
+        .museo-spot:hover { border-color: rgba(251,191,36,0.35); background: rgba(251,191,36,0.04); }
+        .museo-spot.occupied { border-style: solid; border-color: rgba(255,255,255,0.18); background: rgba(0,0,0,0.3); }
+        .museo-spot.highlight-empty {
+            border-color: #22c55e; background: rgba(34,197,94,0.07);
+            animation: spotGlow 0.9s ease-in-out infinite;
+        }
+        @keyframes spotGlow {
+            0%,100% { box-shadow: 0 0 14px rgba(34,197,94,0.25); }
+            50%      { box-shadow: 0 0 28px rgba(34,197,94,0.55); }
+        }
+        .museo-spot-wall { min-width: 92px; min-height: 92px; border-radius: 6px; }
+        .museo-spot-label {
+            font-family: 'Rajdhani',sans-serif; font-size: 8px; font-weight: 700;
+            letter-spacing: 2px; text-transform: uppercase;
+            color: rgba(255,255,255,0.18); margin-top: 4px;
+        }
+        .museo-spot-icon { font-size: 30px; line-height: 1; }
+        .museo-spot-name {
+            font-family: 'Rajdhani',sans-serif; font-size: 9px; font-weight: 700;
+            color: rgba(255,255,255,0.75); text-align: center; max-width: 95%;
+            overflow: hidden; text-overflow: ellipsis; white-space: nowrap; letter-spacing: 0.5px;
+        }
+        .museo-spot-price {
+            font-family: 'JetBrains Mono',monospace; font-size: 8px; color: #4ade80; font-weight: 700;
+        }
+        .museo-spot-remove {
+            font-family: 'Rajdhani',sans-serif; font-size: 7px; font-weight: 700;
+            letter-spacing: 1px; color: rgba(244,63,94,0.5); margin-top: 2px;
+        }
+        .museo-visitor-lane {
+            position: absolute; bottom: 0; left: 0; right: 0; height: 40px;
+            pointer-events: none; overflow: hidden;
+        }
+        .museo-visitor {
+            position: absolute; bottom: 4px; font-size: 18px;
+            animation: visitorWalk linear forwards;
+        }
+        @keyframes visitorWalk {
+            from { left: -40px; opacity: 0.9; }
+            to   { left: calc(100% + 40px); opacity: 0.9; }
+        }
+        .museo-panel {
+            width: 196px; flex-shrink: 0;
+            background: rgba(0,0,0,0.35); border-left: 1px solid rgba(255,255,255,0.06);
+            display: flex; flex-direction: column; overflow: hidden;
+        }
+        .museo-panel-title {
+            font-family: 'Bebas Neue',sans-serif; font-size: 15px;
+            letter-spacing: 3px; color: #fbbf24; padding: 12px 14px 8px;
+            border-bottom: 1px solid rgba(255,255,255,0.05); flex-shrink: 0;
+        }
+        .museo-panel-hint {
+            font-family: 'Rajdhani',sans-serif; font-size: 10px;
+            font-weight: 600; letter-spacing: 0.5px; color: #475569;
+            padding: 6px 12px 4px; flex-shrink: 0; line-height: 1.4;
+        }
+        .museo-inv-list {
+            flex: 1; overflow-y: auto; padding: 6px;
+            display: flex; flex-direction: column; gap: 3px;
+        }
+        .museo-inv-list::-webkit-scrollbar { width: 3px; }
+        .museo-inv-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.12); border-radius: 2px; }
+        .museo-inv-card {
+            display: flex; align-items: center; gap: 8px;
+            padding: 6px 9px; border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.05);
+            background: rgba(255,255,255,0.02); cursor: pointer; transition: all 0.15s;
+        }
+        .museo-inv-card:hover { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.1); }
+        .museo-inv-card.selected {
+            border-color: #22c55e; background: rgba(34,197,94,0.1);
+            box-shadow: 0 0 10px rgba(34,197,94,0.2);
+        }
+        .museo-inv-card.in-museo { opacity: 0.35; cursor: default; }
+        .museo-inv-icon { font-size: 18px; flex-shrink: 0; }
+        .museo-inv-info { flex: 1; overflow: hidden; }
+        .museo-inv-name {
+            font-family: 'Rajdhani',sans-serif; font-size: 11px; font-weight: 700;
+            color: rgba(255,255,255,0.8); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .museo-inv-price {
+            font-family: 'JetBrains Mono',monospace; font-size: 9px; color: #4ade80;
+        }
+        .museo-empty-msg {
+            color: #475569; font-size: 11px; font-family: 'Rajdhani',sans-serif;
+            font-weight: 600; padding: 16px 12px; text-align: center; line-height: 1.5;
+        }
+        /* ──────────────────────────────────────────────────────────── */
         /* ── SUPER MÍTICO: rainbow glow ───────────────────────────── */
         .inv-card-super {
             border-top-width: 3px !important;
@@ -2377,11 +2800,11 @@
             <div style="font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;color:#f43f5e;letter-spacing:1px;line-height:1.5;">☕ Si hos gusta el juego donarme 2€ en cafeina por favor si no lo haceis voy a subir el precio del cofre cerave un 500% por avariciosos.</div>
         </div>
         <div class="splash-title">THE BEST<br><span>COLLECTOR</span></div>
-        <div class="splash-subtitle">By Aritz &nbsp;·&nbsp; Llega a 2.200.000.000 monedas</div>
+        <div class="splash-subtitle">By Aritz &nbsp;·&nbsp; Llega a 500.000.000.000 monedas</div>
         <button class="splash-play-btn" id="playBtn">▶ &nbsp;JUGAR</button>
         <div class="splash-by">Empieza con <span>2.000 monedas</span></div>
-        <div style="margin-top:14px;font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;color:#f43f5e;letter-spacing:2px;">🔧 ACTUALICACION &nbsp;25/ 05 / 2026</div>
-        <div style="margin-top:8px;font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;color:#f43f5e;letter-spacing:2px;">Versión Del Juego Actual #36</div>
+        <div style="margin-top:14px;font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;color:#f43f5e;letter-spacing:2px;">🔧 ACTUALICACION &nbsp;29/ 05 / 2026</div>
+        <div style="margin-top:8px;font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;color:#f43f5e;letter-spacing:2px;">Versión Del Juego Actual #40</div>
     </div>
 </div>
 
@@ -2399,7 +2822,7 @@
     <header>
         <div>
             <div class="header-title">THE BEST <span id="titleTheme">COLLECTOR</span></div>
-            <div class="header-sub">Meta: 2.200.000.000 monedas · By Aritz</div>
+            <div class="header-sub">Meta: 500.000.000.000 monedas · By Aritz</div>
         </div>
         <div style="display:flex;align-items:center;gap:20px;" id="header-right">
             <div id="bonusBox" style="text-align:center;">
@@ -2415,6 +2838,8 @@
                 <div class="balance-amount" id="balance">650</div>
             </div>
             <div style="position:relative;flex-shrink:0;"><button id="coinBtn" title="Apostar monedas">🪙</button><div id="coinCooldownLabel"></div></div>
+            <button id="museoBtnHeader">🏛️ MI MUSEO</button>
+            <button id="bancoBtnHeader">🏦 BANCO</button>
         </div>
     </header>
 
@@ -2426,6 +2851,7 @@
         <div class="potion-indicator" id="darkPotionInd">🖤 OSCURA ACTIVA · <span id="darkPotionTimer">04:00</span></div>
         <div class="potion-indicator" id="flashPotionInd">⚡💥 FLASH ACTIVA · <span id="flashPotionTimer">03:00</span></div>
         <div class="potion-indicator" id="ceravePotionInd">🧴 CERAVE ACTIVA · <span id="ceravePotionTimer">03:00</span></div>
+        <div class="potion-indicator" id="silencePotionInd">🔇 SILENCIO · <span id="silencePotionCharges">0</span> CARGA(S)</div>
     </div>
 
     <!-- PROGRESS -->
@@ -2625,26 +3051,66 @@
         <button class="ruleta-spin-btn" id="hyperRuletaSpinBtn" style="background:linear-gradient(135deg,#b91c1c,#ef4444,#f97316);box-shadow:0 0 30px rgba(249,115,22,0.5),0 8px 24px rgba(0,0,0,0.4);">🔥 GIRAR HYPER RULETA</button>
     </div>
 
-    <!-- SUBASTAS -->
+    <!-- BATALLAS DE SUBASTAS EN VIVO -->
     <div class="subasta-section">
         <div class="subasta-header">
-            <div class="subasta-title">🏷️ SUBASTAS</div>
-            <div class="subasta-subtitle">Objeto misterioso · Precio independiente</div>
+            <div class="subasta-title">⚔️ BATALLAS DE SUBASTAS EN VIVO</div>
+            <div class="subasta-subtitle">Objeto 100% secreto · Solo Épico / Legendario / Mítico</div>
         </div>
-        <div class="subasta-card">
-            <div class="subasta-chest" id="subastaChest">📦</div>
-            <div class="subasta-rarity-hint" id="subastaRarityHint">???</div>
-            <div class="subasta-row">
-                <div class="subasta-info-box">
-                    <div class="subasta-info-label">Precio de Puja</div>
-                    <div class="subasta-price" id="subastaPrice">—</div>
+        <!-- WAITING STATE (between battles) -->
+        <div id="battleWaiting" class="battle-waiting-info" style="display:none">
+            ⏳ PRÓXIMA BATALLA EN &nbsp;<span id="battleWaitTimer">—</span>
+        </div>
+        <!-- BATTLE ACTIVE CARD -->
+        <div class="battle-card" id="battleCard">
+            <div class="battle-secret-box">
+                <div class="battle-secret-icon" id="battleChest">📦</div>
+                <div class="battle-secret-label">??? OBJETO MISTERIOSO</div>
+            </div>
+            <div class="battle-bots-row">
+                <div class="battle-bot-card" id="bot0card">
+                    <div class="battle-bot-avatar">🎩</div>
+                    <div class="battle-bot-name">El Magnate</div>
+                    <div class="battle-bot-bid" id="bot0bid">—</div>
+                    <div class="battle-bot-status" id="bot0status">ACTIVO</div>
                 </div>
-                <div class="subasta-info-box">
-                    <div class="subasta-info-label">Nueva subasta en</div>
-                    <div class="subasta-timer" id="subastaTimer">2:00</div>
+                <div class="battle-bot-card" id="bot1card">
+                    <div class="battle-bot-avatar">🎲</div>
+                    <div class="battle-bot-name">El Apostador</div>
+                    <div class="battle-bot-bid" id="bot1bid">—</div>
+                    <div class="battle-bot-status" id="bot1status">ACTIVO</div>
+                </div>
+                <div class="battle-bot-card" id="bot2card">
+                    <div class="battle-bot-avatar">🤖</div>
+                    <div class="battle-bot-name">El Avaricioso</div>
+                    <div class="battle-bot-bid" id="bot2bid">—</div>
+                    <div class="battle-bot-status" id="bot2status">ACTIVO</div>
                 </div>
             </div>
-            <button class="subasta-buy-btn" id="subastaBuyBtn">🏷️ PUJAR Y ABRIR</button>
+            <div class="battle-bid-row">
+                <div class="battle-info-box">
+                    <div class="battle-info-label">Puja Actual (Tuya)</div>
+                    <div class="battle-bid-amount" id="battleCurrentBid">—</div>
+                </div>
+                <div class="battle-info-box">
+                    <div class="battle-info-label">Tiempo Restante</div>
+                    <div class="battle-timer-display" id="battleTimer">05:00</div>
+                </div>
+            </div>
+            <div class="battle-tactics-row">
+                <button class="battle-tactic-btn battle-tactic-farol"   id="tacticFarol"   title="Sube tu puja un 30% extra · Los bots que no lleguen se retiran inmediatamente">🎭 FAROL</button>
+                <button class="battle-tactic-btn battle-tactic-silence" id="tacticSilence" title="Congela todos los bots 5 segundos · Requiere Poción de Silencio">🔇 SILENCIO<span class="silence-charge-badge" id="silenceChargesBadge">0</span></button>
+                <button class="battle-tactic-btn battle-tactic-espio"   id="tacticEspio"   title="Revela el presupuesto máximo del bot más fuerte activo · Cuesta 2.000$">🔍 ESPIONAJE</button>
+            </div>
+            <div class="battle-spy-info" id="battleSpyInfo"></div>
+            <div class="battle-start-row" id="battleStartRow">
+                <button class="battle-start-btn" id="battleStartBtn">⚔️ EMPEZAR BATALLA</button>
+            </div>
+            <div class="battle-action-row" id="battleActionRow">
+                <button class="battle-bid-btn"       id="battleBidBtn">🏷️ PUJAR</button>
+                <button class="battle-surrender-btn" id="battleSurrenderBtn">🏳️ RÍNDETE</button>
+            </div>
+            <div class="battle-log" id="battleLog"></div>
         </div>
     </div>
 
@@ -2839,6 +3305,18 @@
             </div>
             <button class="pocion-buy-btn" id="buyCeravePotion" style="background:linear-gradient(135deg,#0369a1,#38bdf8);color:white;">
                 5.000.000 $
+            </button>
+        </div>
+
+        <!-- Poción de Silencio -->
+        <div class="pocion-card" style="border-color:rgba(56,189,248,0.25)">
+            <div class="pocion-icon">🔇</div>
+            <div class="pocion-info">
+                <div class="pocion-name" style="color:#38bdf8">Poción de Silencio</div>
+                <div class="pocion-desc">Congela todos los bots 5 seg en subasta · +1 carga (apilable)</div>
+            </div>
+            <button class="pocion-buy-btn" id="buySilencePotion" style="background:linear-gradient(135deg,#0369a1,#38bdf8);color:white;">
+                75.000 $
             </button>
         </div>
 
@@ -3219,7 +3697,7 @@
 
     let currentKey = 'tech';
     let inventory = [];
-    let state = { balance:2000, spent:0, invValue:0, opened:0, best:0, spinning:false, over:false, items:[], commonCount:0, miticoCount:0, consecutiveMiticos:0, lastWasmitico:false, timeInGame:0, gotSuerteMax:false, coinWinStreak:0, coinLoseStreak:0, ruletaCharges:0, miticosForRuleta:0, superRuletaCharges:0, miticosForSuperRuleta:0, hyperRuletaCharges:0, superSpinsForHyper:0, auctionWins:0, universalCount:0, potionsBought:0, pityCount:0 };
+    let state = { balance:2000, spent:0, invValue:0, opened:0, best:0, spinning:false, over:false, items:[], commonCount:0, miticoCount:0, consecutiveMiticos:0, lastWasmitico:false, timeInGame:0, gotSuerteMax:false, coinWinStreak:0, coinLoseStreak:0, ruletaCharges:0, miticosForRuleta:0, superRuletaCharges:0, miticosForSuperRuleta:0, hyperRuletaCharges:0, superSpinsForHyper:0, auctionWins:0, universalCount:0, potionsBought:0, pityCount:0, silenceCharges:0, bankBalance:0, bankLastInterest:0 };
     const WIN_GOAL = 2250000000;
 
     const reel = document.getElementById('caseReel');
@@ -3433,7 +3911,10 @@
         // Aplicar mutación
         const mutation = getMutation();
         finalPrice = Math.round(finalPrice * mutation.mult);
-        const bonusWinner = { ...winner, price: finalPrice, favorite: false, mutation: mutation.id };
+        const isInfected = Math.random() < 0.10;
+        const bonusWinner = { ...winner, price: finalPrice, favorite: false, mutation: mutation.id,
+            _id: Date.now() + Math.floor(Math.random()*99999),
+            ...(isInfected ? { infected: true, infectedSince: Date.now(), parasiteUsed: false } : {}) };
         state.invValue += finalPrice;
         if (finalPrice > state.best) state.best = finalPrice;
         inventory.push(bonusWinner);
@@ -3493,7 +3974,7 @@
         saveGame();
         showModal(bonusWinner);
         state.spinning = false;
-        spinBtn.disabled = false;
+        enableSpinBtn();
         scheduleNextAutoSpin();
     }
 
@@ -3676,6 +4157,7 @@
             d.innerHTML = `
                 <div class="inv-card-bar" style="background:${rarities[item.rarity] ? rarities[item.rarity].color : '#fbbf24'}"></div>
                 <div class="fav-btn" title="${isFav ? 'Quitar favorito' : 'Marcar favorito'}">${isFav ? '⭐' : '☆'}</div>
+                ${item.infected && !item.parasiteUsed ? '<div class="infected-badge" title="¡Objeto infectado! Si lo guardas mucho tiempo...">🦠</div>' : ''}
                 <div class="inv-card-icon">${item.icon}</div>
                 <div class="inv-card-name">${item.name}</div>
                 ${(() => { const m = mutations[item.mutation] || mutations.normal; return `<div class="mutation-badge mutation-${m.id}">${m.icon} ${m.label}</div>`; })()}
@@ -3709,6 +4191,8 @@
             '#4ade80', 8
         );
         setTimeout(() => {
+            const soldId = inventory[origIdx] && inventory[origIdx]._id;
+            if (soldId) cleanMuseumSlot(soldId);
             state.balance += salePrice;
             state.invValue -= inventory[origIdx].price;
             if (state.invValue < 0) state.invValue = 0;
@@ -3728,6 +4212,7 @@
         playSound('money');
         createParticles(window.innerWidth/2, window.innerHeight/2, '#4ade80', 25);
         const sellValue = nonFavItems.reduce((sum, item) => sum + item.price, 0);
+        nonFavItems.forEach(item => { if (item._id) cleanMuseumSlot(item._id); });
         state.balance += sellValue;
         state.invValue -= sellValue;
         if (state.invValue < 0) state.invValue = 0;
@@ -4150,7 +4635,77 @@
         }, 350);
     }
 
-    spinBtn.addEventListener('click', () => { playSound('click'); spin(); });
+    // ─── CLIC FANTASMA ───────────────────────────────────────────────────────────
+    let ghostTrapActive  = false;
+    let ghostTrapTimer   = null;
+    let rapidSpinCount   = 0;
+    let lastSpinEndTime  = 0;
+    const GHOST_RAPID_MS = 4000;  // clics en menos de 4s tras fin de giro = "frenético"
+    const GHOST_THRESHOLD = 5;    // mínimo de clics rápidos antes de que empiece la trampa
+    const GHOST_PENALTY   = 1000000;
+
+    function enableSpinBtn() {
+        const now = Date.now();
+        // Contabilizar racha rápida
+        if (lastSpinEndTime > 0 && (now - lastSpinEndTime) < GHOST_RAPID_MS) {
+            rapidSpinCount++;
+        } else {
+            rapidSpinCount = 1;
+        }
+        lastSpinEndTime = now;
+
+        // Determinar si activar trampa
+        const extraSpins = Math.max(0, rapidSpinCount - GHOST_THRESHOLD);
+        const prob = Math.min(0.05 + extraSpins * 0.05, 0.35); // 5%–35%
+        if (rapidSpinCount >= GHOST_THRESHOLD && Math.random() < prob && !autoAbrirActive) {
+            activateGhostTrap();
+        } else {
+            spinBtn.disabled = false;
+        }
+    }
+
+    function activateGhostTrap() {
+        ghostTrapActive = true;
+        spinBtn.disabled = false;
+        spinBtn.textContent = '💸 DONAR 1.000.000$ A LA BANCA';
+        spinBtn.classList.add('ghost-trap');
+        ghostTrapTimer = setTimeout(() => deactivateGhostTrap(false), 2000);
+    }
+
+    function deactivateGhostTrap(clicked) {
+        clearTimeout(ghostTrapTimer);
+        ghostTrapActive = false;
+        spinBtn.classList.remove('ghost-trap');
+        spinBtn.textContent = 'ABRIR COFRE';
+        if (clicked) {
+            // El jugador cayó en la trampa
+            const loss = Math.min(GHOST_PENALTY, Math.floor(state.balance));
+            if (loss > 0) {
+                state.balance -= loss;
+                updateStats();
+                saveGame();
+            }
+            const msgs = [
+                '👻 ¡CLIC FANTASMA! -1.000.000$ donados a la banca por ir a lo loco',
+                '💸 ¡Sin atención! La banca agradece tu generosa donación de 1.000.000$',
+                '🤖 ¿Autoclicker? La banca cobra por eso. -1.000.000$',
+                '👻 ¡PILLADO! Clic sin pensar = 1.000.000$ menos en tu bolsillo',
+                '💀 La banca cobra el Impuesto del Clic Frenético. -1.000.000$'
+            ];
+            const el = document.createElement('div');
+            el.className = 'ghost-toast';
+            el.textContent = msgs[Math.floor(Math.random() * msgs.length)];
+            document.body.appendChild(el);
+            setTimeout(() => el.remove(), 3600);
+            rapidSpinCount = 0; // reset racha tras penalización
+        }
+    }
+    // ─────────────────────────────────────────────────────────────────────────────
+
+    spinBtn.addEventListener('click', () => {
+        if (ghostTrapActive) { deactivateGhostTrap(true); return; }
+        playSound('click'); spin();
+    });
     document.getElementById('autoAbrirBtn').addEventListener('click', buyAutoAbrir);
     document.getElementById('autoAbrirPauseBtn').addEventListener('click', pauseAutoAbrir);
 
@@ -4411,9 +4966,13 @@
                 auctionWins: state.auctionWins,
                 universalCount: state.universalCount,
                 potionsBought: state.potionsBought,
-                pityCount: state.pityCount
+                pityCount: state.pityCount,
+                silenceCharges: state.silenceCharges,
+                bankBalance: state.bankBalance,
+                bankLastInterest: state.bankLastInterest
             },
             inventory: inventory,
+            museumSlots: museumSlots,
             achievements: achievements.map(a => ({ id: a.id, done: a.done })),
             currentKey: currentKey,
             savedAt: Date.now()
@@ -4443,6 +5002,10 @@
             }
             // Restaurar cofre activo
             if (data.currentKey && boxes[data.currentKey]) currentKey = data.currentKey;
+            // Restaurar museo
+            if (data.museumSlots) museumSlots = data.museumSlots;
+            // Asignar _id a items que no tengan
+            inventory.forEach(item => { if (!item._id) item._id = Date.now() + Math.floor(Math.random()*99999); });
             return true;
         } catch(e) { return false; }
     }
@@ -4829,6 +5392,11 @@
                 crvBtn.textContent = '5.000.000 $';
             }
         }
+        const silBtn = document.getElementById('buySilencePotion');
+        if (silBtn) {
+            silBtn.disabled = false;
+            silBtn.textContent = '75.000 $';
+        }
     }
 
     function buyPotion(type) {
@@ -4840,7 +5408,7 @@
         if (type === 'flash'  && flashPotionActive)  return;
         if (type === 'cerave' && ceravePotionActive) return;
 
-        const prices = { luck: 50000, speed: 55000, money: 60000, dark: 300000, flash: 250000, cerave: 5000000 };
+        const prices = { luck: 50000, speed: 55000, money: 60000, dark: 300000, flash: 250000, cerave: 5000000, silence: 75000 };
         const price = prices[type];
         if (state.balance < price) {
             playSound('click');
@@ -4879,10 +5447,30 @@
             ceravePotionActive = true;
             ceravePotionSecondsLeft = 3 * 60;
             document.getElementById('ceravePotionInd').classList.add('active');
+        } else if (type === 'silence') {
+            state.silenceCharges = (state.silenceCharges || 0) + 1;
+            updateSilenceBadge();
+            const silInd = document.getElementById('silencePotionInd');
+            if (silInd) {
+                silInd.classList.add('active');
+                document.getElementById('silencePotionCharges').textContent = state.silenceCharges;
+            }
         }
         refreshShopPotionBtns();
         checkAchievements();
         closeShop();
+    }
+
+    function updateSilenceBadge() {
+        const badge = document.getElementById('silenceChargesBadge');
+        if (badge) badge.textContent = state.silenceCharges || 0;
+        const silInd = document.getElementById('silencePotionInd');
+        if (silInd) {
+            const span = document.getElementById('silencePotionCharges');
+            if (span) span.textContent = state.silenceCharges || 0;
+            if ((state.silenceCharges || 0) > 0) silInd.classList.add('active');
+            else silInd.classList.remove('active');
+        }
     }
 
     // BONUS x2 TIMER
@@ -5833,13 +6421,34 @@
     window.spinSlot = spinSlot;
     window.setSlotBet = setSlotBet;
 
-    // ─── SUBASTAS ───────────────────────────────────────────────────────────────
-    let currentAuction = null;
-    let auctionSecondsLeft = 120;
-    let auctionInterval = null;
-    let auctionPurchased = false;
+    // ─── BATALLAS DE SUBASTAS EN VIVO ────────────────────────────────────────────
+    // Bot personalities
+    const BATTLE_BOTS = [
+        { id: 0, name: 'El Magnate',    avatar: '🎩',
+          budgetMult: () => 1.1 + Math.random() * 0.25,      // 1.10–1.35× real value
+          bidDelay:   () => 5000 + Math.random() * 6000,     // slow, methodical
+          incrementMult: () => 0.05 + Math.random() * 0.04   // 5–9% of real value per bid
+        },
+        { id: 1, name: 'El Apostador',  avatar: '🎲',
+          budgetMult: () => 0.7  + Math.random() * 0.7,      // 0.70–1.40× (wild)
+          bidDelay:   () => 2000 + Math.random() * 5000,     // unpredictable timing
+          incrementMult: () => 0.03 + Math.random() * 0.08   // 3–11% per bid
+        },
+        { id: 2, name: 'El Avaricioso', avatar: '🤖',
+          budgetMult: () => 0.95 + Math.random() * 0.25,     // 0.95–1.20×
+          bidDelay:   () => 1000 + Math.random() * 2000,     // very frequent
+          incrementMult: () => 0.025 + Math.random() * 0.025 // 2.5–5% per bid
+        }
+    ];
 
-    function getAuctionPool() {
+    let battle = null;          // active battle state
+    let battleInterval = null;  // countdown tick
+    let battleWaitSecs = 0;     // seconds until next battle
+    let battleWaitInterval = null;
+    let botTimers = [null, null, null]; // per-bot bid timers
+    let battleFrozenUntil = 0;  // timestamp for silence freeze
+
+    function getBattlePool() {
         const allowed = ['epico', 'legendario', 'mitico'];
         const pool = [];
         Object.values(boxes).forEach(box => {
@@ -5850,118 +6459,436 @@
         return pool;
     }
 
-    function generateAuction() {
-        const pool = getAuctionPool();
-        // Elegir rareza según probabilidades: Épico 40%, Legendario 40%, Mítico 20%
-        const r = Math.random() * 100;
-        const targetRarity = r < 40 ? 'epico' : r < 80 ? 'legendario' : 'mitico';
-        const filtered = pool.filter(i => i.rarity === targetRarity);
-        const item = filtered[Math.floor(Math.random() * filtered.length)];
+    function startNewBattle() {
+        const pool = getBattlePool();
+        if (!pool.length) return;
 
-        // Precio aleatorio: puede ser desde un 40% más barato hasta un 60% más caro
-        // (verdadera apuesta — a veces ganas, a veces pierdes)
-        const factor = 0.60 + Math.random() * 1.00; // entre 0.60 y 1.60 del valor real
-        const price = Math.max(50, Math.round(item.price * factor / 50) * 50);
+        // Pick random item (100% secret)
+        const item = pool[Math.floor(Math.random() * pool.length)];
+        const realValue = item.price;
 
-        currentAuction = { item, price };
-        auctionPurchased = false;
-        auctionSecondsLeft = 120;
-        renderAuction();
+        // Assign each bot a max budget (they know real value)
+        const bots = BATTLE_BOTS.map(bp => ({
+            ...bp,
+            maxBudget: Math.round(realValue * bp.budgetMult() / 50) * 50,
+            currentBid: 0,
+            retired: false,
+            frozen: false
+        }));
+
+        // Starting bid: ~30% of real value, rounded to nearest 50
+        const startBid = Math.max(100, Math.round(realValue * 0.30 / 50) * 50);
+        const increment = Math.max(50, Math.round(realValue * 0.025 / 50) * 50);
+
+        battle = {
+            item, realValue, bots,
+            playerBid: 0,
+            currentHighBid: startBid,
+            increment,
+            secondsLeft: 300,
+            ended: false,
+            playerIn: false,
+            spyUsed: false,
+            battleStarted: false
+        };
+
+        // Show battle card, hide waiting
+        document.getElementById('battleCard').style.display = 'block';
+        document.getElementById('battleWaiting').style.display = 'none';
+        document.getElementById('battleChest').textContent = '📦';
+
+        // Show start button, hide action row
+        document.getElementById('battleStartRow').style.display = 'flex';
+        document.getElementById('battleActionRow').style.display = 'none';
+
+        // Reset log
+        const log = document.getElementById('battleLog');
+        log.innerHTML = '';
+        addBattleLog(`⚔️ NUEVA BATALLA LISTA · Pulsa EMPEZAR para comenzar`, 'event');
+        addBattleLog(`💰 Puja inicial: ${startBid.toLocaleString()} $`, 'event');
+
+        // Reset spy info
+        const spyEl = document.getElementById('battleSpyInfo');
+        spyEl.style.display = 'none';
+        spyEl.textContent = '';
+
+        updateBattleUI();
     }
 
-    function renderAuction() {
-        if (!currentAuction) return;
-        const { item, price } = currentAuction;
-        const rarLabels = { epico: 'ÉPICO', legendario: 'LEGENDARIO', mitico: 'MÍTICO' };
-        const rarClass  = { epico: 'subasta-rarity-epico', legendario: 'subasta-rarity-legendario', mitico: 'subasta-rarity-mitico' };
-        const hint  = document.getElementById('subastaRarityHint');
-        const btn = document.getElementById('subastaBuyBtn');
-        const chest = document.getElementById('subastaChest');
+    function addBattleLog(text, cls) {
+        const log = document.getElementById('battleLog');
+        const el = document.createElement('div');
+        el.className = 'battle-log-entry' + (cls ? ' ' + cls : '');
+        el.textContent = text;
+        log.appendChild(el);
+        log.scrollTop = log.scrollHeight;
+    }
 
-        if (auctionPurchased) {
-            hint.textContent = '???';
-            hint.className = 'subasta-rarity-hint';
-            hint.style.color = '#475569';
-            hint.style.background = 'rgba(71,85,105,0.15)';
-            hint.style.border = '1px solid rgba(71,85,105,0.3)';
-            chest.style.filter = 'grayscale(1) opacity(0.5)';
-            document.getElementById('subastaPrice').textContent = '—';
-            btn.disabled = true;
-            btn.textContent = '⏳ Esperando nueva subasta…';
+    function updateBattleUI() {
+        if (!battle) return;
+        const { bots, currentHighBid, playerBid, secondsLeft, ended, playerIn } = battle;
+
+        // Timer
+        const timerEl = document.getElementById('battleTimer');
+        const m = Math.floor(secondsLeft / 60);
+        const s = secondsLeft % 60;
+        timerEl.textContent = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+        timerEl.className = 'battle-timer-display' + (secondsLeft <= 15 ? ' urgent' : '');
+
+        // Current player bid
+        document.getElementById('battleCurrentBid').textContent =
+            playerIn ? playerBid.toLocaleString() + ' $' : '—';
+
+        // Bots
+        bots.forEach((bot, i) => {
+            const card   = document.getElementById(`bot${i}card`);
+            const bidEl  = document.getElementById(`bot${i}bid`);
+            const statEl = document.getElementById(`bot${i}status`);
+            card.className = 'battle-bot-card';
+            if (bot.retired) {
+                card.classList.add('retired');
+                bidEl.textContent = 'RETIRADO';
+                bidEl.style.color = '#475569';
+                statEl.textContent = 'RETIRADO';
+            } else if (bot.frozen) {
+                card.classList.add('frozen');
+                bidEl.textContent = bot.currentBid > 0 ? bot.currentBid.toLocaleString() + ' $' : '—';
+                bidEl.style.color = '#38bdf8';
+                statEl.textContent = 'CONGELADO';
+            } else {
+                card.classList.add('active');
+                bidEl.textContent = bot.currentBid > 0 ? bot.currentBid.toLocaleString() + ' $' : '—';
+                bidEl.style.color = '#fbbf24';
+                statEl.textContent = 'PUJANDO';
+            }
+        });
+
+        // Bid button
+        const bidBtn = document.getElementById('battleBidBtn');
+        const surrenderBtn = document.getElementById('battleSurrenderBtn');
+        const nextBidAmount = currentHighBid + battle.increment;
+        if (ended) {
+            bidBtn.disabled = true;
+            surrenderBtn.disabled = true;
+            bidBtn.textContent = '🏁 BATALLA TERMINADA';
+        } else if (!battle.battleStarted) {
+            bidBtn.disabled = true;
+            surrenderBtn.disabled = true;
+            bidBtn.textContent = '🏷️ PUJAR';
+        } else if (state.over) {
+            bidBtn.disabled = true;
+        } else if (state.balance < nextBidAmount) {
+            bidBtn.disabled = true;
+            bidBtn.textContent = `💸 FONDOS INSUFICIENTES`;
         } else {
-            hint.textContent = '???';
-            hint.className = 'subasta-rarity-hint';
-            hint.style.color = '#94a3b8';
-            hint.style.background = 'rgba(148,163,184,0.1)';
-            hint.style.border = '1px solid rgba(148,163,184,0.25)';
-            chest.style.filter = '';
-            document.getElementById('subastaPrice').textContent = price.toLocaleString() + ' $';
-            const canAfford = state.balance >= price;
-            btn.disabled = state.over || !canAfford;
-            btn.textContent = canAfford ? '🏷️ PUJAR Y ABRIR' : '💸 Saldo insuficiente';
+            bidBtn.disabled = false;
+            bidBtn.textContent = `🏷️ PUJAR ${nextBidAmount.toLocaleString()} $`;
         }
+        surrenderBtn.disabled = ended || !playerIn || !battle.battleStarted;
+
+        // Tactics
+        const tacticFarol   = document.getElementById('tacticFarol');
+        const tacticSilence = document.getElementById('tacticSilence');
+        const tacticEspio   = document.getElementById('tacticEspio');
+        tacticFarol.disabled   = ended || !playerIn || !battle.battleStarted;
+        tacticSilence.disabled = ended || (state.silenceCharges || 0) <= 0 || !battle.battleStarted;
+        tacticEspio.disabled   = ended || battle.spyUsed || state.balance < 2000 || !battle.battleStarted;
+
+        // Silence badge
+        document.getElementById('silenceChargesBadge').textContent = state.silenceCharges || 0;
     }
 
-    function updateAuctionTimer() {
-        const timerEl = document.getElementById('subastaTimer');
-        if (!timerEl) return;
-        const m = Math.floor(auctionSecondsLeft / 60);
-        const s = auctionSecondsLeft % 60;
-        timerEl.textContent = `${m}:${String(s).padStart(2,'0')}`;
-        timerEl.className = 'subasta-timer' + (auctionSecondsLeft <= 20 ? ' urgent' : '');
-    }
-
-    function startAuctionLoop() {
-        if (auctionInterval) clearInterval(auctionInterval);
-        auctionInterval = setInterval(() => {
-            if (state.over) return;
-            auctionSecondsLeft--;
-            updateAuctionTimer();
-            if (auctionSecondsLeft <= 0) generateAuction();
-            // Actualizar botón en cada tick por si el balance cambió
-            renderAuction();
+    function startBattleCountdown() {
+        if (battleInterval) clearInterval(battleInterval);
+        battleInterval = setInterval(() => {
+            if (state.over || !battle) return;
+            battle.secondsLeft--;
+            updateBattleUI();
+            if (battle.secondsLeft <= 0) endBattle();
         }, 1000);
     }
 
-    function buyAuction() {
-        if (!currentAuction || state.over || state.spinning) return;
-        const { item, price } = currentAuction;
-        if (state.balance < price) return;
-
-        state.balance -= price;
-        state.spent += price;
-
-        // Aplicar mutación y pociones de dinero
-        let finalPrice = item.price;
-        if (moneyPotionActive)  finalPrice *= 1.3;
-        if (darkPotionActive)   finalPrice *= 1.5;
-        if (ceravePotionActive) finalPrice *= 2.5;
-        const mut = getMutation();
-        finalPrice = Math.round(finalPrice * mut.mult);
-
-        const wonItem = { ...item, price: finalPrice, favorite: false, mutation: mut.id };
-        inventory.push(wonItem);
-        state.invValue += finalPrice;
-        if (finalPrice > state.best) state.best = finalPrice;
-        state.opened++;
-        if (mut.id === 'universal') state.universalCount++;
-        if (finalPrice > currentAuction.price) state.auctionWins++;
-
-        renderInventory();
-        updateStats();
-        checkAchievements();
-        saveGame();
-        showModal(wonItem);
-
-        // Marcar como comprada — nueva subasta solo cuando termine el contador
-        auctionPurchased = true;
-        renderAuction();
+    function scheduleBotBids() {
+        BATTLE_BOTS.forEach((bp, i) => {
+            scheduleSingleBotBid(i);
+        });
     }
 
-    generateAuction();
-    startAuctionLoop();
+    function scheduleSingleBotBid(idx) {
+        if (botTimers[idx]) clearTimeout(botTimers[idx]);
+        const bp = BATTLE_BOTS[idx];
+        const delay = bp.bidDelay();
+        botTimers[idx] = setTimeout(() => {
+            if (!battle || battle.ended || battle.bots[idx].retired) return;
+            // Check freeze
+            if (Date.now() < battleFrozenUntil) {
+                // Reschedule after freeze ends
+                const remaining = battleFrozenUntil - Date.now() + 200;
+                botTimers[idx] = setTimeout(() => scheduleSingleBotBid(idx), remaining);
+                return;
+            }
+            // Bot bids
+            const bot = battle.bots[idx];
+            const nextBid = battle.currentHighBid + battle.increment;
+            // Bot strategy: if next bid exceeds their budget, retire
+            if (nextBid > bot.maxBudget) {
+                bot.retired = true;
+                addBattleLog(`${bp.avatar} ${bp.name} se retira · no puede pagar más`, 'bot');
+                updateBattleUI();
+                checkAllBotsRetired();
+                return;
+            }
+            // Place bot bid
+            bot.currentBid = nextBid;
+            battle.currentHighBid = nextBid;
+            addBattleLog(`${bp.avatar} ${bp.name} puja ${nextBid.toLocaleString()} $`, 'bot');
+            updateBattleUI();
+            // Schedule next bid
+            scheduleSingleBotBid(idx);
+        }, delay);
+    }
 
-    document.getElementById('subastaBuyBtn').addEventListener('click', buyAuction);
+    function checkAllBotsRetired() {
+        if (!battle) return;
+        const activeCount = battle.bots.filter(b => !b.retired).length;
+        if (activeCount === 0) {
+            // All bots gone — if player is in, they win immediately
+            if (battle.playerIn) {
+                addBattleLog('🏆 ¡Todos los bots se retiraron! ¡GANASTE la subasta!', 'win');
+                battle.secondsLeft = 0;
+                endBattle();
+            }
+        }
+    }
+
+    function playerBid() {
+        if (!battle || battle.ended || state.over) return;
+        const nextBid = battle.currentHighBid + battle.increment;
+        if (state.balance < nextBid) return;
+
+        state.balance -= nextBid;
+        // Refund previous player bid
+        if (battle.playerBid > 0) state.balance += battle.playerBid;
+
+        battle.playerBid = nextBid;
+        battle.currentHighBid = nextBid;
+        battle.playerIn = true;
+
+        addBattleLog(`✋ TÚ pujas ${nextBid.toLocaleString()} $`, 'player');
+        updateStats();
+        updateBattleUI();
+        playSound('click');
+    }
+
+    function useFarol() {
+        if (!battle || battle.ended || !battle.playerIn) return;
+        // Boost current bid by 30–40% of real value
+        const boost = Math.round(battle.realValue * (0.30 + Math.random() * 0.10) / 50) * 50;
+        const newBid = battle.playerBid + boost;
+        // Deduct extra cost from balance
+        if (state.balance < boost) {
+            addBattleLog('💸 Sin saldo para el farol', 'lose');
+            return;
+        }
+        state.balance -= boost;
+        battle.playerBid = newBid;
+        battle.currentHighBid = newBid;
+
+        addBattleLog(`🎭 FAROL — puja sube a ${newBid.toLocaleString()} $`, 'event');
+
+        // Bots that can't match immediately retire
+        battle.bots.forEach((bot, i) => {
+            if (!bot.retired && bot.maxBudget < newBid) {
+                bot.retired = true;
+                const bp = BATTLE_BOTS[i];
+                addBattleLog(`${bp.avatar} ${bp.name} no puede con el farol — SE RETIRA`, 'bot');
+            }
+        });
+
+        updateStats();
+        updateBattleUI();
+        checkAllBotsRetired();
+        document.getElementById('tacticFarol').disabled = true;
+        playSound('win');
+    }
+
+    function useSilence() {
+        if (!battle || battle.ended || (state.silenceCharges || 0) <= 0) return;
+        state.silenceCharges--;
+        updateSilenceBadge();
+        saveGame();
+
+        const freezeDuration = 5000;
+        battleFrozenUntil = Date.now() + freezeDuration;
+
+        // Mark bots as frozen in UI
+        battle.bots.forEach(bot => { if (!bot.retired) bot.frozen = true; });
+        updateBattleUI();
+        addBattleLog('🔇 ¡SILENCIO! Los bots están congelados 5 segundos', 'event');
+        playSound('click');
+
+        setTimeout(() => {
+            if (!battle) return;
+            battle.bots.forEach(bot => { bot.frozen = false; });
+            addBattleLog('🔊 Los bots vuelven a pujar', 'bot');
+            updateBattleUI();
+        }, freezeDuration);
+    }
+
+    function useEspionaje() {
+        if (!battle || battle.ended || battle.spyUsed || state.balance < 2000) return;
+        state.balance -= 2000;
+        state.spent += 2000;
+        battle.spyUsed = true;
+
+        // Find strongest active bot
+        const activeBots = battle.bots
+            .map((bot, i) => ({ bot, bp: BATTLE_BOTS[i] }))
+            .filter(x => !x.bot.retired);
+        if (!activeBots.length) {
+            addBattleLog('🔍 No quedan bots activos para espiar', 'event');
+            updateStats();
+            updateBattleUI();
+            return;
+        }
+        const strongest = activeBots.reduce((a, b) => a.bot.maxBudget > b.bot.maxBudget ? a : b);
+        const spyEl = document.getElementById('battleSpyInfo');
+        spyEl.style.display = 'block';
+        spyEl.textContent = `🔍 ESPIONAJE: ${strongest.bp.avatar} ${strongest.bp.name} tiene presupuesto máximo de ${strongest.bot.maxBudget.toLocaleString()} $`;
+
+        addBattleLog(`🔍 Espionaje: ${strongest.bp.name} llega hasta ${strongest.bot.maxBudget.toLocaleString()} $`, 'event');
+        updateStats();
+        updateBattleUI();
+        playSound('click');
+    }
+
+    function surrenderBattle() {
+        if (!battle || battle.ended || !battle.playerIn) return;
+        // Refund player bid (they forfeit the battle, not their money)
+        state.balance += battle.playerBid;
+        battle.playerBid = 0;
+        battle.playerIn = false;
+        battle.ended = true;
+
+        clearBotTimers();
+        if (battleInterval) clearInterval(battleInterval);
+
+        addBattleLog('🏳️ Te rendiste · presupuesto devuelto', 'lose');
+        updateStats();
+        updateBattleUI();
+        saveGame();
+
+        document.getElementById('battleBidBtn').textContent = '🏳️ TE RENDISTE';
+        scheduleBattleWait(300);
+    }
+
+    function clearBotTimers() {
+        botTimers.forEach((t, i) => { if (t) clearTimeout(t); botTimers[i] = null; });
+    }
+
+    function endBattle() {
+        if (!battle || battle.ended) return;
+        battle.ended = true;
+        clearBotTimers();
+        if (battleInterval) clearInterval(battleInterval);
+
+        const { item, playerBid, playerIn, currentHighBid } = battle;
+
+        // Determine winner
+        const activeBotBids = battle.bots
+            .filter(b => !b.retired)
+            .map(b => b.currentBid);
+        const highestBotBid = activeBotBids.length ? Math.max(...activeBotBids) : 0;
+
+        const playerWins = playerIn && playerBid >= currentHighBid;
+
+        if (playerWins) {
+            // Player won — reveal item, add to inventory
+            let finalPrice = item.price;
+            if (moneyPotionActive)  finalPrice *= 1.3;
+            if (darkPotionActive)   finalPrice *= 1.5;
+            if (ceravePotionActive) finalPrice *= 2.5;
+            const mut = getMutation();
+            finalPrice = Math.round(finalPrice * mut.mult);
+
+            const wonItem = { ...item, price: finalPrice, favorite: false, mutation: mut.id };
+            inventory.push(wonItem);
+            state.invValue += finalPrice;
+            if (finalPrice > state.best) state.best = finalPrice;
+            state.opened++;
+            if (mut.id === 'universal') state.universalCount++;
+            state.auctionWins++;
+            // Note: player already paid playerBid above; state.spent tracks it
+            state.spent += playerBid;
+
+            addBattleLog(`🏆 ¡GANASTE! Pagaste ${playerBid.toLocaleString()} $ · Valor real: ${item.price.toLocaleString()} $`, 'win');
+
+            renderInventory();
+            updateStats();
+            checkAchievements();
+            saveGame();
+            showModal(wonItem);
+
+            document.getElementById('battleChest').textContent = item.icon || '🏆';
+        } else {
+            // Player lost or wasn't in — refund player bid if any
+            if (playerIn && playerBid > 0) {
+                state.balance += playerBid;
+            }
+            const winner = battle.bots.find(b => !b.retired && b.currentBid === highestBotBid);
+            const wp = winner ? BATTLE_BOTS[winner.id] : null;
+            if (wp) {
+                addBattleLog(`❌ ${wp.avatar} ${wp.name} ganó la subasta por ${highestBotBid.toLocaleString()} $`, 'lose');
+            } else {
+                addBattleLog('❌ Nadie ganó la subasta · objeto devuelto al mercado', 'lose');
+            }
+            updateStats();
+            saveGame();
+        }
+
+        updateBattleUI();
+        scheduleBattleWait(300);
+    }
+
+    function scheduleBattleWait(seconds) {
+        battleWaitSecs = seconds;
+        document.getElementById('battleCard').style.display = 'none';
+        document.getElementById('battleWaiting').style.display = 'block';
+
+        if (battleWaitInterval) clearInterval(battleWaitInterval);
+        battleWaitInterval = setInterval(() => {
+            if (state.over) return;
+            battleWaitSecs--;
+            const m = Math.floor(battleWaitSecs / 60);
+            const s = battleWaitSecs % 60;
+            const el = document.getElementById('battleWaitTimer');
+            if (el) el.textContent = m > 0 ? `${m}:${String(s).padStart(2,'0')}` : `${s}s`;
+            if (battleWaitSecs <= 0) {
+                clearInterval(battleWaitInterval);
+                battle = null;
+                startNewBattle();
+            }
+        }, 1000);
+    }
+
+    // Wire up battle buttons
+    document.getElementById('battleStartBtn').addEventListener('click', () => {
+        if (!battle || battle.battleStarted || battle.ended) return;
+        battle.battleStarted = true;
+        document.getElementById('battleStartRow').style.display = 'none';
+        document.getElementById('battleActionRow').style.display = 'flex';
+        addBattleLog('⚔️ ¡BATALLA COMENZADA!', 'event');
+        updateBattleUI();
+        startBattleCountdown();
+        scheduleBotBids();
+    });
+    document.getElementById('battleBidBtn').addEventListener('click', playerBid);
+    document.getElementById('battleSurrenderBtn').addEventListener('click', surrenderBattle);
+    document.getElementById('tacticFarol').addEventListener('click', useFarol);
+    document.getElementById('tacticSilence').addEventListener('click', useSilence);
+    document.getElementById('tacticEspio').addEventListener('click', useEspionaje);
+
+    startNewBattle();
     // ────────────────────────────────────────────────────────────────────────────
 
     // TIENDA
@@ -5973,6 +6900,7 @@
     document.getElementById('buyDarkPotion').addEventListener('click', () => buyPotion('dark'));
     document.getElementById('buyFlashPotion').addEventListener('click', () => buyPotion('flash'));
     document.getElementById('buyCeravePotion').addEventListener('click', () => buyPotion('cerave'));
+    document.getElementById('buySilencePotion').addEventListener('click', () => buyPotion('silence'));
 
     // Cerrar tienda clicando fuera
     document.getElementById('shopModal').addEventListener('click', (e) => {
@@ -6302,6 +7230,503 @@
     document.getElementById('modalCloseBtn').addEventListener('click', closeModal);
     document.getElementById('musicToggle').addEventListener('click', toggleMusic);
     document.querySelectorAll('.screen-btn').forEach(btn => btn.addEventListener('click', () => location.reload()));
+
+    // ─── MI MUSEO ────────────────────────────────────────────────────────────────
+    const MUSEO_SLOTS = 12;
+    let museumSlots = new Array(MUSEO_SLOTS).fill(null);
+    let selectedMuseoItem = null;
+    let museoIncomePerSec = 0;
+    let museoVisitorTimer = null;
+
+    const VISITOR_EMOJIS = ['🧑‍🎨','👨‍🦳','👩‍🦱','🧑','👨‍🦰','👩','🧓','👴','🧑‍💼','👩‍💼'];
+
+    function openMuseo() {
+        document.getElementById('museoOverlay').classList.add('open');
+        renderMuseo();
+    }
+
+    function closeMuseo() {
+        document.getElementById('museoOverlay').classList.remove('open');
+        if (museoVisitorTimer) clearTimeout(museoVisitorTimer);
+        selectedMuseoItem = null;
+    }
+
+    function cleanMuseumSlot(id) {
+        for (let i = 0; i < museumSlots.length; i++) {
+            if (museumSlots[i] && museumSlots[i]._id === id) museumSlots[i] = null;
+        }
+    }
+
+    function calcMuseoStats() {
+        const total = museumSlots.filter(Boolean).reduce((s, it) => s + it.price, 0);
+        museoIncomePerSec = Math.floor(total * 0.00005);
+        const visitors = Math.min(Math.floor(total / 50000), 25);
+        return { total, visitors };
+    }
+
+    function renderMuseo() {
+        renderMuseoRoom();
+        renderMuseoPanel();
+        updateMuseoHUD();
+        runMuseoVisitors();
+    }
+
+    function renderMuseoRoom() {
+        document.querySelectorAll('.museo-spot').forEach(spot => {
+            const idx = parseInt(spot.getAttribute('data-slot'));
+            const item = museumSlots[idx];
+            spot.classList.remove('occupied', 'highlight-empty');
+            if (item) {
+                spot.classList.add('occupied');
+                const col = (typeof rarities !== 'undefined' && rarities[item.rarity]) ? rarities[item.rarity].color : '#fbbf24';
+                spot.innerHTML = `
+                    <div style="width:100%;display:flex;flex-direction:column;align-items:center;gap:2px;border-top:2px solid ${col};padding-top:5px;">
+                        <div class="museo-spot-icon">${item.icon}</div>
+                        <div class="museo-spot-name">${item.name}</div>
+                        <div class="museo-spot-price">${item.price.toLocaleString()} $</div>
+                    </div>
+                    <div class="museo-spot-remove">✕ RETIRAR</div>
+                `;
+            } else {
+                const label = idx < 4 ? 'VITRINA' : 'PEDESTAL';
+                spot.innerHTML = `<div class="museo-spot-label">${label}</div>`;
+                if (selectedMuseoItem) spot.classList.add('highlight-empty');
+            }
+        });
+    }
+
+    function renderMuseoPanel() {
+        const list = document.getElementById('museoInvList');
+        if (!list) return;
+        list.innerHTML = '';
+        if (!inventory.length) {
+            list.innerHTML = '<div class="museo-empty-msg">Tu colección está vacía.<br>Abre cofres para conseguir objetos.</div>';
+            return;
+        }
+        [...inventory]
+            .map((item, i) => ({ item, i }))
+            .sort((a, b) => b.item.price - a.item.price)
+            .forEach(({ item, i }) => {
+                const inMuseo = museumSlots.some(s => s && s._id === item._id);
+                const isSel = selectedMuseoItem && selectedMuseoItem._id === item._id;
+                const card = document.createElement('div');
+                card.className = 'museo-inv-card' + (inMuseo ? ' in-museo' : '') + (isSel ? ' selected' : '');
+                card.innerHTML = `
+                    <div class="museo-inv-icon">${item.icon}</div>
+                    <div class="museo-inv-info">
+                        <div class="museo-inv-name">${item.name}</div>
+                        <div class="museo-inv-price">${item.price.toLocaleString()} $</div>
+                    </div>
+                `;
+                if (!inMuseo) {
+                    card.addEventListener('click', () => {
+                        if (isSel) {
+                            selectedMuseoItem = null;
+                            document.getElementById('museoPanelHint').textContent = 'Selecciona un objeto para exhibirlo';
+                        } else {
+                            selectedMuseoItem = { ...item };
+                            document.getElementById('museoPanelHint').textContent = `"${item.name}" — toca un pedestal vacío`;
+                        }
+                        renderMuseo();
+                    });
+                }
+                list.appendChild(card);
+            });
+    }
+
+    function updateMuseoHUD() {
+        const { visitors } = calcMuseoStats();
+        document.getElementById('museoIncomeDisplay').textContent = `💰 ${museoIncomePerSec.toLocaleString()} $/s`;
+        document.getElementById('museoVisitorDisplay').textContent = `👥 ${visitors} visitantes`;
+    }
+
+    function runMuseoVisitors() {
+        if (museoVisitorTimer) clearTimeout(museoVisitorTimer);
+        const { visitors } = calcMuseoStats();
+        if (!visitors || !document.getElementById('museoOverlay').classList.contains('open')) return;
+        const lane = document.getElementById('museoVisitorLane');
+        if (!lane) return;
+        const emoji = VISITOR_EMOJIS[Math.floor(Math.random() * VISITOR_EMOJIS.length)];
+        const v = document.createElement('div');
+        const dur = 5000 + Math.random() * 7000;
+        v.className = 'museo-visitor';
+        v.style.cssText = `bottom:${2 + Math.random()*20}px; animation-duration:${dur}ms;`;
+        v.textContent = emoji;
+        lane.appendChild(v);
+        setTimeout(() => v.remove(), dur + 200);
+        const nextSpawn = Math.max(400, Math.floor(10000 / visitors));
+        museoVisitorTimer = setTimeout(runMuseoVisitors, nextSpawn);
+    }
+
+    // Wire up spot clicks
+    document.addEventListener('click', e => {
+        const spot = e.target.closest('.museo-spot');
+        if (!spot) return;
+        const idx = parseInt(spot.getAttribute('data-slot'));
+        if (museumSlots[idx]) {
+            museumSlots[idx] = null;
+            saveGame();
+            selectedMuseoItem = null;
+            renderMuseo();
+        } else if (selectedMuseoItem) {
+            museumSlots[idx] = { ...selectedMuseoItem };
+            selectedMuseoItem = null;
+            document.getElementById('museoPanelHint').textContent = 'Selecciona un objeto para exhibirlo';
+            saveGame();
+            renderMuseo();
+        }
+    });
+
+    // Passive museum income + bank interest every second
+    const BANK_INTERVAL_SECS = 600; // 10 minutes
+    const BANK_INTEREST_RATE = 0.005; // 0.5%
+    setInterval(() => {
+        if (state.over) return;
+        calcMuseoStats();
+        if (museoIncomePerSec > 0) { state.balance += museoIncomePerSec; updateStats(); }
+        // Bank interest
+        if (state.bankBalance > 0) {
+            const now = Date.now();
+            if (state.bankLastInterest === 0) state.bankLastInterest = now;
+            const elapsed = (now - state.bankLastInterest) / 1000;
+            if (elapsed >= BANK_INTERVAL_SECS) {
+                const interest = Math.floor(state.bankBalance * BANK_INTEREST_RATE);
+                state.bankBalance += interest;
+                state.bankLastInterest = now;
+                renderBanco();
+                showBancoInterestFlash(interest);
+            }
+        }
+        if (document.getElementById('bancoOverlay').classList.contains('open')) {
+            updateBancoTimerBar();
+        }
+    }, 1000);
+
+    // ─── BANCO ───────────────────────────────────────────────────────────────────
+    function openBanco() {
+        document.getElementById('bancoOverlay').classList.add('open');
+        renderBanco();
+        updateBancoTimerBar();
+    }
+    function closeBanco() {
+        document.getElementById('bancoOverlay').classList.remove('open');
+    }
+    function renderBanco() {
+        const el = document.getElementById('bancoBalanceVal');
+        const wl = document.getElementById('bancoWalletVal');
+        if (el) el.textContent = fmtNum(state.bankBalance) + '$';
+        if (wl) wl.textContent = fmtNum(state.balance) + '$';
+    }
+    function updateBancoTimerBar() {
+        if (state.bankBalance === 0) {
+            const fill = document.getElementById('bancoTimerFill');
+            const txt  = document.getElementById('bancoTimerText');
+            if (fill) fill.style.width = '0%';
+            if (txt) txt.textContent = 'Deposita para empezar a ganar interés';
+            return;
+        }
+        const now = Date.now();
+        const base = state.bankLastInterest || now;
+        const elapsed = Math.min((now - base) / 1000, BANK_INTERVAL_SECS);
+        const pct = (elapsed / BANK_INTERVAL_SECS) * 100;
+        const remaining = Math.max(0, BANK_INTERVAL_SECS - elapsed);
+        const mins = Math.floor(remaining / 60);
+        const secs = Math.floor(remaining % 60);
+        const fill = document.getElementById('bancoTimerFill');
+        const txt  = document.getElementById('bancoTimerText');
+        if (fill) fill.style.width = pct.toFixed(1) + '%';
+        if (txt)  txt.textContent = `Próximo interés en ${mins}:${String(secs).padStart(2,'0')} · +${fmtNum(Math.floor(state.bankBalance * BANK_INTEREST_RATE))}$`;
+    }
+    function showBancoInterestFlash(amount) {
+        const el = document.createElement('div');
+        el.className = 'banco-interest-flash';
+        el.textContent = `🏦 +${fmtNum(amount)}$ INTERÉS BANCARIO`;
+        document.body.appendChild(el);
+        setTimeout(() => el.remove(), 3100);
+    }
+    function depositarBanco() {
+        const inp = document.getElementById('bancoDepositInput');
+        let amount = parseInt(inp.value, 10);
+        if (isNaN(amount) || amount <= 0) { inp.value = ''; return; }
+        amount = Math.min(amount, Math.floor(state.balance));
+        if (amount <= 0) return;
+        state.balance -= amount;
+        state.bankBalance += amount;
+        if (state.bankLastInterest === 0) state.bankLastInterest = Date.now();
+        inp.value = '';
+        updateStats();
+        renderBanco();
+        updateBancoTimerBar();
+        saveGame();
+    }
+    function retirarBanco() {
+        const inp = document.getElementById('bancoWithdrawInput');
+        let amount = parseInt(inp.value, 10);
+        if (isNaN(amount) || amount <= 0) { inp.value = ''; return; }
+        amount = Math.min(amount, Math.floor(state.bankBalance));
+        if (amount <= 0) return;
+        state.bankBalance -= amount;
+        state.balance += amount;
+        if (state.bankBalance === 0) state.bankLastInterest = 0;
+        inp.value = '';
+        updateStats();
+        renderBanco();
+        updateBancoTimerBar();
+        saveGame();
+    }
+    function setDepositQuick(fraction) {
+        const val = Math.floor(state.balance * fraction);
+        document.getElementById('bancoDepositInput').value = val > 0 ? val : '';
+    }
+    function setWithdrawQuick(fraction) {
+        const val = Math.floor(state.bankBalance * fraction);
+        document.getElementById('bancoWithdrawInput').value = val > 0 ? val : '';
+    }
+    // ─────────────────────────────────────────────────────────────────────────────
+
+    // ─── HTML MUSEO (inyectado en body) ──────────────────────────────────────────
+    (function() {
+        const overlay = document.createElement('div');
+        overlay.id = 'museoOverlay';
+        overlay.innerHTML = `
+            <div class="museo-topbar">
+                <button id="museoBackBtn">← VOLVER AL JUEGO</button>
+                <div class="museo-topbar-title">🏛️ MI MUSEO</div>
+                <div class="museo-topbar-stats">
+                    <div class="museo-stat-pill" id="museoIncomeDisplay">💰 0 $/s</div>
+                    <div class="museo-stat-pill" id="museoVisitorDisplay">👥 0 visitantes</div>
+                </div>
+            </div>
+            <div class="museo-content">
+                <div class="museo-room">
+                    <div class="museo-back-wall">
+                        <div class="museo-wall-label">⬛ VITRINAS DE PARED</div>
+                        <div class="museo-wall-row">
+                            <div class="museo-spot museo-spot-wall" data-slot="0"><div class="museo-spot-label">VITRINA</div></div>
+                            <div class="museo-spot museo-spot-wall" data-slot="1"><div class="museo-spot-label">VITRINA</div></div>
+                            <div class="museo-spot museo-spot-wall" data-slot="2"><div class="museo-spot-label">VITRINA</div></div>
+                            <div class="museo-spot museo-spot-wall" data-slot="3"><div class="museo-spot-label">VITRINA</div></div>
+                        </div>
+                    </div>
+                    <div class="museo-floor-section">
+                        <div class="museo-floor-label">🏛️ PEDESTALES DE EXPOSICIÓN</div>
+                        <div class="museo-floor-persp">
+                            <div class="museo-spot museo-spot-pedestal" data-slot="4"><div class="museo-spot-label">PEDESTAL</div></div>
+                            <div class="museo-spot museo-spot-pedestal" data-slot="5"><div class="museo-spot-label">PEDESTAL</div></div>
+                            <div class="museo-spot museo-spot-pedestal" data-slot="6"><div class="museo-spot-label">PEDESTAL</div></div>
+                            <div class="museo-spot museo-spot-pedestal" data-slot="7"><div class="museo-spot-label">PEDESTAL</div></div>
+                            <div class="museo-spot museo-spot-pedestal" data-slot="8"><div class="museo-spot-label">PEDESTAL</div></div>
+                            <div class="museo-spot museo-spot-pedestal" data-slot="9"><div class="museo-spot-label">PEDESTAL</div></div>
+                            <div class="museo-spot museo-spot-pedestal" data-slot="10"><div class="museo-spot-label">PEDESTAL</div></div>
+                            <div class="museo-spot museo-spot-pedestal" data-slot="11"><div class="museo-spot-label">PEDESTAL</div></div>
+                        </div>
+                        <div class="museo-visitor-lane" id="museoVisitorLane"></div>
+                    </div>
+                </div>
+                <div class="museo-panel">
+                    <div class="museo-panel-title">🎒 COLECCIÓN</div>
+                    <div class="museo-panel-hint" id="museoPanelHint">Selecciona un objeto para exhibirlo</div>
+                    <div class="museo-inv-list" id="museoInvList"></div>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(overlay);
+    })();
+    document.getElementById('museoBtnHeader').addEventListener('click', openMuseo);
+    document.getElementById('museoBackBtn').addEventListener('click', closeMuseo);
+    // ─────────────────────────────────────────────────────────────────────────────
+
+    // ─── HTML BANCO (inyectado en body) ──────────────────────────────────────────
+    (function() {
+        const overlay = document.createElement('div');
+        overlay.id = 'bancoOverlay';
+        overlay.innerHTML = `
+            <div class="banco-topbar">
+                <button id="bancoBackBtn">← VOLVER AL JUEGO</button>
+                <div class="banco-topbar-title">🏦 BANCO — HUCHA DE INTERESES</div>
+            </div>
+            <div class="banco-body">
+                <div class="banco-card">
+                    <div class="banco-icon">🏦</div>
+                    <div class="banco-card-title">HUCHA DE INTERESES</div>
+                    <div class="banco-subtitle">0.5% CADA 10 MINUTOS · DINERO INMOVILIZADO</div>
+
+                    <div class="banco-stats">
+                        <div class="banco-stat">
+                            <div class="banco-stat-label">💰 En el banco</div>
+                            <div class="banco-stat-value" id="bancoBalanceVal">0$</div>
+                        </div>
+                        <div class="banco-stat">
+                            <div class="banco-stat-label">👛 Tu cartera</div>
+                            <div class="banco-stat-value wallet" id="bancoWalletVal">0$</div>
+                        </div>
+                    </div>
+
+                    <div class="banco-timer-bar">
+                        <div class="banco-timer-label">⏱ PRÓXIMO INTERÉS</div>
+                        <div class="banco-timer-track">
+                            <div class="banco-timer-fill" id="bancoTimerFill" style="width:0%"></div>
+                        </div>
+                        <div class="banco-timer-text" id="bancoTimerText">Deposita para empezar a ganar interés</div>
+                    </div>
+
+                    <div class="banco-actions">
+                        <div>
+                            <div style="font-size:11px;letter-spacing:2px;color:#64748b;text-transform:uppercase;margin-bottom:8px;">Depositar</div>
+                            <div class="banco-input-row">
+                                <input class="banco-input" id="bancoDepositInput" type="number" min="1" placeholder="Cantidad a depositar…">
+                                <button class="banco-btn banco-btn-deposit" onclick="depositarBanco()">DEPOSITAR</button>
+                            </div>
+                            <div class="banco-quick-btns" style="margin-top:8px;">
+                                <button class="banco-quick" onclick="setDepositQuick(0.1)">10%</button>
+                                <button class="banco-quick" onclick="setDepositQuick(0.25)">25%</button>
+                                <button class="banco-quick" onclick="setDepositQuick(0.5)">50%</button>
+                                <button class="banco-quick" onclick="setDepositQuick(1)">TODO</button>
+                            </div>
+                        </div>
+                        <div>
+                            <div style="font-size:11px;letter-spacing:2px;color:#64748b;text-transform:uppercase;margin-bottom:8px;">Retirar</div>
+                            <div class="banco-input-row">
+                                <input class="banco-input" id="bancoWithdrawInput" type="number" min="1" placeholder="Cantidad a retirar…">
+                                <button class="banco-btn banco-btn-withdraw" onclick="retirarBanco()">RETIRAR</button>
+                            </div>
+                            <div class="banco-quick-btns" style="margin-top:8px;">
+                                <button class="banco-quick" onclick="setWithdrawQuick(0.1)">10%</button>
+                                <button class="banco-quick" onclick="setWithdrawQuick(0.25)">25%</button>
+                                <button class="banco-quick" onclick="setWithdrawQuick(0.5)">50%</button>
+                                <button class="banco-quick" onclick="setWithdrawQuick(1)">TODO</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="banco-interest-note">
+                        ⚠️ El dinero depositado no puede usarse para comprar cofres, pociones ni apostar.<br>
+                        Retíralo cuando lo necesites, pero perderás el progreso del temporizador si retiras todo.
+                    </div>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(overlay);
+    })();
+    document.getElementById('bancoBtnHeader').addEventListener('click', openBanco);
+    document.getElementById('bancoBackBtn').addEventListener('click', closeBanco);
+    // ─────────────────────────────────────────────────────────────────────────────
+
+    // ─── PARÁSITOS EN LA INTERFAZ ────────────────────────────────────────────────
+    // Crear elementos de parásitos en el DOM
+    (function() {
+        const gc = document.createElement('div'); gc.id = 'glitchCursor'; gc.textContent = '🐛'; document.body.appendChild(gc);
+        const td = document.createElement('div'); td.id = 'thiefDiv'; document.body.appendChild(td);
+    })();
+    let glitchCursorActive = false;
+    let thiefActive = false;
+
+    function showParasiteAlert(msg) {
+        const el = document.createElement('div');
+        el.className = 'parasite-alert';
+        el.textContent = msg;
+        document.body.appendChild(el);
+        setTimeout(() => { el.style.opacity = '0'; el.style.transition = 'opacity 0.5s'; setTimeout(() => el.remove(), 500); }, 3500);
+    }
+
+    function activateGlitchCursor() {
+        if (glitchCursorActive) return;
+        glitchCursorActive = true;
+        document.body.style.cursor = 'none';
+        const cursor = document.getElementById('glitchCursor');
+        cursor.style.display = 'block';
+        showParasiteAlert('🖱️ ¡EL GLITCH DEL RATÓN te ha infectado! Tu cursor está bajo el agua...');
+
+        let mouseX = window.innerWidth / 2, mouseY = window.innerHeight / 2;
+        let phase = 0;
+        let glitchRaf;
+
+        const onMove = (e) => { mouseX = e.clientX; mouseY = e.clientY; };
+        document.addEventListener('mousemove', onMove);
+
+        const animate = () => {
+            phase += 0.07;
+            const wobbleX = Math.sin(phase * 1.9) * 38 + Math.sin(phase * 0.7) * 18;
+            const wobbleY = Math.cos(phase * 1.4) * 28 + Math.cos(phase * 2.3) * 12;
+            cursor.style.left = (mouseX + wobbleX) + 'px';
+            cursor.style.top  = (mouseY + wobbleY) + 'px';
+            glitchRaf = requestAnimationFrame(animate);
+        };
+        glitchRaf = requestAnimationFrame(animate);
+
+        setTimeout(() => {
+            glitchCursorActive = false;
+            document.body.style.cursor = '';
+            cursor.style.display = 'none';
+            document.removeEventListener('mousemove', onMove);
+            cancelAnimationFrame(glitchRaf);
+            showParasiteAlert('✅ El Glitch del Ratón ha desaparecido... por ahora.');
+        }, 120000);
+    }
+
+    function activateButtonThief() {
+        if (thiefActive) return;
+        thiefActive = true;
+        let thiefHits = 0;
+        const HITS_NEEDED = 3;
+
+        const sellBtn = document.getElementById('sellAllBtn');
+        sellBtn.style.visibility = 'hidden';
+
+        showParasiteAlert('👾 ¡EL LADRÓN DE BOTONES ha robado tu botón! Haz clic en él ' + HITS_NEEDED + ' veces para recuperarlo.');
+
+        const thief = document.getElementById('thiefDiv');
+        thief.innerHTML = '👾 &nbsp;<span style="font-size:12px;letter-spacing:1px;">VENDER TODO 💰</span>';
+        thief.style.display = 'flex';
+
+        let x = Math.random() * (window.innerWidth - 220);
+        let y = Math.random() * (window.innerHeight - 80);
+        const baseSpeed = 3.5;
+        let vx = (Math.random() < 0.5 ? 1 : -1) * (baseSpeed + Math.random() * 1.5);
+        let vy = (Math.random() < 0.5 ? 1 : -1) * (baseSpeed + Math.random() * 1.5);
+        let speed = 1;
+        let thiefRaf;
+
+        const moveThief = () => {
+            x += vx * speed;
+            y += vy * speed;
+            if (x <= 0 || x >= window.innerWidth - 220)  { vx = -vx; x = Math.max(0, Math.min(x, window.innerWidth - 220)); }
+            if (y <= 0 || y >= window.innerHeight - 80)  { vy = -vy; y = Math.max(0, Math.min(y, window.innerHeight - 80)); }
+            thief.style.left = x + 'px';
+            thief.style.top  = y + 'px';
+            thiefRaf = requestAnimationFrame(moveThief);
+        };
+        moveThief();
+
+        thief.onclick = () => {
+            thiefHits++;
+            thief.style.transform = 'scale(0.8) rotate(-8deg)';
+            setTimeout(() => { thief.style.transform = ''; }, 150);
+            speed += 0.6;
+            if (thiefHits >= HITS_NEEDED) {
+                cancelAnimationFrame(thiefRaf);
+                thief.style.display = 'none';
+                sellBtn.style.visibility = '';
+                thiefActive = false;
+                showParasiteAlert('✅ ¡Atrapaste al ladrón! El botón ha vuelto a su sitio.');
+            } else {
+                showParasiteAlert(`👊 ¡Golpe ${thiefHits}/${HITS_NEEDED}! ¡Más rápido!`);
+            }
+        };
+    }
+
+    // Comprobar cada 5s si algún objeto infectado lleva más de 15 segundos en el inventario
+    setInterval(() => {
+        if (state.over || glitchCursorActive || thiefActive) return;
+        const now = Date.now();
+        const ready = inventory.filter(item => item.infected && !item.parasiteUsed && (now - item.infectedSince) > 15 * 1000);
+        if (ready.length > 0) {
+            ready[0].parasiteUsed = true;
+            if (Math.random() < 0.5) activateGlitchCursor();
+            else activateButtonThief();
+        }
+    }, 5000);
+    // ─────────────────────────────────────────────────────────────────────────────
 
 </script>
 </body>
