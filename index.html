@@ -2815,8 +2815,8 @@
         <div class="splash-subtitle">By Aritz &nbsp;·&nbsp; Llega a 500.000.000.000 monedas</div>
         <button class="splash-play-btn" id="playBtn">▶ &nbsp;JUGAR</button>
         <div class="splash-by">Empieza con <span>2.000 monedas</span></div>
-        <div style="margin-top:14px;font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;color:#f43f5e;letter-spacing:2px;">🔧 ACTUALICACION &nbsp;01/ 06 / 2026</div>
-        <div style="margin-top:8px;font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;color:#f43f5e;letter-spacing:2px;">Versión Del Juego Actual #44</div>
+        <div style="margin-top:14px;font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;color:#f43f5e;letter-spacing:2px;">🔧 ACTUALICACION &nbsp;25/ 05 / 2026</div>
+        <div style="margin-top:8px;font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;color:#f43f5e;letter-spacing:2px;">Versión Del Juego Actual #40</div>
     </div>
 </div>
 
@@ -3076,7 +3076,7 @@
             <div class="ruleta-marker" style="background:#84cc16;box-shadow:0 0 16px #84cc16,0 0 40px rgba(132,204,22,0.6);"></div>
             <div class="ruleta-reel" id="idiotaRuletaReel"></div>
         </div>
-        <div class="ruleta-cost-info">Precio por tirada: <span style="color:#84cc16;">500.000.000 $</span></div>
+        <div class="ruleta-cost-info">Precio por tirada: <span style="color:#84cc16;">2.500.000.000 $</span></div>
         <button class="ruleta-spin-btn" id="idiotaRuletaSpinBtn" style="background:linear-gradient(135deg,#3f6212,#65a30d,#84cc16);box-shadow:0 0 30px rgba(132,204,22,0.5),0 8px 24px rgba(0,0,0,0.4);">🤡 GIRAR RULETA DE IDIOTAS</button>
     </div>
 
@@ -6344,17 +6344,17 @@
     setupHyperRuleta();
 
     // ─── RULETA DE IDIOTAS ───────────────────────────────────────────────────────
-    const IDIOTA_SPIN_COST = 500000000;
+    const IDIOTA_SPIN_COST = 2500000000;
     const idiotaItems = [
-        { name:"Oier Negro",          icon:"🖤", price:300000000  },
-        { name:"Eñaut 200cm",         icon:"📏", price:1000000000 },
-        { name:"Erlantz 5cm",         icon:"📐", price:250000000  },
-        { name:"Marcos Sin Granos",   icon:"✨", price:475000000  },
-        { name:"Aiert Pelo Corto",    icon:"💇", price:750000000  },
-        { name:"Jon Sin Autismo",     icon:"🧠", price:800000000  },
-        { name:"Ioritz Sin Porros",   icon:"🚭", price:550000000  },
-        { name:"Iraitz Calvoo!!!",    icon:"👨‍🦲", price:495000000  },
-        { name:'Estaban "Blanco"',    icon:"⬜", price:435000000  },
+        { name:"Oier Negro",          icon:"🖤", price:1250000000  },
+        { name:"Eñaut 200cm",         icon:"📏", price:5000000000 },
+        { name:"Erlantz 5cm",         icon:"📐", price:1000000000  },
+        { name:"Marcos Sin Granos",   icon:"✨", price:175000000  },
+        { name:"Aiert Pelo Corto",    icon:"💇", price:3750000000  },
+        { name:"Jon Sin Autismo",     icon:"🧠", price:4800000000  },
+        { name:"Ioritz Sin Porros",   icon:"🚭", price:2550000000  },
+        { name:"Iraitz Calvoo!!!",    icon:"👨‍🦲", price:1495000000  },
+        { name:'Estaban "Blanco"',    icon:"⬜", price:1435000000  },
     ];
 
     let idiotaRuletaSpinning = false;
@@ -6476,11 +6476,11 @@
         if (!btn) return;
         if (state.balance >= IDIOTA_SPIN_COST) {
             btn.disabled = false;
-            btn.textContent = '🤡 GIRAR RULETA DE IDIOTAS (500.000.000 $)';
+            btn.textContent = '🤡 GIRAR RULETA DE IDIOTAS (2.500.000.000 $)';
             btn.style.opacity = '1';
         } else {
             btn.disabled = true;
-            btn.textContent = '🤡 NECESITAS 500.000.000 $';
+            btn.textContent = '🤡 NECESITAS 2.500.000.000 $';
             btn.style.opacity = '0.45';
         }
     }
