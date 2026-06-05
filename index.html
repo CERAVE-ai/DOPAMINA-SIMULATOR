@@ -2816,7 +2816,7 @@
         <button class="splash-play-btn" id="playBtn">▶ &nbsp;JUGAR</button>
         <div class="splash-by">Empieza con <span>2.000 monedas</span></div>
         <div style="margin-top:14px;font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;color:#f43f5e;letter-spacing:2px;">🔧 ACTUALICACION &nbsp;08/ 06 / 2026</div>
-        <div style="margin-top:8px;font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;color:#f43f5e;letter-spacing:2px;">Versión Del Juego Actual #45</div>
+        <div style="margin-top:8px;font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;color:#f43f5e;letter-spacing:2px;">Versión Del Juego Actual #50</div>
     </div>
 </div>
 
@@ -2848,6 +2848,7 @@
             <div class="balance-box">
                 <div class="balance-label">Tu Fortuna</div>
                 <div class="balance-amount" id="balance">650</div>
+                <div id="prestigioBadge" style="display:none;margin-top:4px;font-family:'Rajdhani',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;color:#a855f7;text-align:center;">⭐ PRESTIGIO <span id="prestigioLvl">0</span> · +<span id="prestigioPct">0</span>%</div>
             </div>
             <div style="position:relative;flex-shrink:0;"><button id="coinBtn" title="Apostar monedas">🪙</button><div id="coinCooldownLabel"></div></div>
 
@@ -3191,9 +3192,40 @@
         <button class="craft-btn" id="craftBtn" style="padding:18px 40px;">⚗️ &nbsp;CRAFTEO</button>
         <button id="ruletaBtnHeader" style="padding:18px 40px;font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:4px;border-radius:14px;border:none;cursor:pointer;background:linear-gradient(135deg,#991b1b,#dc2626);color:white;box-shadow:0 0 30px rgba(220,38,38,0.4),0 8px 24px rgba(0,0,0,0.4);transition:all 0.3s;position:relative;overflow:hidden;">🎰 &nbsp;RULETA</button>
         <button id="museoBtnHeader" style="padding:18px 40px;font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:4px;border-radius:14px;border:none;cursor:pointer;background:linear-gradient(135deg,#92400e,#fbbf24);color:white;box-shadow:0 0 30px rgba(251,191,36,0.4),0 8px 24px rgba(0,0,0,0.4);transition:all 0.3s;position:relative;overflow:hidden;">🏛️ &nbsp;MI MUSEO</button>
+        <button id="prestigioBtn" style="padding:18px 40px;font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:4px;border-radius:14px;border:none;cursor:pointer;background:linear-gradient(135deg,#4c1d95,#7c3aed,#a855f7);color:white;box-shadow:0 0 30px rgba(168,85,247,0.4),0 8px 24px rgba(0,0,0,0.4);transition:all 0.3s;">⭐ &nbsp;PRESTIGIO</button>
     </div>
 
 </div>
+
+<!-- ══════════════ PRESTIGIO MODAL ══════════════ -->
+<div id="prestigioOverlay" style="display:none;position:fixed;inset:0;z-index:9500;background:rgba(0,0,0,0.85);backdrop-filter:blur(8px);align-items:center;justify-content:center;">
+    <div id="prestigioBox" style="background:linear-gradient(145deg,#0d0a1a,#1a0d2e);border:1px solid rgba(168,85,247,0.4);border-radius:24px;padding:40px 36px;max-width:480px;width:90%;text-align:center;box-shadow:0 0 60px rgba(168,85,247,0.3),0 24px 60px rgba(0,0,0,0.6);transform:scale(0.9) translateY(20px);opacity:0;transition:all 0.35s cubic-bezier(0.34,1.56,0.64,1);">
+        <div style="font-size:64px;margin-bottom:12px;filter:drop-shadow(0 0 30px rgba(168,85,247,0.8));">⭐</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:5px;color:#a855f7;text-shadow:0 0 20px rgba(168,85,247,0.5);margin-bottom:6px;">PRESTIGIO</div>
+        <div style="font-family:'Rajdhani',sans-serif;font-size:13px;letter-spacing:2px;color:#64748b;margin-bottom:28px;">Invierte para ganar más dinero permanentemente</div>
+
+        <div style="display:flex;gap:16px;justify-content:center;margin-bottom:28px;">
+            <div style="background:rgba(168,85,247,0.1);border:1px solid rgba(168,85,247,0.3);border-radius:14px;padding:14px 24px;">
+                <div style="font-family:'Rajdhani',sans-serif;font-size:11px;letter-spacing:2px;color:#64748b;margin-bottom:4px;">NIVEL ACTUAL</div>
+                <div id="prestigioModalLvl" style="font-family:'Bebas Neue',sans-serif;font-size:36px;color:#a855f7;letter-spacing:2px;">0</div>
+            </div>
+            <div style="background:rgba(74,222,128,0.08);border:1px solid rgba(74,222,128,0.3);border-radius:14px;padding:14px 24px;">
+                <div style="font-family:'Rajdhani',sans-serif;font-size:11px;letter-spacing:2px;color:#64748b;margin-bottom:4px;">BONUS DINERO</div>
+                <div id="prestigioModalBonus" style="font-family:'Bebas Neue',sans-serif;font-size:36px;color:#4ade80;letter-spacing:2px;">+0%</div>
+            </div>
+        </div>
+
+        <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:16px;margin-bottom:24px;">
+            <div style="font-family:'Rajdhani',sans-serif;font-size:11px;letter-spacing:2px;color:#64748b;margin-bottom:6px;">SIGUIENTE PRESTIGIO</div>
+            <div style="font-family:'Rajdhani',sans-serif;font-size:13px;color:#94a3b8;margin-bottom:8px;">+2% al dinero ganado al vender · permanente y acumulable</div>
+            <div id="prestigioModalCost" style="font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:700;color:#fbbf24;">10.000.000 $</div>
+        </div>
+
+        <button id="prestigioBuyBtn" style="width:100%;padding:18px;font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:4px;border-radius:14px;border:none;cursor:pointer;background:linear-gradient(135deg,#4c1d95,#7c3aed,#a855f7);color:white;box-shadow:0 0 30px rgba(168,85,247,0.5);transition:all 0.3s;margin-bottom:14px;">⭐ COMPRAR PRESTIGIO</button>
+        <button id="prestigioCloseBtn" style="background:none;border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:10px 28px;color:#64748b;font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;letter-spacing:2px;cursor:pointer;">CERRAR</button>
+    </div>
+</div>
+
 
 <!-- ══════════════ CRAFT MODAL ══════════════ -->
 <div class="craft-overlay" id="craftModal">
@@ -3740,7 +3772,7 @@
 
     let currentKey = 'tech';
     let inventory = [];
-    let state = { balance:2000, spent:0, invValue:0, opened:0, best:0, spinning:false, over:false, items:[], commonCount:0, miticoCount:0, consecutiveMiticos:0, lastWasmitico:false, timeInGame:0, gotSuerteMax:false, coinWinStreak:0, coinLoseStreak:0, ruletaCharges:0, miticosForRuleta:0, superRuletaCharges:0, miticosForSuperRuleta:0, hyperRuletaCharges:0, superSpinsForHyper:0, auctionWins:0, universalCount:0, potionsBought:0, pityCount:0, silenceCharges:0, };
+    let state = { balance:2000, spent:0, invValue:0, opened:0, best:0, spinning:false, over:false, items:[], commonCount:0, miticoCount:0, consecutiveMiticos:0, lastWasmitico:false, timeInGame:0, gotSuerteMax:false, coinWinStreak:0, coinLoseStreak:0, ruletaCharges:0, miticosForRuleta:0, superRuletaCharges:0, miticosForSuperRuleta:0, hyperRuletaCharges:0, superSpinsForHyper:0, auctionWins:0, universalCount:0, potionsBought:0, pityCount:0, silenceCharges:0, prestige:0, };
     const WIN_GOAL = 500000000000;
 
     const reel = document.getElementById('caseReel');
@@ -4236,7 +4268,7 @@
         setTimeout(() => {
             const soldId = inventory[origIdx] && inventory[origIdx]._id;
             if (soldId) cleanMuseumSlot(soldId);
-            state.balance += salePrice;
+            state.balance += Math.floor(salePrice * prestigeMult());
             state.invValue -= inventory[origIdx].price;
             if (state.invValue < 0) state.invValue = 0;
             inventory.splice(origIdx, 1);
@@ -4256,7 +4288,7 @@
         createParticles(window.innerWidth/2, window.innerHeight/2, '#4ade80', 25);
         const sellValue = nonFavItems.reduce((sum, item) => sum + item.price, 0);
         nonFavItems.forEach(item => { if (item._id) cleanMuseumSlot(item._id); });
-        state.balance += sellValue;
+        state.balance += Math.floor(sellValue * prestigeMult());
         state.invValue -= sellValue;
         if (state.invValue < 0) state.invValue = 0;
         inventory = inventory.filter(item => item.favorite);
@@ -4279,6 +4311,7 @@
         document.getElementById('statBest').textContent = state.best > 0 ? Math.round(state.best).toLocaleString() : '-';
         document.getElementById('progressFill').style.width = `${Math.min((state.balance / WIN_GOAL) * 100, 100)}%`;
         if (typeof updateIdiotaRuletaBtn === 'function') updateIdiotaRuletaBtn();
+        if (typeof updatePrestigioBtn === 'function') updatePrestigioBtn();
     }
 
 
@@ -5011,7 +5044,8 @@
                 universalCount: state.universalCount,
                 potionsBought: state.potionsBought,
                 pityCount: state.pityCount,
-                silenceCharges: state.silenceCharges
+                silenceCharges: state.silenceCharges,
+                prestige: state.prestige
             },
             inventory: inventory,
             museumSlots: museumSlots,
@@ -7083,8 +7117,95 @@
     startNewBattle();
     // ────────────────────────────────────────────────────────────────────────────
 
+
+    // ─── PRESTIGIO ───────────────────────────────────────────────────────────────
+    function prestigeMult() {
+        return 1 + (state.prestige * 0.02);
+    }
+
+    function prestigeCost() {
+        return Math.floor(10000000 * Math.pow(3.5, state.prestige));
+    }
+
+    function openPrestigio() {
+        if (state.over) return;
+        playSound('click');
+        updatePrestigioModal();
+        const ov = document.getElementById('prestigioOverlay');
+        const box = document.getElementById('prestigioBox');
+        ov.style.display = 'flex';
+        setTimeout(() => { box.style.transform = 'scale(1) translateY(0)'; box.style.opacity = '1'; }, 10);
+    }
+
+    function closePrestigio() {
+        const box = document.getElementById('prestigioBox');
+        box.style.transform = 'scale(0.9) translateY(20px)';
+        box.style.opacity = '0';
+        setTimeout(() => { document.getElementById('prestigioOverlay').style.display = 'none'; }, 350);
+    }
+
+    function updatePrestigioModal() {
+        const cost = prestigeCost();
+        document.getElementById('prestigioModalLvl').textContent   = state.prestige;
+        document.getElementById('prestigioModalBonus').textContent  = '+' + (state.prestige * 2) + '%';
+        document.getElementById('prestigioModalCost').textContent   = cost.toLocaleString() + ' $';
+        const btn = document.getElementById('prestigioBuyBtn');
+        if (state.balance >= cost) {
+            btn.disabled = false;
+            btn.style.opacity = '1';
+            btn.style.cursor = 'pointer';
+        } else {
+            btn.disabled = true;
+            btn.style.opacity = '0.4';
+            btn.style.cursor = 'not-allowed';
+        }
+    }
+
+    function buyPrestigio() {
+        const cost = prestigeCost();
+        if (state.balance < cost) return;
+        playSound('money');
+        state.balance -= cost;
+        state.spent   += cost;
+        state.prestige++;
+        updatePrestigioModal();
+        updateStats();
+        saveGame();
+        // Flash de confirmación
+        const box = document.getElementById('prestigioBox');
+        box.style.boxShadow = '0 0 80px rgba(168,85,247,0.8), 0 24px 60px rgba(0,0,0,0.6)';
+        setTimeout(() => { box.style.boxShadow = '0 0 60px rgba(168,85,247,0.3), 0 24px 60px rgba(0,0,0,0.6)'; }, 600);
+    }
+
+    function updatePrestigioBtn() {
+        // Update header badge
+        const badge = document.getElementById('prestigioBadge');
+        const lvlEl = document.getElementById('prestigioLvl');
+        const pctEl = document.getElementById('prestigioPct');
+        if (!badge) return;
+        if (state.prestige > 0) {
+            badge.style.display = 'block';
+            lvlEl.textContent = state.prestige;
+            pctEl.textContent = state.prestige * 2;
+        } else {
+            badge.style.display = 'none';
+        }
+        // Update buy button in modal if open
+        const btn = document.getElementById('prestigioBuyBtn');
+        if (btn) {
+            const cost = prestigeCost();
+            btn.disabled     = state.balance < cost;
+            btn.style.opacity  = state.balance >= cost ? '1' : '0.4';
+            btn.style.cursor   = state.balance >= cost ? 'pointer' : 'not-allowed';
+        }
+    }
+
     // TIENDA
     document.getElementById('shopBtn').addEventListener('click', openShop);
+    document.getElementById('prestigioBtn').addEventListener('click', openPrestigio);
+    document.getElementById('prestigioBuyBtn').addEventListener('click', buyPrestigio);
+    document.getElementById('prestigioCloseBtn').addEventListener('click', closePrestigio);
+    document.getElementById('prestigioOverlay').addEventListener('click', function(e){ if(e.target===this) closePrestigio(); });
     document.getElementById('shopCloseBtn').addEventListener('click', closeShop);
     document.getElementById('buyLuckPotion').addEventListener('click', () => buyPotion('luck'));
     document.getElementById('buySpeedPotion').addEventListener('click', () => buyPotion('speed'));
@@ -7573,7 +7694,7 @@
     setInterval(() => {
         if (state.over) return;
         calcMuseoStats();
-        if (museoIncomePerSec > 0) { state.balance += museoIncomePerSec; updateStats(); }
+        if (museoIncomePerSec > 0) { state.balance += Math.floor(museoIncomePerSec * prestigeMult()); updateStats(); }
     }, 1000);
 
     // ─── RULETA DE CASINO ────────────────────────────────────────────────────────
