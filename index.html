@@ -2815,7 +2815,7 @@
         <div class="splash-subtitle">By Aritz &nbsp;·&nbsp; Llega a 500.000.000.000 monedas</div>
         <button class="splash-play-btn" id="playBtn">▶ &nbsp;JUGAR</button>
         <div class="splash-by">Empieza con <span>2.000 monedas</span></div>
-        <div style="margin-top:14px;font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;color:#f43f5e;letter-spacing:2px;">🔧 ACTUALICACION &nbsp;01/ 06 / 2026</div>
+        <div style="margin-top:14px;font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;color:#f43f5e;letter-spacing:2px;">🔧 ACTUALICACION &nbsp;08/ 06 / 2026</div>
         <div style="margin-top:8px;font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;color:#f43f5e;letter-spacing:2px;">Versión Del Juego Actual #45</div>
     </div>
 </div>
@@ -2850,8 +2850,7 @@
                 <div class="balance-amount" id="balance">650</div>
             </div>
             <div style="position:relative;flex-shrink:0;"><button id="coinBtn" title="Apostar monedas">🪙</button><div id="coinCooldownLabel"></div></div>
-            <button id="museoBtnHeader">🏛️ MI MUSEO</button>
-            <button id="ruletaBtnHeader">🎰 RULETA</button>
+
         </div>
     </header>
 
@@ -3186,13 +3185,12 @@
         </div>
     </div>
 
-    <!-- BOTÓN TIENDA -->
-    <div class="shop-btn-wrap">
-        <button class="shop-btn" id="shopBtn">🛒 &nbsp;TIENDA</button>
-    </div>
-    <!-- BOTÓN CRAFTEO -->
-    <div class="shop-btn-wrap" style="margin-top:-22px;margin-bottom:40px">
-        <button class="craft-btn" id="craftBtn">⚗️ &nbsp;CRAFTEO</button>
+    <!-- BOTÓN TIENDA + RULETA + MUSEO + CRAFTEO -->
+    <div style="display:flex;flex-wrap:wrap;gap:14px;justify-content:center;margin:20px 0 40px;">
+        <button class="shop-btn" id="shopBtn" style="padding:18px 40px;">🛒 &nbsp;TIENDA</button>
+        <button class="craft-btn" id="craftBtn" style="padding:18px 40px;">⚗️ &nbsp;CRAFTEO</button>
+        <button id="ruletaBtnHeader" style="padding:18px 40px;font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:4px;border-radius:14px;border:none;cursor:pointer;background:linear-gradient(135deg,#991b1b,#dc2626);color:white;box-shadow:0 0 30px rgba(220,38,38,0.4),0 8px 24px rgba(0,0,0,0.4);transition:all 0.3s;position:relative;overflow:hidden;">🎰 &nbsp;RULETA</button>
+        <button id="museoBtnHeader" style="padding:18px 40px;font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:4px;border-radius:14px;border:none;cursor:pointer;background:linear-gradient(135deg,#92400e,#fbbf24);color:white;box-shadow:0 0 30px rgba(251,191,36,0.4),0 8px 24px rgba(0,0,0,0.4);transition:all 0.3s;position:relative;overflow:hidden;">🏛️ &nbsp;MI MUSEO</button>
     </div>
 
 </div>
@@ -4280,6 +4278,7 @@
         document.getElementById('statSpent').textContent = Math.round(state.spent).toLocaleString();
         document.getElementById('statBest').textContent = state.best > 0 ? Math.round(state.best).toLocaleString() : '-';
         document.getElementById('progressFill').style.width = `${Math.min((state.balance / WIN_GOAL) * 100, 100)}%`;
+        if (typeof updateIdiotaRuletaBtn === 'function') updateIdiotaRuletaBtn();
     }
 
 
