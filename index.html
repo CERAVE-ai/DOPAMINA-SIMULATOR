@@ -2486,6 +2486,111 @@
             0%,100% { box-shadow: 0 0 8px rgba(56,189,248,0.4); }
             50% { box-shadow: 0 0 18px rgba(56,189,248,0.8); }
         }
+        #mascotaInd { background: rgba(236,72,153,0.15); border: 1px solid rgba(236,72,153,0.4); color: #ec4899; }
+        @keyframes mascotaPulse {
+            0%,100% { box-shadow: 0 0 8px rgba(236,72,153,0.3); }
+            50% { box-shadow: 0 0 20px rgba(236,72,153,0.7); }
+        }
+        #mascotaInd.active { animation: mascotaPulse 1.5s infinite; }
+
+        /* MASCOTAS */
+        #mascotasOverlay {
+            display: none; position: fixed; inset: 0; z-index: 9100;
+            background: rgba(0,0,0,0.88); backdrop-filter: blur(12px);
+            align-items: center; justify-content: center; padding: 16px;
+        }
+        #mascotasOverlay.open { display: flex; }
+        #mascotasBox {
+            background: #0a0f1e;
+            border: 1px solid rgba(236,72,153,0.4);
+            border-radius: 24px;
+            width: min(860px, 98vw);
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 0 80px rgba(236,72,153,0.15);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        .mascotas-header {
+            position: sticky; top: 0; background: #0a0f1e;
+            border-bottom: 1px solid rgba(236,72,153,0.2);
+            padding: 20px 28px 16px;
+            display: flex; flex-direction: column; align-items: center; gap: 4px;
+            z-index: 2;
+        }
+        .mascotas-header::before {
+            content:''; position:absolute; top:0; left:0; right:0; height:3px;
+            background:linear-gradient(90deg,transparent,#ec4899,#f43f5e,#fbbf24,transparent);
+            border-radius:24px 24px 0 0;
+        }
+        .mascotas-title { font-family:'Bebas Neue',sans-serif; font-size:28px; letter-spacing:6px; color:#ec4899; }
+        .mascotas-subtitle { font-size:11px; color:#475569; letter-spacing:2px; text-align:center; }
+        .mascotas-close-btn {
+            position: absolute; top: 14px; right: 18px;
+            background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+            color: #94a3b8; border-radius: 8px; width: 32px; height: 32px;
+            cursor: pointer; font-size: 15px; transition: all 0.2s;
+        }
+        .mascotas-close-btn:hover { background:rgba(255,255,255,0.14); color:#fff; }
+        .mascotas-equipped-bar {
+            margin: 16px 24px 0;
+            padding: 12px 18px;
+            background: rgba(236,72,153,0.08);
+            border: 1px solid rgba(236,72,153,0.25);
+            border-radius: 12px;
+            display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+        }
+        .mascotas-equipped-label { font-family:'Bebas Neue',sans-serif; font-size:12px; letter-spacing:3px; color:#ec4899; flex-shrink:0; }
+        .mascotas-equipped-info { font-size:12px; color:#94a3b8; font-weight:700; letter-spacing:1px; flex:1; }
+        .mascotas-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(185px, 1fr));
+            gap: 14px;
+            padding: 20px 24px 28px;
+        }
+        .mascota-card {
+            background: rgba(255,255,255,0.03);
+            border: 2px solid rgba(255,255,255,0.08);
+            border-radius: 16px;
+            padding: 20px 14px 16px;
+            text-align: center;
+            transition: all 0.25s;
+            position: relative;
+            overflow: hidden;
+            display: flex; flex-direction: column; align-items: center; gap: 7px;
+        }
+        .mascota-card:hover { border-color: rgba(236,72,153,0.3); background: rgba(236,72,153,0.04); }
+        .mascota-card.owned { border-color: rgba(74,222,128,0.35); background: rgba(74,222,128,0.04); }
+        .mascota-card.equipped { border-color: #ec4899; background: rgba(236,72,153,0.1); box-shadow: 0 0 24px rgba(236,72,153,0.25); }
+        .mascota-card.equipped::before {
+            content:''; position:absolute; top:0; left:0; right:0; height:2px;
+            background: linear-gradient(90deg,transparent,#ec4899,transparent);
+        }
+        .mascota-equipped-badge {
+            position: absolute; top: 8px; right: 8px;
+            font-size: 7px; font-weight: 800; letter-spacing: 2px;
+            padding: 3px 7px; border-radius: 20px;
+            background: rgba(236,72,153,0.2); color: #ec4899;
+            border: 1px solid rgba(236,72,153,0.4);
+        }
+        .mascota-icon { font-size: 48px; line-height: 1; filter: drop-shadow(0 0 14px rgba(236,72,153,0.5)); }
+        .mascota-name { font-family:'Bebas Neue',sans-serif; font-size:16px; letter-spacing:2px; color:#fff; line-height:1.2; }
+        .mascota-benefit { font-size:9px; font-weight:700; letter-spacing:0.5px; text-transform:uppercase; color:#64748b; line-height:1.5; min-height:28px; }
+        .mascota-benefit.has-benefit { color:#a855f7; }
+        .mascota-price { font-family:'JetBrains Mono',monospace; font-size:13px; font-weight:700; color:#fbbf24; }
+        .mascota-buy-btn {
+            font-family:'Bebas Neue',sans-serif; font-size:13px; letter-spacing:2px;
+            padding: 9px 14px; border: none; border-radius: 10px; cursor: pointer;
+            transition: all 0.2s; width: 100%; margin-top:4px;
+        }
+        .mascota-buy-btn.buy { background: linear-gradient(135deg,#be185d,#ec4899); color:#fff; box-shadow:0 0 16px rgba(236,72,153,0.35); }
+        .mascota-buy-btn.buy:hover { opacity:0.88; transform:translateY(-2px); }
+        .mascota-buy-btn.equip { background: linear-gradient(135deg,#047857,#10b981); color:#fff; box-shadow:0 0 14px rgba(16,185,129,0.3); }
+        .mascota-buy-btn.equip:hover { opacity:0.88; transform:translateY(-2px); }
+        .mascota-buy-btn.unequip { background: rgba(255,255,255,0.08); color:#94a3b8; border:1px solid rgba(255,255,255,0.12); }
+        .mascota-buy-btn.unequip:hover { background:rgba(255,255,255,0.15); color:#fff; }
+        .mascota-buy-btn:disabled { opacity:0.35; pointer-events:none; }
 
         /* ── MI MUSEO ─────────────────────────────────────────────── */
         #museoOverlay {
@@ -2864,6 +2969,7 @@
         <div class="potion-indicator" id="flashPotionInd">⚡💥 FLASH ACTIVA · <span id="flashPotionTimer">03:00</span></div>
         <div class="potion-indicator" id="ceravePotionInd">🧴 CERAVE ACTIVA · <span id="ceravePotionTimer">03:00</span></div>
         <div class="potion-indicator" id="silencePotionInd">🔇 SILENCIO · <span id="silencePotionCharges">0</span> CARGA(S)</div>
+        <div class="potion-indicator" id="mascotaInd">🐾 <span id="mascotaIndName">MASCOTA</span></div>
     </div>
 
     <!-- PROGRESS -->
@@ -3186,13 +3292,14 @@
         </div>
     </div>
 
-    <!-- BOTÓN TIENDA + RULETA + MUSEO + CRAFTEO -->
+    <!-- BOTÓN TIENDA + RULETA + MUSEO + CRAFTEO + MASCOTAS -->
     <div style="display:flex;flex-wrap:wrap;gap:14px;justify-content:center;margin:20px 0 40px;">
         <button class="shop-btn" id="shopBtn" style="padding:18px 40px;">🛒 &nbsp;TIENDA</button>
         <button class="craft-btn" id="craftBtn" style="padding:18px 40px;">⚗️ &nbsp;CRAFTEO</button>
         <button id="ruletaBtnHeader" style="padding:18px 40px;font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:4px;border-radius:14px;border:none;cursor:pointer;background:linear-gradient(135deg,#991b1b,#dc2626);color:white;box-shadow:0 0 30px rgba(220,38,38,0.4),0 8px 24px rgba(0,0,0,0.4);transition:all 0.3s;position:relative;overflow:hidden;">🎰 &nbsp;RULETA</button>
         <button id="museoBtnHeader" style="padding:18px 40px;font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:4px;border-radius:14px;border:none;cursor:pointer;background:linear-gradient(135deg,#92400e,#fbbf24);color:white;box-shadow:0 0 30px rgba(251,191,36,0.4),0 8px 24px rgba(0,0,0,0.4);transition:all 0.3s;position:relative;overflow:hidden;">🏛️ &nbsp;MI MUSEO</button>
         <button id="prestigioBtn" style="padding:18px 40px;font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:4px;border-radius:14px;border:none;cursor:pointer;background:linear-gradient(135deg,#4c1d95,#7c3aed,#a855f7);color:white;box-shadow:0 0 30px rgba(168,85,247,0.4),0 8px 24px rgba(0,0,0,0.4);transition:all 0.3s;">⭐ &nbsp;PRESTIGIO</button>
+        <button id="mascotasBtn" style="padding:18px 40px;font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:4px;border-radius:14px;border:none;cursor:pointer;background:linear-gradient(135deg,#9d174d,#ec4899,#f43f5e);color:white;box-shadow:0 0 30px rgba(236,72,153,0.4),0 8px 24px rgba(0,0,0,0.4);transition:all 0.3s;" onclick="openMascotas()">🐾 &nbsp;MASCOTAS</button>
     </div>
 
 </div>
@@ -3770,9 +3877,25 @@
         mitico: { chance:1, color:"#fbbf24", label:"MÍTICO" }
     };
 
+    const PETS_DATA = [
+        { id:'gato',             icon:'🐱', name:'Gato',                          price:35000,           moneyBonus:0,    luckBonus:0,    speedBonus:0,    desc:'Sin beneficios' },
+        { id:'perro',            icon:'🐶', name:'Perro',                         price:150000,          moneyBonus:0.02, luckBonus:0,    speedBonus:0,    desc:'+2% más dinero' },
+        { id:'lobo',             icon:'🐺', name:'Lobo',                          price:750000,          moneyBonus:0.05, luckBonus:0.05, speedBonus:0,    desc:'+5% dinero · +5% suerte' },
+        { id:'serpiente',        icon:'🐍', name:'Serpiente',                     price:1250000,         moneyBonus:0,    luckBonus:0.17, speedBonus:0,    desc:'+17% más suerte' },
+        { id:'dragon',           icon:'🐉', name:'Dragón',                        price:35000000,        moneyBonus:0.15, luckBonus:0.20, speedBonus:0,    desc:'+15% dinero · +20% suerte' },
+        { id:'dragon_rojo',      icon:'🔥', name:'Dragón Rojo',                   price:100000000,       moneyBonus:0.50, luckBonus:0.20, speedBonus:0,    desc:'+50% dinero · +20% suerte' },
+        { id:'dragon_fantasma',  icon:'👻', name:'Dragón Fantasma',               price:1250000000,       moneyBonus:0.60, luckBonus:0.80, speedBonus:0,    desc:'+60% dinero · +80% suerte' },
+        { id:'dragon_segador',   icon:'☠️', name:'Dragón Segador De La Muerte',   price:275000000000,    moneyBonus:2.75, luckBonus:2.00, speedBonus:3.50, desc:'+275% dinero · +200% suerte · +350% ruleta' }
+    ];
+
+    function getEquippedPet() {
+        if (!state.equippedPet) return null;
+        return PETS_DATA.find(p => p.id === state.equippedPet) || null;
+    }
+
     let currentKey = 'tech';
     let inventory = [];
-    let state = { balance:2000, spent:0, invValue:0, opened:0, best:0, spinning:false, over:false, items:[], commonCount:0, miticoCount:0, consecutiveMiticos:0, lastWasmitico:false, timeInGame:0, gotSuerteMax:false, coinWinStreak:0, coinLoseStreak:0, ruletaCharges:0, miticosForRuleta:0, superRuletaCharges:0, miticosForSuperRuleta:0, hyperRuletaCharges:0, superSpinsForHyper:0, auctionWins:0, universalCount:0, potionsBought:0, pityCount:0, silenceCharges:0, prestige:0, };
+    let state = { balance:2000, spent:0, invValue:0, opened:0, best:0, spinning:false, over:false, items:[], commonCount:0, miticoCount:0, consecutiveMiticos:0, lastWasmitico:false, timeInGame:0, gotSuerteMax:false, coinWinStreak:0, coinLoseStreak:0, ruletaCharges:0, miticosForRuleta:0, superRuletaCharges:0, miticosForSuperRuleta:0, hyperRuletaCharges:0, superSpinsForHyper:0, auctionWins:0, universalCount:0, potionsBought:0, pityCount:0, silenceCharges:0, prestige:0, ownedPets:[], equippedPet:null, };
     const WIN_GOAL = 500000000000;
 
     const reel = document.getElementById('caseReel');
@@ -3873,6 +3996,9 @@
             if (luckPotionActive && k !== 'comun') chance *= 1.4;
             if (darkPotionActive && k !== 'comun') chance *= 1.55;
             if (ceravePotionActive && k !== 'comun') chance *= 3.0;
+            // Mascota: bonus de suerte
+            const _petLuck = getEquippedPet();
+            if (_petLuck && _petLuck.luckBonus > 0 && k !== 'comun') chance *= (1 + _petLuck.luckBonus);
             cum += chance;
             if (rand <= cum) return items.find(i => i.rarity === k) || items[0];
         }
@@ -3926,6 +4052,9 @@
         if (darkPotionActive)   spinDuration = Math.round(spinDuration * 0.60);
         if (flashPotionActive)  spinDuration = Math.round(spinDuration * 0.50);
         if (ceravePotionActive) spinDuration = Math.round(spinDuration * 0.333);
+        // Mascota: bonus de velocidad de ruleta
+        const _petSpeed = getEquippedPet();
+        if (_petSpeed && _petSpeed.speedBonus > 0) spinDuration = Math.round(spinDuration / (1 + _petSpeed.speedBonus));
         reel.style.transition = `transform ${spinDuration/1000}s cubic-bezier(0.12, 0, 0.04, 1)`;
         const winIdx = 55;
         const caseW = caseEl.offsetWidth;
@@ -3983,6 +4112,9 @@
         if (moneyPotionActive)  finalPrice *= 1.3;
         if (darkPotionActive)   finalPrice *= 1.5;
         if (ceravePotionActive) finalPrice *= 2.5;
+        // Mascota: bonus de dinero
+        const _petMoney = getEquippedPet();
+        if (_petMoney && _petMoney.moneyBonus > 0) finalPrice *= (1 + _petMoney.moneyBonus);
         // Aplicar mutación
         const mutation = getMutation();
         finalPrice = Math.round(finalPrice * mutation.mult);
@@ -5045,7 +5177,9 @@
                 potionsBought: state.potionsBought,
                 pityCount: state.pityCount,
                 silenceCharges: state.silenceCharges,
-                prestige: state.prestige
+                prestige: state.prestige,
+                ownedPets: state.ownedPets,
+                equippedPet: state.equippedPet
             },
             inventory: inventory,
             museumSlots: museumSlots,
@@ -5192,6 +5326,7 @@
         }
         updateStats();
         updateRecordDisplay();
+        updateMascotaIndicator();
 
         startBonusTimer();
         startEventTimer();
@@ -8115,6 +8250,149 @@
         }
     }, 5000);
     // ─────────────────────────────────────────────────────────────────────────────
+
+    // ══════════════════════════════════════════════════════════════
+    //  MASCOTAS
+    // ══════════════════════════════════════════════════════════════
+
+    function formatPetPrice(n) {
+        if (n >= 1e12) return (n/1e12).toFixed(n%1e12===0?0:1).replace('.',',') + ' B$';
+        if (n >= 1e9)  return (n/1e9).toFixed(n%1e9===0?0:1).replace('.',',') + ' M$';
+        if (n >= 1e6)  return (n/1e6).toFixed(n%1e6===0?0:1).replace('.',',') + ' M$';
+        if (n >= 1e3)  return (n/1e3).toFixed(0) + '.000 $';
+        return n + ' $';
+    }
+
+    function buildPetPrice(n) {
+        if (n >= 1000000000000) return (n/1000000000000).toLocaleString('es-ES',{maximumFractionDigits:0})+'.000.000.000.000 $';
+        if (n >= 1000000000)   return (n/1000000000).toLocaleString('es-ES',{maximumFractionDigits:0})+'.000.000.000 $';
+        if (n >= 1000000)      return (n/1000000).toLocaleString('es-ES',{maximumFractionDigits:0})+'.000.000 $';
+        if (n >= 1000)         return n.toLocaleString('es-ES') + ' $';
+        return n + ' $';
+    }
+
+    function renderMascotasGrid() {
+        const grid = document.getElementById('mascotasGrid');
+        if (!grid) return;
+        if (!state.ownedPets) state.ownedPets = [];
+        const equippedBar = document.getElementById('mascotasEquippedInfo');
+        const pet = getEquippedPet();
+        if (pet) {
+            equippedBar.textContent = pet.icon + ' ' + pet.name + (pet.desc !== 'Sin beneficios' ? ' — ' + pet.desc : '');
+        } else {
+            equippedBar.textContent = 'Ninguna mascota equipada';
+        }
+        grid.innerHTML = '';
+        PETS_DATA.forEach(p => {
+            const owned = state.ownedPets.includes(p.id);
+            const equipped = state.equippedPet === p.id;
+            const canAfford = state.balance >= p.price;
+            const card = document.createElement('div');
+            card.className = 'mascota-card' + (equipped ? ' equipped' : owned ? ' owned' : '');
+            let btnHtml;
+            if (!owned) {
+                btnHtml = `<button class="mascota-buy-btn buy" ${!canAfford?'disabled':''} onclick="buyMascota('${p.id}')">Comprar</button>`;
+            } else if (equipped) {
+                btnHtml = `<button class="mascota-buy-btn unequip" onclick="unequipMascota()">Desequipar</button>`;
+            } else {
+                btnHtml = `<button class="mascota-buy-btn equip" onclick="equipMascota('${p.id}')">Equipar</button>`;
+            }
+            card.innerHTML = `
+                ${equipped ? '<div class="mascota-equipped-badge">EQUIPADA</div>' : ''}
+                <div class="mascota-icon">${p.icon}</div>
+                <div class="mascota-name">${p.name}</div>
+                <div class="mascota-benefit ${p.desc!=='Sin beneficios'?'has-benefit':''}">${p.desc}</div>
+                <div class="mascota-price">${p.price.toLocaleString('es-ES')} $</div>
+                ${btnHtml}
+            `;
+            grid.appendChild(card);
+        });
+    }
+
+    function openMascotas() {
+        if (state.over) return;
+        playSound('click');
+        if (!state.ownedPets) state.ownedPets = [];
+        let overlay = document.getElementById('mascotasOverlay');
+        if (!overlay) {
+            overlay = document.createElement('div');
+            overlay.id = 'mascotasOverlay';
+            overlay.innerHTML = `
+                <div id="mascotasBox">
+                    <div class="mascotas-header">
+                        <button class="mascotas-close-btn" onclick="closeMascotas()">✕</button>
+                        <div class="mascotas-title">🐾 MASCOTAS</div>
+                        <div class="mascotas-subtitle">COMPRA Y EQUIPA UNA MASCOTA · SOLO UNA PUEDE ESTAR ACTIVA A LA VEZ</div>
+                        <div class="mascotas-equipped-bar">
+                            <div class="mascotas-equipped-label">EQUIPADA:</div>
+                            <div class="mascotas-equipped-info" id="mascotasEquippedInfo">Ninguna mascota equipada</div>
+                        </div>
+                    </div>
+                    <div class="mascotas-grid" id="mascotasGrid"></div>
+                </div>
+            `;
+            document.body.appendChild(overlay);
+            overlay.addEventListener('click', e => {
+                if (e.target === overlay) closeMascotas();
+            });
+        }
+        overlay.classList.add('open');
+        renderMascotasGrid();
+    }
+
+    function closeMascotas() {
+        const overlay = document.getElementById('mascotasOverlay');
+        if (overlay) overlay.classList.remove('open');
+    }
+
+    function buyMascota(id) {
+        const p = PETS_DATA.find(x => x.id === id);
+        if (!p) return;
+        if (state.balance < p.price) {
+            playSound('click');
+            document.getElementById('balance').parentElement.classList.add('shake');
+            setTimeout(() => document.getElementById('balance').parentElement.classList.remove('shake'), 400);
+            return;
+        }
+        if (!state.ownedPets) state.ownedPets = [];
+        if (state.ownedPets.includes(id)) return;
+        state.balance -= p.price;
+        state.ownedPets.push(id);
+        updateStats();
+        saveGame();
+        playSound('win');
+        confetti({ particleCount: 100, spread: 80, colors: ['#ec4899','#f43f5e','#fbbf24','#ffffff'] });
+        renderMascotasGrid();
+    }
+
+    function equipMascota(id) {
+        if (!state.ownedPets || !state.ownedPets.includes(id)) return;
+        state.equippedPet = id;
+        saveGame();
+        updateMascotaIndicator();
+        renderMascotasGrid();
+        playSound('win');
+    }
+
+    function unequipMascota() {
+        state.equippedPet = null;
+        saveGame();
+        updateMascotaIndicator();
+        renderMascotasGrid();
+    }
+
+    function updateMascotaIndicator() {
+        const ind = document.getElementById('mascotaInd');
+        const nameEl = document.getElementById('mascotaIndName');
+        if (!ind) return;
+        const pet = getEquippedPet();
+        if (pet) {
+            nameEl.textContent = pet.icon + ' ' + pet.name.toUpperCase();
+            ind.classList.add('active');
+        } else {
+            ind.classList.remove('active');
+        }
+    }
 
 </script>
 </body>
