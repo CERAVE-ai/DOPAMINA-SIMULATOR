@@ -1522,6 +1522,222 @@
             border-radius: 50%;
         }
 
+        /* ══════════ ESTADÍSTICAS DETALLADAS ══════════ */
+        #statsOverlay {
+            display:none;position:fixed;inset:0;
+            background:rgba(0,0,0,0.92);backdrop-filter:blur(20px);
+            z-index:9850;align-items:flex-start;justify-content:center;
+            overflow-y:auto;padding:20px;
+        }
+        #statsOverlay.open{display:flex;}
+        #statsBox {
+            background:linear-gradient(145deg,#0a0c1a,#0d0f22,#10122a);
+            border:1px solid rgba(99,102,241,0.35);
+            border-radius:24px;padding:30px 24px;
+            max-width:640px;width:100%;
+            box-shadow:0 0 80px rgba(99,102,241,0.12),0 24px 60px rgba(0,0,0,0.8);
+            position:relative;margin:auto;
+        }
+        #statsBox::before{
+            content:'';position:absolute;top:0;left:0;right:0;height:3px;
+            background:linear-gradient(90deg,transparent,#818cf8,transparent);
+            border-radius:24px 24px 0 0;
+        }
+        .stats-modal-title{
+            font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:6px;
+            text-align:center;color:#818cf8;text-shadow:0 0 20px rgba(129,140,248,0.4);
+            margin-bottom:4px;
+        }
+        .stats-modal-sub{
+            font-size:9px;font-weight:700;letter-spacing:3px;text-transform:uppercase;
+            color:#334155;text-align:center;margin-bottom:22px;
+        }
+        .stats-section {
+            margin-bottom:18px;
+        }
+        .stats-section-title {
+            font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:3px;
+            color:#475569;border-bottom:1px solid rgba(255,255,255,0.06);
+            padding-bottom:6px;margin-bottom:10px;
+        }
+        .stats-rows {
+            display:grid;grid-template-columns:1fr 1fr;gap:6px;
+        }
+        .stats-rows.single {
+            grid-template-columns:1fr;
+        }
+        .stat-row {
+            display:flex;justify-content:space-between;align-items:center;
+            background:rgba(255,255,255,0.03);border-radius:8px;
+            padding:8px 12px;
+        }
+        .stat-row-label {
+            font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;
+            color:#475569;
+        }
+        .stat-row-val {
+            font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;
+            color:#e2e8f0;
+        }
+        .stat-row-val.green{color:#4ade80;}
+        .stat-row-val.yellow{color:#fbbf24;}
+        .stat-row-val.red{color:#f43f5e;}
+        .stat-row-val.blue{color:#60a5fa;}
+        .stat-row-val.purple{color:#a78bfa;}
+        .stats-close-btn {
+            display:block;width:100%;margin-top:16px;
+            font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:3px;
+            padding:12px;border:1px solid rgba(255,255,255,0.1);border-radius:12px;
+            background:rgba(255,255,255,0.06);color:#64748b;cursor:pointer;
+            transition:all 0.2s;
+        }
+        .stats-close-btn:hover{background:rgba(255,255,255,0.1);color:#94a3b8;}
+
+        /* ══════════ POKER ══════════ */
+        #pokerOverlay {
+            display:none;position:fixed;inset:0;
+            background:rgba(0,0,0,0.93);backdrop-filter:blur(22px);
+            z-index:9800;align-items:flex-start;justify-content:center;
+            overflow-y:auto;padding:20px;
+        }
+        #pokerOverlay.open{display:flex;}
+        #pokerBox {
+            background:linear-gradient(145deg,#071207,#0a1a0a,#0d1f0d);
+            border:1px solid rgba(74,222,128,0.3);
+            border-radius:24px;padding:28px 24px;
+            max-width:680px;width:100%;
+            box-shadow:0 0 80px rgba(0,180,0,0.15),0 24px 60px rgba(0,0,0,0.8);
+            position:relative;margin:auto;
+        }
+        #pokerBox::before{
+            content:'';position:absolute;top:0;left:0;right:0;height:3px;
+            background:linear-gradient(90deg,transparent,#4ade80,transparent);
+            border-radius:24px 24px 0 0;
+        }
+        .poker-title{
+            font-family:'Bebas Neue',sans-serif;font-size:30px;letter-spacing:6px;
+            text-align:center;color:#4ade80;text-shadow:0 0 20px rgba(74,222,128,0.5);
+            margin-bottom:4px;
+        }
+        .poker-subtitle{
+            font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;
+            color:#475569;text-align:center;margin-bottom:20px;
+        }
+        .poker-bots-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px;}
+        .poker-bot{
+            background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);
+            border-radius:12px;padding:10px 6px;text-align:center;transition:border-color 0.3s;
+        }
+        .poker-bot.winner-bot{border-color:rgba(244,63,94,0.6);background:rgba(244,63,94,0.05);}
+        .poker-bot-avatar{font-size:22px;margin-bottom:3px;}
+        .poker-bot-name{font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#475569;margin-bottom:6px;}
+        .poker-bot-cards{display:flex;gap:3px;justify-content:center;flex-wrap:wrap;}
+        .pcard{
+            width:34px;height:50px;
+            background:white;border-radius:5px;
+            display:flex;flex-direction:column;align-items:center;justify-content:center;
+            font-weight:900;border:1px solid rgba(0,0,0,0.15);
+            box-shadow:0 2px 6px rgba(0,0,0,0.4);color:#1a1a2e;
+            transition:all 0.25s;flex-shrink:0;cursor:default;
+            user-select:none;
+        }
+        .pcard.red{color:#dc2626;}
+        .pcard.face-down{
+            background:linear-gradient(135deg,#1e3a5f,#0d1f3c);
+            border:1px solid rgba(99,102,241,0.35);color:transparent;font-size:0;
+        }
+        .pcard.face-down::after{content:'🃏';font-size:18px;color:rgba(99,102,241,0.7);}
+        .pcard.selected{
+            transform:translateY(-14px);
+            border:2px solid #f43f5e !important;
+            box-shadow:0 8px 20px rgba(244,63,94,0.5) !important;
+        }
+        .pcard-rank{font-size:11px;font-weight:900;line-height:1.1;}
+        .pcard-suit{font-size:13px;line-height:1.1;}
+        .poker-bot-hand-name{
+            font-size:8px;font-weight:700;letter-spacing:1px;text-transform:uppercase;
+            margin-top:5px;min-height:11px;color:#94a3b8;
+        }
+        .poker-separator{height:1px;background:rgba(255,255,255,0.06);margin:14px 0;}
+        .poker-player-label{
+            font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:3px;
+            color:#4ade80;text-align:center;margin-bottom:10px;
+        }
+        .poker-player-area{text-align:center;}
+        #pokerPlayerCards{display:flex;gap:8px;justify-content:center;margin-bottom:12px;flex-wrap:wrap;}
+        #pokerPlayerCards .pcard{width:52px;height:74px;cursor:pointer;}
+        #pokerPlayerCards .pcard .pcard-rank{font-size:14px;}
+        #pokerPlayerCards .pcard .pcard-suit{font-size:17px;}
+        #pokerPlayerCards .pcard.face-down::after{font-size:22px;}
+        .poker-hand-name{
+            font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:3px;
+            min-height:28px;color:#fbbf24;text-align:center;
+            transition:all 0.3s;
+        }
+        .poker-discard-hint{
+            font-size:10px;font-weight:700;letter-spacing:2px;
+            text-transform:uppercase;color:#64748b;text-align:center;margin-bottom:8px;
+        }
+        .poker-bet-section{margin-bottom:8px;}
+        .poker-bet-row{
+            display:flex;gap:8px;justify-content:center;
+            align-items:center;flex-wrap:wrap;margin-bottom:12px;
+        }
+        .poker-bet-input{
+            background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);
+            border-radius:8px;padding:10px 14px;color:white;
+            font-size:16px;font-family:'JetBrains Mono',monospace;
+            text-align:center;width:150px;
+        }
+        .poker-bet-input:focus{outline:none;border-color:rgba(74,222,128,0.5);}
+        .poker-preset-btn{
+            background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);
+            color:#cbd5e1;border-radius:8px;padding:8px 10px;
+            font-size:12px;font-family:'Bebas Neue',sans-serif;letter-spacing:1px;
+            cursor:pointer;transition:all 0.2s;
+        }
+        .poker-preset-btn:hover{background:rgba(74,222,128,0.15);border-color:rgba(74,222,128,0.4);color:#4ade80;}
+        .poker-info-row{
+            display:flex;justify-content:space-around;align-items:center;
+            background:rgba(0,0,0,0.3);border-radius:10px;padding:10px 16px;margin-bottom:14px;
+        }
+        .poker-info-item{text-align:center;}
+        .poker-info-label{font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#475569;margin-bottom:2px;}
+        .poker-info-val{font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:700;color:#fbbf24;}
+        .poker-actions{display:flex;gap:10px;justify-content:center;margin-top:14px;flex-wrap:wrap;}
+        .poker-action-btn{
+            font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:3px;
+            padding:12px 28px;border:none;border-radius:12px;
+            cursor:pointer;transition:all 0.2s;
+        }
+        .poker-action-btn:hover{transform:translateY(-2px);}
+        .poker-action-btn:active{transform:scale(0.97);}
+        .poker-action-btn:disabled{opacity:0.4;pointer-events:none;}
+        .poker-btn-deal{background:linear-gradient(135deg,#166534,#4ade80);color:#0a0f1e;box-shadow:0 0 24px rgba(74,222,128,0.3);}
+        .poker-btn-draw{background:linear-gradient(135deg,#1d4ed8,#3b82f6);color:white;box-shadow:0 0 24px rgba(59,130,246,0.3);}
+        .poker-btn-new{background:linear-gradient(135deg,#166534,#4ade80);color:#0a0f1e;}
+        .poker-btn-close{background:rgba(255,255,255,0.08);color:#cbd5e1;border:1px solid rgba(255,255,255,0.12);}
+        .poker-result-banner{
+            text-align:center;padding:16px;border-radius:14px;
+            margin:14px 0;animation:pokerResIn 0.45s cubic-bezier(0.34,1.56,0.64,1);display:none;
+        }
+        @keyframes pokerResIn{from{transform:scale(0.75) translateY(10px);opacity:0;}to{transform:scale(1) translateY(0);opacity:1;}}
+        .poker-result-banner.win{background:rgba(74,222,128,0.1);border:1px solid rgba(74,222,128,0.4);}
+        .poker-result-banner.lose{background:rgba(244,63,94,0.1);border:1px solid rgba(244,63,94,0.4);}
+        .poker-result-title{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:4px;}
+        .poker-result-banner.win .poker-result-title{color:#4ade80;}
+        .poker-result-banner.lose .poker-result-title{color:#f43f5e;}
+        .poker-result-amount{font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:700;margin-top:4px;}
+        .poker-result-banner.win .poker-result-amount{color:#4ade80;}
+        .poker-result-banner.lose .poker-result-amount{color:#f43f5e;}
+        .poker-result-hands{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#64748b;margin-top:6px;}
+        @media(max-width:600px){
+            #pokerPlayerCards .pcard{width:42px;height:60px;}
+            .pcard{width:26px;height:40px;}
+            .pcard-rank{font-size:9px;}
+            .pcard-suit{font-size:11px;}
+        }
+
         /* COIN FLIP */
         #coinBtn {
             width: 48px; height: 48px;
@@ -2920,8 +3136,8 @@
         <div class="splash-subtitle">By Aritz &nbsp;·&nbsp; Llega a 500.000.000.000 monedas</div>
         <button class="splash-play-btn" id="playBtn">▶ &nbsp;JUGAR</button>
         <div class="splash-by">Empieza con <span>2.000 monedas</span></div>
-        <div style="margin-top:14px;font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;color:#f43f5e;letter-spacing:2px;">🔧 ACTUALICACION &nbsp;15/ 06 / 2026</div>
-        <div style="margin-top:8px;font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;color:#f43f5e;letter-spacing:2px;">Versión Del Juego Actual #52</div>
+        <div style="margin-top:14px;font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;color:#f43f5e;letter-spacing:2px;">🔧 ACTUALICACION &nbsp;08/ 06 / 2026</div>
+        <div style="margin-top:8px;font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;color:#f43f5e;letter-spacing:2px;">Versión Del Juego Actual #50</div>
     </div>
 </div>
 
@@ -3033,6 +3249,11 @@
             <div class="stat-label">Inversión Total</div>
             <div class="stat-value" id="statSpent" style="color:#f43f5e">0</div>
         </div>
+    </div>
+
+    <!-- BOTÓN ESTADÍSTICAS DETALLADAS -->
+    <div style="text-align:center;margin:6px 0 20px;">
+        <button onclick="openStats()" style="font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:3px;padding:10px 28px;border:1px solid rgba(99,102,241,0.4);border-radius:10px;background:rgba(99,102,241,0.1);color:#a5b4fc;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.background='rgba(99,102,241,0.2)'" onmouseout="this.style.background='rgba(99,102,241,0.1)'">📊 &nbsp;ESTADÍSTICAS DETALLADAS</button>
     </div>
 
     <!-- HISTORIAL DE PARTIDAS -->
@@ -3300,8 +3521,173 @@
         <button id="museoBtnHeader" style="padding:18px 40px;font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:4px;border-radius:14px;border:none;cursor:pointer;background:linear-gradient(135deg,#92400e,#fbbf24);color:white;box-shadow:0 0 30px rgba(251,191,36,0.4),0 8px 24px rgba(0,0,0,0.4);transition:all 0.3s;position:relative;overflow:hidden;">🏛️ &nbsp;MI MUSEO</button>
         <button id="prestigioBtn" style="padding:18px 40px;font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:4px;border-radius:14px;border:none;cursor:pointer;background:linear-gradient(135deg,#4c1d95,#7c3aed,#a855f7);color:white;box-shadow:0 0 30px rgba(168,85,247,0.4),0 8px 24px rgba(0,0,0,0.4);transition:all 0.3s;">⭐ &nbsp;PRESTIGIO</button>
         <button id="mascotasBtn" style="padding:18px 40px;font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:4px;border-radius:14px;border:none;cursor:pointer;background:linear-gradient(135deg,#9d174d,#ec4899,#f43f5e);color:white;box-shadow:0 0 30px rgba(236,72,153,0.4),0 8px 24px rgba(0,0,0,0.4);transition:all 0.3s;" onclick="openMascotas()">🐾 &nbsp;MASCOTAS</button>
+        <button id="pokerBtn" onclick="openPoker()" style="padding:18px 40px;font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:4px;border-radius:14px;border:none;cursor:pointer;background:linear-gradient(135deg,#14532d,#166534,#4ade80);color:white;box-shadow:0 0 30px rgba(74,222,128,0.4),0 8px 24px rgba(0,0,0,0.4);transition:all 0.3s;position:relative;overflow:hidden;">🃏 &nbsp;POKER</button>
     </div>
 
+</div>
+
+<!-- ══════════════ ESTADÍSTICAS MODAL ══════════════ -->
+<div id="statsOverlay">
+  <div id="statsBox">
+    <div class="stats-modal-title">📊 ESTADÍSTICAS</div>
+    <div class="stats-modal-sub">Resumen completo de tu partida</div>
+
+    <!-- COLECCIÓN -->
+    <div class="stats-section">
+      <div class="stats-section-title">📦 COLECCIÓN</div>
+      <div class="stats-rows">
+        <div class="stat-row"><span class="stat-row-label">Cofres Abiertos</span><span class="stat-row-val yellow" id="ds_opened">0</span></div>
+        <div class="stat-row"><span class="stat-row-label">Objeto Más Caro</span><span class="stat-row-val yellow" id="ds_best">—</span></div>
+        <div class="stat-row"><span class="stat-row-label">Objetos Vendidos</span><span class="stat-row-val" id="ds_sold">0</span></div>
+        <div class="stat-row"><span class="stat-row-label">Items Fabricados</span><span class="stat-row-val purple" id="ds_crafted">0</span></div>
+        <div class="stat-row"><span class="stat-row-label">Nivel Prestigio</span><span class="stat-row-val purple" id="ds_prestige">0</span></div>
+        <div class="stat-row"><span class="stat-row-label">Valor Inventario</span><span class="stat-row-val green" id="ds_invVal">0 $</span></div>
+      </div>
+    </div>
+
+    <!-- DINERO -->
+    <div class="stats-section">
+      <div class="stats-section-title">💰 DINERO</div>
+      <div class="stats-rows">
+        <div class="stat-row"><span class="stat-row-label">Balance Actual</span><span class="stat-row-val green" id="ds_balance">0 $</span></div>
+        <div class="stat-row"><span class="stat-row-label">Máximo Alcanzado</span><span class="stat-row-val yellow" id="ds_maxBalance">0 $</span></div>
+        <div class="stat-row"><span class="stat-row-label">Total Invertido</span><span class="stat-row-val red" id="ds_spent">0 $</span></div>
+        <div class="stat-row"><span class="stat-row-label">Ganado Vendiendo</span><span class="stat-row-val green" id="ds_earned">0 $</span></div>
+        <div class="stat-row"><span class="stat-row-label">Balance + Inventario</span><span class="stat-row-val green" id="ds_total">0 $</span></div>
+        <div class="stat-row"><span class="stat-row-label">Rentabilidad Neta</span><span class="stat-row-val" id="ds_roi">—</span></div>
+      </div>
+    </div>
+
+    <!-- POKER -->
+    <div class="stats-section">
+      <div class="stats-section-title">🃏 PÓKER</div>
+      <div class="stats-rows">
+        <div class="stat-row"><span class="stat-row-label">Partidas Jugadas</span><span class="stat-row-val" id="ds_pkPlayed">0</span></div>
+        <div class="stat-row"><span class="stat-row-label">Victorias</span><span class="stat-row-val green" id="ds_pkWon">0</span></div>
+        <div class="stat-row"><span class="stat-row-label">Derrotas</span><span class="stat-row-val red" id="ds_pkLost">0</span></div>
+        <div class="stat-row"><span class="stat-row-label">% Victoria</span><span class="stat-row-val blue" id="ds_pkWinRate">—</span></div>
+        <div class="stat-row"><span class="stat-row-label">Mayor Ganancia</span><span class="stat-row-val green" id="ds_pkMaxWin">—</span></div>
+        <div class="stat-row"><span class="stat-row-label">Balance Neto Póker</span><span class="stat-row-val" id="ds_pkProfit">—</span></div>
+      </div>
+    </div>
+
+    <!-- RECORDS -->
+    <div class="stats-section">
+      <div class="stats-section-title">🏆 RECORDS Y PARTIDAS</div>
+      <div class="stats-rows">
+        <div class="stat-row" style="border:1px solid rgba(251,191,36,0.2);background:rgba(251,191,36,0.04);">
+          <span class="stat-row-label" style="color:#fbbf24;">👑 Glorias Alcanzadas</span>
+          <span class="stat-row-val yellow" id="ds_wins">0</span>
+        </div>
+        <div class="stat-row" style="border:1px solid rgba(244,63,94,0.2);background:rgba(244,63,94,0.04);">
+          <span class="stat-row-label" style="color:#f43f5e;">👟 Zapatos Vendidos</span>
+          <span class="stat-row-val red" id="ds_losses">0</span>
+        </div>
+      </div>
+    </div>
+
+    <button class="stats-close-btn" onclick="closeStats()">✕ CERRAR</button>
+  </div>
+</div>
+
+<!-- ══════════════ POKER MODAL ══════════════ -->
+<div id="pokerOverlay">
+  <div id="pokerBox">
+    <div class="poker-title">🃏 POKER</div>
+    <div class="poker-subtitle">5-CARD DRAW · GANA A LOS 3 BOTS · x65 TU APUESTA</div>
+
+    <!-- Bots -->
+    <div class="poker-bots-row">
+      <div class="poker-bot" id="pkBot0">
+        <div class="poker-bot-avatar">🦈</div>
+        <div class="poker-bot-name">El Tiburón</div>
+        <div class="poker-bot-cards" id="pkBot0Cards">
+          <div class="pcard face-down"></div><div class="pcard face-down"></div>
+          <div class="pcard face-down"></div><div class="pcard face-down"></div>
+          <div class="pcard face-down"></div>
+        </div>
+        <div class="poker-bot-hand-name" id="pkBot0Hand"></div>
+      </div>
+      <div class="poker-bot" id="pkBot1">
+        <div class="poker-bot-avatar">🎭</div>
+        <div class="poker-bot-name">La Sombra</div>
+        <div class="poker-bot-cards" id="pkBot1Cards">
+          <div class="pcard face-down"></div><div class="pcard face-down"></div>
+          <div class="pcard face-down"></div><div class="pcard face-down"></div>
+          <div class="pcard face-down"></div>
+        </div>
+        <div class="poker-bot-hand-name" id="pkBot1Hand"></div>
+      </div>
+      <div class="poker-bot" id="pkBot2">
+        <div class="poker-bot-avatar">♟️</div>
+        <div class="poker-bot-name">El Maestro</div>
+        <div class="poker-bot-cards" id="pkBot2Cards">
+          <div class="pcard face-down"></div><div class="pcard face-down"></div>
+          <div class="pcard face-down"></div><div class="pcard face-down"></div>
+          <div class="pcard face-down"></div>
+        </div>
+        <div class="poker-bot-hand-name" id="pkBot2Hand"></div>
+      </div>
+    </div>
+
+    <div class="poker-separator"></div>
+
+    <!-- Player area -->
+    <div class="poker-player-area">
+      <div class="poker-player-label">TU MANO</div>
+      <div id="pokerPlayerCards">
+        <div class="pcard face-down"></div><div class="pcard face-down"></div>
+        <div class="pcard face-down"></div><div class="pcard face-down"></div>
+        <div class="pcard face-down"></div>
+      </div>
+      <div class="poker-hand-name" id="pokerHandName"></div>
+      <div class="poker-discard-hint" id="pokerDiscardHint"></div>
+    </div>
+
+    <!-- Info row (hidden until deal) -->
+    <div class="poker-info-row" id="pokerInfoRow" style="display:none;margin-top:12px;">
+      <div class="poker-info-item">
+        <div class="poker-info-label">Apuesta</div>
+        <div class="poker-info-val" id="pkBetAmt">—</div>
+      </div>
+      <div class="poker-info-item">
+        <div class="poker-info-label">Premio si ganas</div>
+        <div class="poker-info-val" style="color:#4ade80;" id="pkWinAmt">—</div>
+      </div>
+    </div>
+
+    <!-- Result banner -->
+    <div class="poker-result-banner" id="pokerResultBanner">
+      <div class="poker-result-title" id="pkResTitle"></div>
+      <div class="poker-result-amount" id="pkResAmt"></div>
+      <div class="poker-result-hands" id="pkResHands"></div>
+    </div>
+
+    <!-- Bet section -->
+    <div class="poker-bet-section" id="pokerBetSection">
+      <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#475569;text-align:center;margin-bottom:10px;">¿CUÁNTO APUESTAS?</div>
+      <div class="poker-bet-row">
+        <input type="number" id="pokerBetInput" class="poker-bet-input" value="1000" min="1" placeholder="Apuesta...">
+        <button class="poker-preset-btn" onclick="pkSetBet(100)">100</button>
+        <button class="poker-preset-btn" onclick="pkSetBet(1000)">1K</button>
+        <button class="poker-preset-btn" onclick="pkSetBet(10000)">10K</button>
+        <button class="poker-preset-btn" onclick="pkSetBet(100000)">100K</button>
+        <button class="poker-preset-btn" style="color:#4ade80;border-color:rgba(74,222,128,0.4);" onclick="pkSetBet('max')">MAX</button>
+      </div>
+    </div>
+
+    <!-- Draw action (shown after deal) -->
+    <div id="pokerDrawSection" style="display:none;justify-content:center;">
+    </div>
+
+    <!-- Buttons -->
+    <div class="poker-actions">
+      <button class="poker-action-btn poker-btn-deal" id="pokerDealBtn" onclick="pkDeal()">🃏 REPARTIR</button>
+      <button class="poker-action-btn poker-btn-draw" id="pokerDrawBtn" onclick="pkDraw()" style="display:none;">♻️ CAMBIAR CARTAS</button>
+      <button class="poker-action-btn poker-btn-new" id="pokerPlayAgainBtn" onclick="openPoker()" style="display:none;">🔄 NUEVA PARTIDA</button>
+      <button class="poker-action-btn poker-btn-close" onclick="closePoker()">✕ CERRAR</button>
+    </div>
+  </div>
 </div>
 
 <!-- ══════════════ PRESTIGIO MODAL ══════════════ -->
@@ -3884,8 +4270,8 @@
         { id:'serpiente',        icon:'🐍', name:'Serpiente',                     price:1250000,         moneyBonus:0,    luckBonus:0.17, speedBonus:0,    desc:'+17% más suerte' },
         { id:'dragon',           icon:'🐉', name:'Dragón',                        price:35000000,        moneyBonus:0.15, luckBonus:0.20, speedBonus:0,    desc:'+15% dinero · +20% suerte' },
         { id:'dragon_rojo',      icon:'🔥', name:'Dragón Rojo',                   price:100000000,       moneyBonus:0.50, luckBonus:0.20, speedBonus:0,    desc:'+50% dinero · +20% suerte' },
-        { id:'dragon_fantasma',  icon:'👻', name:'Dragón Fantasma',               price:1250000000,       moneyBonus:0.60, luckBonus:0.80, speedBonus:0,    desc:'+60% dinero · +80% suerte' },
-        { id:'dragon_segador',   icon:'☠️', name:'Dragón Segador De La Muerte',   price:275000000000,    moneyBonus:2.75, luckBonus:2.00, speedBonus:3.50, desc:'+275% dinero · +200% suerte · +350% ruleta' }
+        { id:'dragon_fantasma',  icon:'👻', name:'Dragón Fantasma',               price:250000000,       moneyBonus:0.40, luckBonus:0.40, speedBonus:0,    desc:'+40% dinero · +40% suerte' },
+        { id:'dragon_segador',   icon:'☠️', name:'Dragón Segador De La Muerte',   price:100000000000,    moneyBonus:2.50, luckBonus:2.00, speedBonus:2.50, desc:'+250% dinero · +200% suerte · +250% ruleta' }
     ];
 
     function getEquippedPet() {
@@ -3895,7 +4281,7 @@
 
     let currentKey = 'tech';
     let inventory = [];
-    let state = { balance:2000, spent:0, invValue:0, opened:0, best:0, spinning:false, over:false, items:[], commonCount:0, miticoCount:0, consecutiveMiticos:0, lastWasmitico:false, timeInGame:0, gotSuerteMax:false, coinWinStreak:0, coinLoseStreak:0, ruletaCharges:0, miticosForRuleta:0, superRuletaCharges:0, miticosForSuperRuleta:0, hyperRuletaCharges:0, superSpinsForHyper:0, auctionWins:0, universalCount:0, potionsBought:0, pityCount:0, silenceCharges:0, prestige:0, ownedPets:[], equippedPet:null, };
+    let state = { balance:2000, spent:0, invValue:0, opened:0, best:0, spinning:false, over:false, items:[], commonCount:0, miticoCount:0, consecutiveMiticos:0, lastWasmitico:false, timeInGame:0, gotSuerteMax:false, coinWinStreak:0, coinLoseStreak:0, ruletaCharges:0, miticosForRuleta:0, superRuletaCharges:0, miticosForSuperRuleta:0, hyperRuletaCharges:0, superSpinsForHyper:0, auctionWins:0, universalCount:0, potionsBought:0, pityCount:0, silenceCharges:0, prestige:0, ownedPets:[], equippedPet:null, sold:0, earned:0, crafted:0, maxBalance:2000, pokerPlayed:0, pokerWon:0, pokerProfit:0, pokerMaxWin:0, sessionStart:Date.now(), playTime:0, };
     const WIN_GOAL = 500000000000;
 
     const reel = document.getElementById('caseReel');
@@ -4078,7 +4464,7 @@
         roto:       { id: 'roto',        label: 'Roto',        mult: 0.75, color: '#f87171', icon: '💔' },
         radiactivo: { id: 'radiactivo',  label: 'Radiactivo',  mult: 1.25, color: '#4ade80', icon: '☢️' },
         cosmico:    { id: 'cosmico',     label: 'Cósmico',     mult: 1.40, color: '#818cf8', icon: '🌌' },
-        universal:  { id: 'universal',   label: 'Universal',   mult: 2.00, color: '#fbbf24', icon: '✨' }
+        universal:  { id: 'universal',   label: 'Universal',   mult: 2.75, color: '#fbbf24', icon: '✨' }
     };
 
     function getMutation() {
@@ -4400,7 +4786,10 @@
         setTimeout(() => {
             const soldId = inventory[origIdx] && inventory[origIdx]._id;
             if (soldId) cleanMuseumSlot(soldId);
-            state.balance += Math.floor(salePrice * prestigeMult());
+            const _saleAmt = Math.floor(salePrice * prestigeMult());
+            state.balance += _saleAmt;
+            state.earned = (state.earned||0) + _saleAmt;
+            state.sold = (state.sold||0) + 1;
             state.invValue -= inventory[origIdx].price;
             if (state.invValue < 0) state.invValue = 0;
             inventory.splice(origIdx, 1);
@@ -4420,7 +4809,10 @@
         createParticles(window.innerWidth/2, window.innerHeight/2, '#4ade80', 25);
         const sellValue = nonFavItems.reduce((sum, item) => sum + item.price, 0);
         nonFavItems.forEach(item => { if (item._id) cleanMuseumSlot(item._id); });
-        state.balance += Math.floor(sellValue * prestigeMult());
+        const _sellAmt = Math.floor(sellValue * prestigeMult());
+        state.balance += _sellAmt;
+        state.earned = (state.earned||0) + _sellAmt;
+        state.sold = (state.sold||0) + nonFavItems.length;
         state.invValue -= sellValue;
         if (state.invValue < 0) state.invValue = 0;
         inventory = inventory.filter(item => item.favorite);
@@ -4442,6 +4834,7 @@
         document.getElementById('statSpent').textContent = Math.round(state.spent).toLocaleString();
         document.getElementById('statBest').textContent = state.best > 0 ? Math.round(state.best).toLocaleString() : '-';
         document.getElementById('progressFill').style.width = `${Math.min((state.balance / WIN_GOAL) * 100, 100)}%`;
+        if (state.balance > (state.maxBalance||0)) state.maxBalance = state.balance;
         if (typeof updateIdiotaRuletaBtn === 'function') updateIdiotaRuletaBtn();
         if (typeof updatePrestigioBtn === 'function') updatePrestigioBtn();
     }
@@ -6517,7 +6910,7 @@
         { name:"Oier Negro",          icon:"🖤", price:1250000000  },
         { name:"Eñaut 200cm",         icon:"📏", price:5000000000 },
         { name:"Erlantz Sin Mochila",         icon:"🎒", price:1000000000  },
-        { name:"Marcos Sin Granos",   icon:"✨", price:175000000  },
+        { name:"Marcos Sin Granos",   icon:"✨", price:2175000000  },
         { name:"Aiert Pelo Corto",    icon:"💇", price:3750000000  },
         { name:"Jon Sin Autismo",     icon:"🧠", price:4800000000  },
         { name:"Ioritz Sin Porros",   icon:"🚭", price:2550000000  },
@@ -7630,6 +8023,7 @@
             inventory.push(result);
             state.invValue += result.price;
             if (result.price > state.best) state.best = result.price;
+            state.crafted = (state.crafted||0) + 1;
             updateStats(); renderInventory(); saveGame();
         }
         showCraftResult(result);
@@ -8393,6 +8787,336 @@
             ind.classList.remove('active');
         }
     }
+
+
+    // ═══════════════════ ESTADÍSTICAS DETALLADAS ═══════════════════
+    function openStats() {
+        if (state.over) return;
+        playSound('click');
+        // Actualizar tiempo de juego
+        state.playTime = (state.playTime||0) + Math.round((Date.now() - (state.sessionStart||Date.now())) / 1000);
+        state.sessionStart = Date.now();
+
+        const rec = getRecord();
+        const fmt = n => Math.round(n||0).toLocaleString('es-ES');
+        const fmtM = n => fmt(n) + ' $';
+
+        // COLECCIÓN
+        document.getElementById('ds_opened').textContent   = fmt(state.opened);
+        document.getElementById('ds_best').textContent     = state.best > 0 ? fmtM(state.best) : '—';
+        document.getElementById('ds_sold').textContent     = fmt(state.sold);
+        document.getElementById('ds_crafted').textContent  = fmt(state.crafted);
+        document.getElementById('ds_prestige').textContent = fmt(state.prestige) + (state.prestige > 0 ? ' (+' + (state.prestige*2) + '%)' : '');
+        document.getElementById('ds_invVal').textContent   = fmtM(state.invValue);
+
+        // DINERO
+        const total = (state.balance||0) + (state.invValue||0);
+        const roi = state.spent > 0 ? (((total - 2000) / state.spent) * 100).toFixed(1) : null;
+        document.getElementById('ds_balance').textContent    = fmtM(state.balance);
+        document.getElementById('ds_maxBalance').textContent = fmtM(state.maxBalance||state.balance);
+        document.getElementById('ds_spent').textContent      = fmtM(state.spent);
+        document.getElementById('ds_earned').textContent     = fmtM(state.earned);
+        document.getElementById('ds_total').textContent      = fmtM(total);
+        const roiEl = document.getElementById('ds_roi');
+        if (roi !== null) {
+            roiEl.textContent = (roi >= 0 ? '+' : '') + roi + '%';
+            roiEl.className = 'stat-row-val ' + (roi >= 0 ? 'green' : 'red');
+        } else { roiEl.textContent = '—'; roiEl.className = 'stat-row-val'; }
+
+        // POKER
+        const pkPlayed = state.pokerPlayed||0;
+        const pkWon = state.pokerWon||0;
+        const pkLost = pkPlayed - pkWon;
+        const pkProfit = state.pokerProfit||0;
+        document.getElementById('ds_pkPlayed').textContent  = pkPlayed;
+        document.getElementById('ds_pkWon').textContent     = pkWon;
+        document.getElementById('ds_pkLost').textContent    = pkLost;
+        const wrEl = document.getElementById('ds_pkWinRate');
+        wrEl.textContent = pkPlayed > 0 ? (((pkWon/pkPlayed)*100).toFixed(0)+'%') : '—';
+        wrEl.className = 'stat-row-val blue';
+        const pkMaxWinEl = document.getElementById('ds_pkMaxWin');
+        pkMaxWinEl.textContent = (state.pokerMaxWin||0) > 0 ? fmtM(state.pokerMaxWin) : '—';
+        const pkProfitEl = document.getElementById('ds_pkProfit');
+        pkProfitEl.textContent = pkPlayed > 0 ? ((pkProfit>=0?'+':'')+fmt(pkProfit)+' $') : '—';
+        pkProfitEl.className = 'stat-row-val ' + (pkProfit >= 0 ? 'green' : 'red');
+
+        // RECORDS
+        document.getElementById('ds_wins').textContent   = fmt(rec.wins);
+        document.getElementById('ds_losses').textContent = fmt(rec.losses);
+
+        document.getElementById('statsOverlay').classList.add('open');
+    }
+
+    function closeStats() {
+        document.getElementById('statsOverlay').classList.remove('open');
+    }
+    // ═══════════════════ FIN ESTADÍSTICAS ═══════════════════
+
+    // ═══════════════════ POKER ═══════════════════
+    const POKER_SUITS = ['♠','♥','♦','♣'];
+    const POKER_RANKS = ['2','3','4','5','6','7','8','9','10','J','Q','K','A'];
+    const POKER_RV = {'2':2,'3':3,'4':4,'5':5,'6':6,'7':7,'8':8,'9':9,'10':10,'J':11,'Q':12,'K':13,'A':14};
+    const POKER_RED = new Set(['♥','♦']);
+    const POKER_BOT_NAMES = ['El Tiburón 🦈','La Sombra 🎭','El Maestro ♟️'];
+    const POKER_BOT_AVAT  = ['🦈','🎭','♟️'];
+
+    let pks = { deck:[], player:[], bots:[[],[],[]], sel:new Set(), phase:'bet', bet:0 };
+
+    function pkCreateDeck() {
+        const d=[];
+        for(const s of POKER_SUITS) for(const r of POKER_RANKS) d.push({s,r,v:POKER_RV[r]});
+        for(let i=d.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[d[i],d[j]]=[d[j],d[i]];}
+        return d;
+    }
+
+    function pkEval(cards) {
+        const vals = cards.map(c=>c.v).sort((a,b)=>b-a);
+        const suits = cards.map(c=>c.s);
+        const rc={};vals.forEach(v=>rc[v]=(rc[v]||0)+1);
+        const counts=Object.values(rc).sort((a,b)=>b-a);
+        const uv=Object.keys(rc).map(Number).sort((a,b)=>b-a);
+        const isFlush=suits.every(s=>s===suits[0]);
+        const isStraight=uv.length===5&&(uv[0]-uv[4]===4);
+        const isWheel=uv.length===5&&uv[0]===14&&uv[1]===5&&uv[4]===2;
+        // Tiebreak: order cards by count desc then value desc
+        const byCount=Object.entries(rc).sort((a,b)=>b[1]-a[1]||Number(b[0])-Number(a[0]));
+        let score=0; byCount.forEach(([v],i)=>{score+=Number(v)*Math.pow(15,4-i);});
+        if(isFlush&&!isWheel&&isStraight&&vals[0]===14) return {rank:8,name:'ESCALERA REAL 👑',score:8e9+score};
+        if(isFlush&&(isStraight||isWheel)) return {rank:7,name:'ESCALERA DE COLOR',score:7e9+score};
+        if(counts[0]===4) return {rank:6,name:'PÓQUER',score:6e9+score};
+        if(counts[0]===3&&counts[1]===2) return {rank:5,name:'FULL HOUSE',score:5e9+score};
+        if(isFlush) return {rank:4,name:'COLOR',score:4e9+score};
+        if(isStraight||isWheel) return {rank:3,name:'ESCALERA',score:3e9+(isWheel?0:score)};
+        if(counts[0]===3) return {rank:2,name:'TRÍO',score:2e9+score};
+        if(counts[0]===2&&counts[1]===2) return {rank:1,name:'DOBLE PAREJA',score:1e9+score};
+        if(counts[0]===2) return {rank:0,name:'PAREJA',score:5e8+score};
+        return {rank:0,name:'CARTA ALTA',score};
+    }
+
+    // Bot AI: decide which card indices to discard (optimal strategy)
+    function pkBotDiscard(cards) {
+        const rc={};cards.forEach(c=>rc[c.v]=(rc[c.v]||0)+1);
+        const sc={};cards.forEach(c=>sc[c.s]=(sc[c.s]||0)+1);
+        const h=pkEval(cards);
+        // Keep strong hands
+        if(h.rank>=5) return [];
+        // Three of a kind: keep the trio
+        if(h.rank===2){
+            const tv=Object.keys(rc).find(v=>rc[v]===3);
+            return cards.reduce((a,c,i)=>{if(c.v!=tv)a.push(i);return a;},[]);
+        }
+        // Two pair: keep both pairs
+        if(h.rank===1){
+            const pairs=Object.keys(rc).filter(v=>rc[v]===2).map(Number);
+            return cards.reduce((a,c,i)=>{if(!pairs.includes(c.v))a.push(i);return a;},[]);
+        }
+        // One pair: keep the pair
+        const pv=Object.keys(rc).find(v=>rc[v]===2);
+        if(pv) return cards.reduce((a,c,i)=>{if(c.v!=pv)a.push(i);return a;},[]);
+        // Flush draw (4 same suit): keep the 4
+        const maxS=Math.max(...Object.values(sc));
+        if(maxS===4){
+            const fs=Object.keys(sc).find(s=>sc[s]===4);
+            return cards.reduce((a,c,i)=>{if(c.s!==fs)a.push(i);return a;},[]);
+        }
+        // Straight draw (4 sequential): keep the 4
+        const uv=[...new Set(cards.map(c=>c.v))].sort((a,b)=>a-b);
+        for(let i=0;i<=uv.length-4;i++){
+            if(uv[i+3]-uv[i]===3){
+                const keep=uv.slice(i,i+4);
+                return cards.reduce((a,c,i2)=>{if(!keep.includes(c.v))a.push(i2);return a;},[]);
+            }
+        }
+        // High cards (A,K,Q): keep highest
+        const high=cards.filter(c=>c.v>=12).map(c=>c.v);
+        if(high.length>0) return cards.reduce((a,c,i)=>{if(!high.includes(c.v))a.push(i);return a;},[]).slice(0,5-high.length);
+        // Bad hand: discard lowest 3
+        return [...cards].map((c,i)=>({...c,i})).sort((a,b)=>a.v-b.v).slice(0,3).map(c=>c.i);
+    }
+
+    function pkCardHTML(card, idx, clickable) {
+        const col=POKER_RED.has(card.s)?'red':'';
+        const sel=pks.sel.has(idx)?'selected':'';
+        const oc=clickable?`onclick="pkToggle(${idx})"` : '';
+        return `<div class="pcard ${col} ${sel}" id="pcard${idx}" ${oc}>
+            <div class="pcard-rank">${card.r}</div>
+            <div class="pcard-suit">${card.s}</div>
+        </div>`;
+    }
+
+    function pkToggle(idx) {
+        if(pks.phase!=='draw') return;
+        pks.sel.has(idx)?pks.sel.delete(idx):pks.sel.add(idx);
+        pkRenderPlayer(true);
+        playSound('click');
+    }
+
+    function pkRenderPlayer(clickable) {
+        const el=document.getElementById('pokerPlayerCards');
+        el.innerHTML=pks.player.map((c,i)=>pkCardHTML(c,i,clickable)).join('');
+        const h=pkEval(pks.player);
+        document.getElementById('pokerHandName').textContent=h.name;
+        if(clickable){
+            document.getElementById('pokerDiscardHint').textContent =
+                pks.sel.size>0 ? `${pks.sel.size} carta${pks.sel.size>1?'s':''} seleccionada${pks.sel.size>1?'s':''} para cambiar — vuelve a pulsar para deseleccionar` :
+                'Pulsa las cartas que quieres cambiar (0-4 cartas)';
+        }
+    }
+
+    function openPoker() {
+        if(state.over) return;
+        playSound('click');
+        pks={deck:[],player:[],bots:[[],[],[]],sel:new Set(),phase:'bet',bet:0};
+        const ov=document.getElementById('pokerOverlay');
+        ov.classList.add('open');
+        // Reset UI
+        document.getElementById('pokerResultBanner').style.display='none';
+        document.getElementById('pokerBetSection').style.display='block';
+        document.getElementById('pokerDiscardHint').textContent='';
+        document.getElementById('pokerHandName').textContent='';
+        document.getElementById('pokerInfoRow').style.display='none';
+        document.getElementById('pokerPlayAgainBtn').style.display='none';
+        document.getElementById('pokerDrawBtn').style.display='none';
+        document.getElementById('pokerDrawBtn').disabled=false;
+        document.getElementById('pokerDealBtn').style.display='inline-block';
+        document.getElementById('pokerDealBtn').disabled=false;
+        // Empty bot displays
+        for(let b=0;b<3;b++){
+            document.getElementById(`pkBot${b}Cards`).innerHTML=
+                Array(5).fill('<div class="pcard face-down"></div>').join('');
+            document.getElementById(`pkBot${b}Hand`).textContent='';
+            document.getElementById(`pkBot${b}`).classList.remove('winner-bot');
+        }
+        // Empty player cards
+        document.getElementById('pokerPlayerCards').innerHTML=
+            Array(5).fill('<div class="pcard face-down"></div>').join('');
+        document.getElementById('pokerBetInput').value=Math.min(1000,Math.floor(state.balance));
+    }
+
+    function closePoker() {
+        document.getElementById('pokerOverlay').classList.remove('open');
+    }
+
+    function pkDeal() {
+        const bet=parseInt(document.getElementById('pokerBetInput').value)||0;
+        if(bet<=0||bet>state.balance||state.balance<=0){
+            document.getElementById('balance').parentElement.classList.add('shake');
+            setTimeout(()=>document.getElementById('balance').parentElement.classList.remove('shake'),400);
+            return;
+        }
+        pks.bet=bet; pks.deck=pkCreateDeck(); pks.sel=new Set(); pks.phase='draw';
+        pks.player=pks.deck.splice(0,5);
+        for(let b=0;b<3;b++) pks.bots[b]=pks.deck.splice(0,5);
+
+        // Update UI
+        document.getElementById('pokerBetSection').style.display='none';
+        document.getElementById('pokerDealBtn').style.display='none';
+        document.getElementById('pokerDrawBtn').style.display='inline-block';
+        document.getElementById('pokerInfoRow').style.display='flex';
+        document.getElementById('pkBetAmt').textContent=bet.toLocaleString()+' $';
+        document.getElementById('pkWinAmt').textContent=(bet*65).toLocaleString()+' $';
+
+        // Bot cards face-down
+        for(let b=0;b<3;b++){
+            document.getElementById(`pkBot${b}Cards`).innerHTML=
+                Array(5).fill('<div class="pcard face-down"></div>').join('');
+            document.getElementById(`pkBot${b}Hand`).textContent='?????';
+        }
+        pkRenderPlayer(true);
+        playSound('win');
+    }
+
+    function pkDraw() {
+        if(pks.phase!=='draw') return;
+        pks.phase='result';
+        document.getElementById('pokerDrawBtn').disabled=true;
+        document.getElementById('pokerDiscardHint').textContent='Los bots están pensando...';
+
+        // Replace selected player cards
+        pks.sel.forEach(i=>{pks.player[i]=pks.deck.shift();});
+        pks.sel=new Set();
+        pkRenderPlayer(false);
+
+        // Bot draws (staggered animation)
+        setTimeout(()=>{
+            for(let b=0;b<3;b++){
+                const disc=pkBotDiscard(pks.bots[b]);
+                disc.forEach(i=>{pks.bots[b][i]=pks.deck.shift();});
+            }
+            // Reveal bots with stagger
+            document.getElementById('pokerDiscardHint').textContent='Revelando cartas...';
+            let delay=300;
+            for(let b=0;b<3;b++){
+                const bidx=b;
+                setTimeout(()=>{
+                    const el=document.getElementById(`pkBot${bidx}Cards`);
+                    el.innerHTML=pks.bots[bidx].map(c=>{
+                        const col=POKER_RED.has(c.s)?'red':'';
+                        return `<div class="pcard ${col}"><div class="pcard-rank">${c.r}</div><div class="pcard-suit">${c.s}</div></div>`;
+                    }).join('');
+                    const bh=pkEval(pks.bots[bidx]);
+                    document.getElementById(`pkBot${bidx}Hand`).textContent=bh.name;
+                    playSound('click');
+                },delay);
+                delay+=350;
+            }
+
+            // Final result after all bots revealed
+            setTimeout(()=>{
+                const playerH=pkEval(pks.player);
+                const botHands=pks.bots.map(bc=>pkEval(bc));
+                const bestBotScore=Math.max(...botHands.map(h=>h.score));
+                const playerWins=playerH.score>bestBotScore;
+                const winnerBotIdx=botHands.findIndex(h=>h.score===bestBotScore);
+
+                // Highlight winner bot if player lost
+                if(!playerWins) document.getElementById(`pkBot${winnerBotIdx}`).classList.add('winner-bot');
+
+                const banner=document.getElementById('pokerResultBanner');
+                const rtitle=document.getElementById('pkResTitle');
+                const ramt=document.getElementById('pkResAmt');
+                const rhands=document.getElementById('pkResHands');
+
+                banner.style.display='block';
+                document.getElementById('pokerDrawSection').style.display='none';
+                document.getElementById('pokerPlayAgainBtn').style.display='inline-block';
+                document.getElementById('pokerDiscardHint').textContent='';
+
+                state.pokerPlayed=(state.pokerPlayed||0)+1;
+                if(playerWins){
+                    const gain=pks.bet*65;
+                    state.balance+=gain;
+                    state.pokerWon=(state.pokerWon||0)+1;
+                    state.pokerProfit=(state.pokerProfit||0)+gain;
+                    if(gain>(state.pokerMaxWin||0)) state.pokerMaxWin=gain;
+                    banner.className='poker-result-banner win';
+                    rtitle.textContent='¡VICTORIA! 🏆';
+                    ramt.textContent='+'+gain.toLocaleString()+' $';
+                    rhands.textContent='Tu mano: '+playerH.name+' · Mejor bot: '+botHands.reduce((b,h)=>h.score>b.score?h:b).name;
+                    playSound('win');
+                    confetti({particleCount:140,spread:90,colors:['#4ade80','#fbbf24','#ffffff'],origin:{y:0.6}});
+                } else {
+                    state.balance-=pks.bet;
+                    if(state.balance<0) state.balance=0;
+                    state.pokerProfit=(state.pokerProfit||0)-pks.bet;
+                    banner.className='poker-result-banner lose';
+                    rtitle.textContent=POKER_BOT_NAMES[winnerBotIdx]+' GANA';
+                    ramt.textContent='-'+pks.bet.toLocaleString()+' $';
+                    rhands.textContent='Tu mano: '+playerH.name+' · Ganador: '+botHands[winnerBotIdx].name;
+                    playSound('click');
+                }
+                updateStats();
+                saveGame();
+                checkEnd();
+            }, delay+200);
+        },500);
+    }
+
+    function pkSetBet(v){
+        const inp=document.getElementById('pokerBetInput');
+        inp.value = v==='max'?Math.floor(state.balance):Math.min(v,Math.floor(state.balance));
+    }
+    // ═══════════════════ FIN POKER ═══════════════════
 
 </script>
 </body>
